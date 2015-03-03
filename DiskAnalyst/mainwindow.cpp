@@ -22,28 +22,32 @@ MainWindow::MainWindow(QWidget *parent)
     ui->twgDirViewer->hideColumn(3);
     centerWindow();
 
-    QDockWidget *dckDir = new QDockWidget(this);
-    dckDir->setFeatures(QDockWidget::DockWidgetMovable);
-    dckDir->setWidget(ui->twgDirViewer);
-    dckDir->setAllowedAreas(Qt::LeftDockWidgetArea);
-    addDockWidget(Qt::LeftDockWidgetArea, dckDir);
+    setWindowState(Qt::WindowMaximized);
+    setFixedSize(width(), height() + 40);
+    centerWindow();
+    statusBar()->setSizeGripEnabled(false);
 
-    QDockWidget *dckWeb = new QDockWidget(this);
-    dckWeb->setFeatures(QDockWidget::DockWidgetMovable);
-    dckWeb->setWidget(ui->wvwCharts);
-    dckWeb->setAllowedAreas(Qt::RightDockWidgetArea);
-    addDockWidget(Qt::RightDockWidgetArea, dckWeb);
+    QWebFrame *frame = ui->wvwCharts->page()->mainFrame();
+    ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/index.html"));
 
-    ui->wvwCharts->setUrl(QUrl("qrc:/charts/Icons/main.html"));
-    connect(ui->wvwCharts->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectToJS()));
+    frame->setScrollBarValue(Qt::Vertical, frame->scrollBarMaximum(Qt::Vertical));
+    frame->setScrollBarValue(Qt::Horizontal, frame->scrollBarMaximum(Qt::Horizontal));
+    frame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    frame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+
+    connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
+
+
 }
+
 
 MainWindow::~MainWindow(){
     delete ui;
 }
 
-void MainWindow::exposeObjectToJS(){
-    qDebug() << "Adding object" << endl;
+void MainWindow::exposeObjectsToJS(){
+    qDebug() << "Adding objects" << endl;
     //ui->wvwCharts->page()->mainFrame()->addToJavaScriptWindowObject(QString("name"), objecy, QWebFrame::ScriptOwnership);
 }
 

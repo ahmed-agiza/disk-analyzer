@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>589</width>
-    <height>500</height>
+    <width>1070</width>
+    <height>693</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -17,15 +20,25 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Disk Analyst</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="files.qrc">
+    <normaloff>:/icons/Icons/Awicons-Vista-Artistic-Chart-search.ico</normaloff>:/icons/Icons/Awicons-Vista-Artistic-Chart-search.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QTreeView" name="twgDirViewer">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
-        <width>150</width>
+        <width>200</width>
         <height>0</height>
        </size>
       </property>
@@ -33,10 +46,28 @@
     </item>
     <item row="0" column="1">
      <widget class="QWebView" name="wvwCharts">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>1000</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="url">
        <url>
         <string>about:blank</string>
        </url>
+      </property>
+      <property name="zoomFactor">
+       <double>1.000000000000000</double>
+      </property>
+      <property name="renderHints">
+       <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
       </property>
      </widget>
     </item>
@@ -47,7 +78,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>589</width>
+     <width>1070</width>
      <height>20</height>
     </rect>
    </property>
@@ -69,8 +100,8 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionAnalyzeDirectory">
    <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/Icons/analysis-icon.png</normaloff>:/Icons/analysis-icon.png</iconset>
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/analysis-icon.png</normaloff>:/icons/Icons/analysis-icon.png</iconset>
    </property>
    <property name="text">
     <string>Analyze Directory</string>
@@ -84,8 +115,8 @@
   </action>
   <action name="actionExploreDirectory">
    <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/Icons/Open-icon.png</normaloff>:/Icons/Open-icon.png</iconset>
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/Open-icon.png</normaloff>:/icons/Icons/Open-icon.png</iconset>
    </property>
    <property name="text">
     <string>Explore Directory</string>
@@ -99,8 +130,8 @@
   </action>
   <action name="actionOpen_Terminal">
    <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/Icons/Apps-konsole-icon.png</normaloff>:/Icons/Apps-konsole-icon.png</iconset>
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/Apps-konsole-icon.png</normaloff>:/icons/Icons/Apps-konsole-icon.png</iconset>
    </property>
    <property name="text">
     <string>Open Terminal</string>
@@ -114,8 +145,8 @@
   </action>
   <action name="actionRefresh">
    <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/Icons/Actions-view-refresh-icon.png</normaloff>:/Icons/Actions-view-refresh-icon.png</iconset>
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/Actions-view-refresh-icon.png</normaloff>:/icons/Icons/Actions-view-refresh-icon.png</iconset>
    </property>
    <property name="text">
     <string>Refresh</string>
@@ -129,8 +160,8 @@
   </action>
   <action name="actionSettings">
    <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/Icons/settings-icon.png</normaloff>:/Icons/settings-icon.png</iconset>
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/settings-icon.png</normaloff>:/icons/Icons/settings-icon.png</iconset>
    </property>
    <property name="text">
     <string>Settings</string>
@@ -152,7 +183,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="icons.qrc"/>
+  <include location="files.qrc"/>
  </resources>
  <connections/>
 </ui>

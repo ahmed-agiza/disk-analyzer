@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/icons">
         <file>Icons/settings-icon.png</file>
         <file>Icons/Open-icon.png</file>
         <file>Icons/Folder-Open-icon.png</file>
@@ -9,6 +9,12 @@
         <file>Icons/Awicons-Vista-Artistic-Chart-search.ico</file>
     </qresource>
     <qresource prefix="/charts">
-        <file>Icons/main.html</file>
+        <file>Charts/index.html</file>
+        <file>Charts/visit-sequences.csv</file>
+        <file>Charts/css.css</file>
+        <file>Charts/d3.v3.min.js</file>
+        <file>Charts/data.json</file>
+        <file>Charts/sequences.css</file>
+        <file>Charts/sequences.js</file>
     </qresource>
 </RCC>

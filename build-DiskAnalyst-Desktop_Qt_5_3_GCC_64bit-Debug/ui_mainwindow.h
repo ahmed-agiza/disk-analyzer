@@ -45,33 +45,37 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(589, 500);
+        MainWindow->setWindowModality(Qt::WindowModal);
+        MainWindow->resize(1070, 693);
         MainWindow->setMinimumSize(QSize(0, 500));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/icons/Icons/Awicons-Vista-Artistic-Chart-search.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        MainWindow->setWindowIcon(icon);
         actionAnalyzeDirectory = new QAction(MainWindow);
         actionAnalyzeDirectory->setObjectName(QStringLiteral("actionAnalyzeDirectory"));
-        QIcon icon;
-        icon.addFile(QStringLiteral(":/Icons/analysis-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionAnalyzeDirectory->setIcon(icon);
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/icons/Icons/analysis-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionAnalyzeDirectory->setIcon(icon1);
         actionExploreDirectory = new QAction(MainWindow);
         actionExploreDirectory->setObjectName(QStringLiteral("actionExploreDirectory"));
-        QIcon icon1;
-        icon1.addFile(QStringLiteral(":/Icons/Open-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionExploreDirectory->setIcon(icon1);
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/icons/Icons/Open-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionExploreDirectory->setIcon(icon2);
         actionOpen_Terminal = new QAction(MainWindow);
         actionOpen_Terminal->setObjectName(QStringLiteral("actionOpen_Terminal"));
-        QIcon icon2;
-        icon2.addFile(QStringLiteral(":/Icons/Apps-konsole-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionOpen_Terminal->setIcon(icon2);
+        QIcon icon3;
+        icon3.addFile(QStringLiteral(":/icons/Icons/Apps-konsole-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionOpen_Terminal->setIcon(icon3);
         actionRefresh = new QAction(MainWindow);
         actionRefresh->setObjectName(QStringLiteral("actionRefresh"));
-        QIcon icon3;
-        icon3.addFile(QStringLiteral(":/Icons/Actions-view-refresh-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionRefresh->setIcon(icon3);
+        QIcon icon4;
+        icon4.addFile(QStringLiteral(":/icons/Icons/Actions-view-refresh-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRefresh->setIcon(icon4);
         actionSettings = new QAction(MainWindow);
         actionSettings->setObjectName(QStringLiteral("actionSettings"));
-        QIcon icon4;
-        icon4.addFile(QStringLiteral(":/Icons/settings-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionSettings->setIcon(icon4);
+        QIcon icon5;
+        icon5.addFile(QStringLiteral(":/icons/Icons/settings-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSettings->setIcon(icon5);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -80,20 +84,30 @@ public:
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         twgDirViewer = new QTreeView(centralWidget);
         twgDirViewer->setObjectName(QStringLiteral("twgDirViewer"));
-        twgDirViewer->setMinimumSize(QSize(150, 0));
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(twgDirViewer->sizePolicy().hasHeightForWidth());
+        twgDirViewer->setSizePolicy(sizePolicy);
+        twgDirViewer->setMinimumSize(QSize(200, 0));
 
         gridLayout->addWidget(twgDirViewer, 0, 0, 1, 1);
 
         wvwCharts = new QWebView(centralWidget);
         wvwCharts->setObjectName(QStringLiteral("wvwCharts"));
+        sizePolicy.setHeightForWidth(wvwCharts->sizePolicy().hasHeightForWidth());
+        wvwCharts->setSizePolicy(sizePolicy);
+        wvwCharts->setMinimumSize(QSize(1000, 0));
         wvwCharts->setUrl(QUrl(QStringLiteral("about:blank")));
+        wvwCharts->setZoomFactor(1);
+        wvwCharts->setRenderHints(QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
 
         gridLayout->addWidget(wvwCharts, 0, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 589, 20));
+        menuBar->setGeometry(QRect(0, 0, 1070, 20));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -116,7 +130,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Disk Analyst", 0));
         actionAnalyzeDirectory->setText(QApplication::translate("MainWindow", "Analyze Directory", 0));
 #ifndef QT_NO_TOOLTIP
         actionAnalyzeDirectory->setToolTip(QApplication::translate("MainWindow", "Open Directory for Analysis", 0));

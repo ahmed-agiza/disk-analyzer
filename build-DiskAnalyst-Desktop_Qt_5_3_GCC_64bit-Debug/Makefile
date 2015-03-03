@@ -463,7 +463,13 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/settings-icon.png \
 		../DiskAnalyst/Icons/analysis-icon.png \
 		../DiskAnalyst/Icons/Open-icon.png \
-		../DiskAnalyst/Icons/main.html
+		../DiskAnalyst/Charts/css.css \
+		../DiskAnalyst/Charts/d3.v3.min.js \
+		../DiskAnalyst/Charts/sequences.css \
+		../DiskAnalyst/Charts/sequences.js \
+		../DiskAnalyst/Charts/data.json \
+		../DiskAnalyst/Charts/index.html \
+		../DiskAnalyst/Charts/visit-sequences.csv
 	/opt/Qt5.3.2/5.3/gcc_64/bin/rcc -name files ../DiskAnalyst/files.qrc -o qrc_files.cpp
 
 compiler_moc_header_make_all: moc_mainwindow.cpp

@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[4];
-    char stringdata[65];
+    char stringdata[66];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,10 +32,10 @@ static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
 QT_MOC_LITERAL(0, 0, 10),
 QT_MOC_LITERAL(1, 11, 35),
 QT_MOC_LITERAL(2, 47, 0),
-QT_MOC_LITERAL(3, 48, 16)
+QT_MOC_LITERAL(3, 48, 17)
     },
     "MainWindow\0on_actionAnalyzeDirectory_triggered\0"
-    "\0exposeObjectToJS"
+    "\0exposeObjectsToJS"
 };
 #undef QT_MOC_LITERAL
 
@@ -69,7 +69,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         MainWindow *_t = static_cast<MainWindow *>(_o);
         switch (_id) {
         case 0: _t->on_actionAnalyzeDirectory_triggered(); break;
-        case 1: _t->exposeObjectToJS(); break;
+        case 1: _t->exposeObjectsToJS(); break;
         default: ;
         }
     }
