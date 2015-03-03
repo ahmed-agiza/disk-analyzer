@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Icons/settings-icon.png</file>
+        <file>Icons/Open-icon.png</file>
+        <file>Icons/Folder-Open-icon.png</file>
+        <file>Icons/Apps-konsole-icon.png</file>
+        <file>Icons/analysis-icon.png</file>
+        <file>Icons/Actions-view-refresh-icon.png</file>
+        <file>Icons/Awicons-Vista-Artistic-Chart-search.ico</file>
+    </qresource>
+    <qresource prefix="/charts">
+        <file>Icons/main.html</file>
+    </qresource>
+</RCC>

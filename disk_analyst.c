@@ -28,15 +28,20 @@
 #define FLAG_SHOW_OWNER 512
 #define FLAG_SHOW_HUMAN_FORMAT 1024
 
+#define MAX_NAME_SIZE 256
+#define MAX_USER_SIZE 64
+#define MAX_GROUP_SIZE 64
+#define MAX_FULL_PATH_SIZE 512
+
 typedef enum {BLOCK_DEVICE, CHARACTER_DEVICE, DIRECTORY, FIFO_PIPE, SYMLINK, REGULAR_FILE, SOCKET, UNKNOWN} FILE_TYPE;
 
 struct file_stat{
-  char name[256];
+  char name[MAX_NAME_SIZE];
   FILE_TYPE type;
   long inode;
   long links;
-  char user[64];
-  char group[64];
+  char user[MAX_USER_SIZE];
+  char group[MAX_GROUP_SIZE];
   long long size;
   long long total_size;
   long long number_of_blocks;
@@ -49,8 +54,8 @@ int get_human_format(long long number, char *format);
 
 
 int main(int argc, char **argv){
-	char *dir;
-  char full_path[512], h_format[10];
+  char *dir;
+  char full_path[MAX_FULL_PATH_SIZE], h_format[10];
   DIR *dir_d;
   struct dirent *dir_inode;
   struct stat buf;
@@ -165,7 +170,7 @@ int main(int argc, char **argv){
 int stat_file(char *path, char *name, struct file_stat *stat_buf, int flags){
   int fd;
   struct stat buf;
-  char full_path[512];
+  char full_path[MAX_FULL_PATH_SIZE];
 
   if (path[strlen(path) - 1] != '/')
     strcat(path, "/");
@@ -295,13 +300,13 @@ long long get_dir_size(char *r_dir){
 
 int get_human_format(long long number, char *format){
   if (number <= 1000){
-    sprintf(format, "%lldB", number);
+    return sprintf(format, "%lldB", number);
   }else if (number <= 1000000){
-    sprintf(format, "%1.1fKBs", (float)number / 1000.0);
+    return sprintf(format, "%1.1fKBs", (float)number / 1000.0);
   }else if(number <= 1000000000){
-    sprintf(format, "%1.1fMBs", (float)number / 1000000.0);
+    return sprintf(format, "%1.1fMBs", (float)number / 1000000.0);
   }else{
-    sprintf(format, "%1.1fGBs", (float)number / 1000000000.0);
+    return sprintf(format, "%1.1fGBs", (float)number / 1000000000.0);
   }
 }
 
