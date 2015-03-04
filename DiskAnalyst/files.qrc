@@ -16,5 +16,6 @@
         <file>Charts/data.json</file>
         <file>Charts/sequences.css</file>
         <file>Charts/sequences.js</file>
+        <file>Charts/jquery.min.js</file>
     </qresource>
 </RCC>

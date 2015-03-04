@@ -18,6 +18,7 @@ var totalSize = 0;
 
 // Setting start point in the center
 var vis = d3.select("#chart").append("svg:svg")
+    .attr("id", "mainsvg")
     .attr("width", width)
     .attr("height", height)
     .append("svg:g")
@@ -37,12 +38,14 @@ var arc = d3.svg.arc()
     .outerRadius(function(d) {return Math.sqrt(d.y + d.dy);});
 
 // Calling the json function with the disk statistics
+// Invoking from a JSON file
 d3.json("./data.json", function(error, root) {
     visualize(root);
 });
 
 // The core visualization function
 function visualize(root){
+    clearHtml();
     initializeFilePathDisplay();
     //Bounding circle
     vis.append("svg:circle")
@@ -58,7 +61,8 @@ function visualize(root){
         .attr("fill-rule", "evenodd")
         .style("fill", function(d) {return color((d.children ? d : d.parent).name);})
         .style("opacity", 1)
-        .on("mouseover", mouseover);
+        .on("mouseover", mouseover)
+        .on("click", click)
 
     // Remove transparency if hovering out of the graph
     d3.select("#container").on("mouseleave", mouseleave);
@@ -82,14 +86,15 @@ function initializeFilePathDisplay() {
 
 // Interactive: This will fade all elements except for the path leading to the node being hovered over
 function mouseover(d){
+    var readableMemory = convert(d.value);
     var percentage = (100 * d.value / totalSize).toPrecision(3);
     var percentageString = percentage + "%";
     if (percentage < 0.1) {
         percentageString = "< 0.1%";
     }
 
-    d3.select("#percentage")
-        .text(percentageString);
+    d3.select("#size")
+        .text(readableMemory);
     d3.select("#explanation")
         .style("visibility", "");
 
@@ -182,14 +187,34 @@ function updateFilePathDisplay(nodeArray, percentageString) {
 
 // Discription of file path entry as a set of points
 function fpdPoints(d, i) {
-  var points = [];
-  points.push("0,0");
-  points.push(fpd.width + ",0");
-  points.push(fpd.width + fpd.tail + "," + (fpd.height / 2));
-  points.push(fpd.width + "," + fpd.height);
-  points.push("0," + fpd.height);
-  if (i > 0) { // Don't include 6th vertex in the first entry
-    points.push(fpd.tail + "," + (fpd.height / 2));
-  }
-  return points.join(" ");
+    var points = [];
+    points.push("0,0");
+    points.push(fpd.width + ",0");
+    points.push(fpd.width + fpd.tail + "," + (fpd.height / 2));
+    points.push(fpd.width + "," + fpd.height);
+    points.push("0," + fpd.height);
+    if (i > 0) { // Don't include 6th vertex in the first entry
+        points.push(fpd.tail + "," + (fpd.height / 2));
+    }
+    return points.join(" ");
+}
+
+// Interactive: When a node is clicked this will trigger
+function click(d){
+    //Create a backtraversal to get the name.
+}
+
+// Function to clear html
+function clearHtml(){
+    $('#container').empty();
+}
+
+// Readable memory display
+function convert(bytes){
+    var out;
+    if(bytes <= 1024) out = bytes.toPrecision(3) + "B";
+    else if (bytes <= 1024*1024) out = (bytes / 1024.0).toPrecision(3) + "KB";
+    else if (bytes <= 1024*1024*1024) out = (bytes / (1024.0*1024.0)).toPrecision(3) + "MB";
+    else out = (bytes / (1024.0*1024.0*1024.0)).toPrecision(3) + "GB";
+    return out;
 }
