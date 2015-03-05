@@ -32,7 +32,13 @@ var vis = d3.select("#chart").append("svg:svg")
 // The layout is a partitioned one to achieve the sunburst structure
 var partition = d3.layout.partition()
     .size([2 * Math.PI, radius * radius])
-    .value(function(d) {return d.size;});
+    .value(function(d) {return d.size;})
+    .sort(function(a,b){
+        if(a.hasOwnProperty("dummy")) return 1;
+        else if(b.hasOwnProperty("dummy")) return -1;
+        else return b.value < a.value ? -1 : b.value > a.value ? 1 : b.value >= a.value ? 0 : NaN;
+    //    return 0;
+    });
 
 // The arc for drawing the svg
 var arc = d3.svg.arc()
@@ -60,6 +66,9 @@ function visualize(root){
     var path = vis.selectAll("path")
         .data(partition.nodes(root))
         .enter().append("svg:path")
+        .filter(function(d){
+            return !d.hasOwnProperty("dummy");
+        })
         .attr("display", function(d) {
             if (!d.depth){
                 d3.select("#root")
@@ -173,7 +182,12 @@ function updateFilePathDisplay(nodeArray, percentageString) {
         .attr("y", fpd.height / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
-        .text(function(d) {return d.name;});
+        .text(function(d) {
+            if (d.name.length <= 10)
+                return d.name;
+            else
+                return d.name.substr(0, 10) + '..';
+        });
 
     // Set position for entering and updating nodes
     g.attr("transform", function(d, i) {
