@@ -56,7 +56,13 @@ function visualize(root){
     var path = vis.selectAll("path")
         .data(partition.nodes(root))
         .enter().append("svg:path")
-        .attr("display", function(d) {return d.depth ? null : "none";})
+        .attr("display", function(d) {
+            if (!d.depth){
+                d3.select("#root")
+                    .text(d.name);
+            }
+            return d.depth ? null : "none";
+        })
         .attr("d", arc)
         .attr("fill-rule", "evenodd")
         .style("fill", function(d) {return color((d.children ? d : d.parent).name);})
@@ -69,6 +75,7 @@ function visualize(root){
 
     // Get total size of the tree = value of root node from partition
     totalSize = path.node().__data__.value;
+    console.log(path.node().__data__);
 }
 
 function initializeFilePathDisplay() {
@@ -201,7 +208,8 @@ function fpdPoints(d, i) {
 
 // Interactive: When a node is clicked this will trigger
 function click(d){
-    //Create a backtraversal to get the name.
+    path = getPath(d);
+    alert(path);
 }
 
 // Function to clear html
@@ -212,9 +220,21 @@ function clearHtml(){
 // Readable memory display
 function convert(bytes){
     var out;
-    if(bytes <= 1024) out = bytes.toPrecision(3) + "B";
-    else if (bytes <= 1024*1024) out = (bytes / 1024.0).toPrecision(3) + "KB";
-    else if (bytes <= 1024*1024*1024) out = (bytes / (1024.0*1024.0)).toPrecision(3) + "MB";
-    else out = (bytes / (1024.0*1024.0*1024.0)).toPrecision(3) + "GB";
+    if(bytes <= 1000) out = bytes.toPrecision(3) + "B";
+    else if (bytes <= 1000*1000) out = (bytes / 1000.0).toPrecision(3) + "KB";
+    else if (bytes <= 1000*1000*1000) out = (bytes / (1000.0*1000.0)).toPrecision(3) + "MB";
+    else out = (bytes / (1000.0*1000.0*1000.0)).toPrecision(3) + "GB";
     return out;
+}
+
+// Get Readable path name to selected node
+function getPath(node) {
+    var path = '';
+    var current = node;
+    while (current.parent) {
+        path = current.name + '/' + path;
+        current = current.parent;
+    }
+    path = current.name + '/' + path;
+    return path;
 }

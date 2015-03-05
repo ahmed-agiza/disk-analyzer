@@ -18,13 +18,14 @@ body {
   height: 70px;
 }
 
-#legend {
-  padding: 10px 0 0 3px;
-}
-
 #sequence text {
   font-weight: 600;
   fill: #fff;
+
+  width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #chart {
@@ -47,4 +48,10 @@ body {
 
 #size {
   font-size: 2.5em;
+}
+
+#root {
+    visibility: visible;
+    font-size: 2em;
+    color: #000066;
 }
