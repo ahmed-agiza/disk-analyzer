@@ -1,4 +1,3 @@
-#include <QFileSystemModel>
 #include <QDesktopWidget>
 #include <QDockWidget>
 #include <QHBoxLayout>
@@ -8,14 +7,18 @@
 #include <QMessageBox>
 #include <QWebPage>
 #include <QWebFrame>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
 #include <QDebug>
+#include <QFileSystemModel>
 
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
-    QFileSystemModel *model = new QFileSystemModel(this);
+    model = new QFileSystemModel(this);
     model->setRootPath("/");
     ui->twgDirViewer->setModel(model);
     ui->twgDirViewer->hideColumn(1);
@@ -38,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
 
-
 }
 
 
@@ -47,7 +49,7 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::exposeObjectsToJS(){
-    qDebug() << "Adding objects" << endl;
+    //qDebug() << "Adding objects" << endl;
     //ui->wvwCharts->page()->mainFrame()->addToJavaScriptWindowObject(QString("name"), objecy, QWebFrame::ScriptOwnership);
 }
 
@@ -76,4 +78,33 @@ void MainWindow::centerWindow(){
 
 void MainWindow::on_actionAnalyzeDirectory_triggered(){
 
+}
+
+void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){
+    QJsonObject mainData;
+    QJsonObject childA;
+    childA.insert("name", "childA");
+    childA.insert("size", 1000);
+    QJsonObject childB;
+    childB.insert("name", "childB");
+    QJsonObject childBA;
+    childBA.insert("name", "childBA");
+    childBA.insert("size", 400);
+    QJsonObject childBB;
+    childBB.insert("name", "childBB");
+    childBB.insert("size",  700);
+    QJsonArray childBChildren;
+    childBChildren.push_back(childBA);;
+    childBChildren.push_back(childBB);
+    childB.insert("children", childBChildren);
+    QJsonArray mainChildren;
+    mainChildren.push_back(childA);
+    mainChildren.push_back(childB);
+    mainData.insert("children", mainChildren);
+    mainData.insert("name", "main");
+    QString jsonString = QString(QJsonDocument(mainData).toJson(QJsonDocument::Compact));
+    qDebug() << jsonString;
+    ui->wvwCharts->page()->mainFrame()->evaluateJavaScript("visualize("+ jsonString +"); alert('X'); null");
+    //ui->wvwCharts->page()->mainFrame()->evaluateJavaScript("test(); null");
+    //01012230444
 }
