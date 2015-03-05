@@ -21,11 +21,6 @@ body {
 #sequence text {
   font-weight: 600;
   fill: #fff;
-
-  width: 80px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 #chart {
