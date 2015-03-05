@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileSystemModel>
 
 namespace Ui {
 class MainWindow;
@@ -19,11 +20,14 @@ public:
 private slots:
     void on_actionAnalyzeDirectory_triggered();
 
+    void on_twgDirViewer_doubleClicked(const QModelIndex &index);
+
 public slots:
     void exposeObjectsToJS();
 
 private:
     Ui::MainWindow *ui;
+    QFileSystemModel *model;
 };
 
 

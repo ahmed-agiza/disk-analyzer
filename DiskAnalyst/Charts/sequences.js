@@ -3,6 +3,10 @@ var width = 750;
 var height = 600;
 var radius = Math.min(width, height) / 2;
 
+function test(){
+      alert('Test');
+}
+
 // File path graphically
 var fpd = {
     width: 100,
