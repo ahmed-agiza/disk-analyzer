@@ -45,6 +45,8 @@ private slots:
 
     void on_actionExploreDirectory_triggered();
 
+    void on_actionSettings_triggered();
+
 public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);

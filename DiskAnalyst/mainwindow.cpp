@@ -20,8 +20,8 @@
 MainWindow::MainWindow(QWidget *parent)
     :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(new DirectoryAnalyzer(this)){
     ui->setupUi(this);
-    setCurrentPath("~/");
     ui->twgDirViewer->setModel(model);
+    setCurrentPath(QDir::homePath ());
     ui->twgDirViewer->hideColumn(1);
     ui->twgDirViewer->hideColumn(3);
     centerWindow();
@@ -50,13 +50,18 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::exposeObjectsToJS(){
-    //qDebug() << "Adding objects" << endl;
     frame->addToJavaScriptWindowObject(QString("mainWindow"), this, QWebFrame::ScriptOwnership);
 }
 
 void MainWindow::setCurrentPath(QString newPath){
+    if (!QFileInfo(newPath).isDir()){
+        QMessageBox::critical(this, "Error", "Invalid directory " + newPath);
+        return;
+    }
     currentPath = newPath;
     model->setRootPath(newPath);
+    QModelIndex rootIndex = model->index(newPath);
+    ui->twgDirViewer->setRootIndex(rootIndex);
 }
 
 void MainWindow::centerWindow(){
@@ -120,8 +125,9 @@ void MainWindow::setCurrentDUA(const QString &value){
 
 
 void MainWindow::on_actionAnalyzeDirectory_triggered(){
-    QModelIndex index = ui->twgDirViewer->currentIndex();
-    on_twgDirViewer_doubleClicked(index);
+    QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", currentDUA);
+    if (fileName.trimmed() != "")
+        setCurrentPath(fileName);
 }
 
 void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){   
@@ -148,6 +154,9 @@ void MainWindow::analysisComplete(){
 }
 
 void MainWindow::on_actionOpen_Terminal_triggered(){
+    if(currentDUA.isEmpty())
+        return;
+
     QFileInfo pathInfo(currentDUA);
     if(!pathInfo.isDir()){
         QMessageBox::critical(this, "Error", "Invalid directory " + currentDUA);
@@ -170,6 +179,8 @@ void MainWindow::on_actionOpen_Terminal_triggered(){
 }
 
 void MainWindow::on_actionExploreDirectory_triggered(){
+    if(currentDUA.isEmpty())
+        return;
     QFileInfo pathInfo(currentDUA);
     if(!pathInfo.isDir()){
         QMessageBox::critical(this, "Error", "Invalid directory " + currentDUA);
@@ -180,4 +191,8 @@ void MainWindow::on_actionExploreDirectory_triggered(){
     QStringList arguments;
     arguments << currentDUA;
     fileManagerProcess->start("xdg-open", arguments);
+}
+
+void MainWindow::on_actionSettings_triggered(){
+
 }

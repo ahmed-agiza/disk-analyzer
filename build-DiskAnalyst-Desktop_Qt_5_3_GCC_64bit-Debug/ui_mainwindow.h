@@ -33,7 +33,6 @@ public:
     QAction *actionOpen_Terminal;
     QAction *actionRefresh;
     QAction *actionSettings;
-    QAction *actionStop;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTreeView *twgDirViewer;
@@ -47,7 +46,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setWindowModality(Qt::WindowModal);
-        MainWindow->resize(1224, 693);
+        MainWindow->resize(1324, 693);
         MainWindow->setMinimumSize(QSize(0, 500));
         QIcon icon;
         icon.addFile(QStringLiteral(":/icons/Icons/Awicons-Vista-Artistic-Chart-search.ico"), QSize(), QIcon::Normal, QIcon::Off);
@@ -77,11 +76,6 @@ public:
         QIcon icon5;
         icon5.addFile(QStringLiteral(":/icons/Icons/settings-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSettings->setIcon(icon5);
-        actionStop = new QAction(MainWindow);
-        actionStop->setObjectName(QStringLiteral("actionStop"));
-        QIcon icon6;
-        icon6.addFile(QStringLiteral(":/icons/Icons/Stop-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionStop->setIcon(icon6);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -113,7 +107,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1224, 20));
+        menuBar->setGeometry(QRect(0, 0, 1324, 20));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -126,7 +120,6 @@ public:
         mainToolBar->addAction(actionExploreDirectory);
         mainToolBar->addAction(actionOpen_Terminal);
         mainToolBar->addSeparator();
-        mainToolBar->addAction(actionStop);
         mainToolBar->addAction(actionRefresh);
         mainToolBar->addSeparator();
         mainToolBar->addAction(actionSettings);
@@ -164,10 +157,6 @@ public:
         actionSettings->setToolTip(QApplication::translate("MainWindow", "Settings", 0));
 #endif // QT_NO_TOOLTIP
         actionSettings->setShortcut(QApplication::translate("MainWindow", "Ctrl+M", 0));
-        actionStop->setText(QApplication::translate("MainWindow", "Stop", 0));
-#ifndef QT_NO_TOOLTIP
-        actionStop->setToolTip(QApplication::translate("MainWindow", "Stop Current Analysis", 0));
-#endif // QT_NO_TOOLTIP
     } // retranslateUi
 
 };
