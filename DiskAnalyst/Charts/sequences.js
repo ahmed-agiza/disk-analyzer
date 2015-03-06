@@ -62,12 +62,17 @@ function visualize(root){
         .attr("r", radius)
         .style("opacity", 0);
 
+    var nodes = partition.nodes(root)
+        .filter(function(d) {
+            return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
+        });
+
     // Path building
-    var path = vis.selectAll("path")
-        .data(partition.nodes(root))
+    var path = vis.data([root]).selectAll("path")
+        .data(nodes)
         .enter().append("svg:path")
         .filter(function(d){
-            return !d.hasOwnProperty("dummy");
+            return (!d.hasOwnProperty("dummy")); // && d.depth <= 5;
         })
         .attr("display", function(d) {
             if (!d.depth){
