@@ -168,3 +168,16 @@ void MainWindow::on_actionOpen_Terminal_triggered(){
         terminalProcess->start(terminal, arguments);
     }
 }
+
+void MainWindow::on_actionExploreDirectory_triggered(){
+    QFileInfo pathInfo(currentDUA);
+    if(!pathInfo.isDir()){
+        QMessageBox::critical(this, "Error", "Invalid directory " + currentDUA);
+        return;
+    }
+
+    QProcess *fileManagerProcess = new QProcess(this);
+    QStringList arguments;
+    arguments << currentDUA;
+    fileManagerProcess->start("xdg-open", arguments);
+}
