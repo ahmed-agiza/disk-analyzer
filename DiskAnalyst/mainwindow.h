@@ -41,6 +41,8 @@ private slots:
 
     void analysisComplete();
 
+    void on_actionOpen_Terminal_triggered();
+
 public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);

@@ -2,8 +2,6 @@
 #include <QDockWidget>
 #include <QHBoxLayout>
 #include <QFileDialog>
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <QWebPage>
 #include <QWebFrame>
@@ -12,6 +10,11 @@
 #include <QJsonArray>
 #include <QDebug>
 #include <QFileSystemModel>
+#include <QProcess>
+#include <QMessageBox>
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -142,4 +145,26 @@ void MainWindow::on_actionRefresh_triggered(){
 
 void MainWindow::analysisComplete(){
 
+}
+
+void MainWindow::on_actionOpen_Terminal_triggered(){
+    QFileInfo pathInfo(currentDUA);
+    if(!pathInfo.isDir()){
+        QMessageBox::critical(this, "Error", "Invalid directory " + currentDUA);
+        return;
+    }
+
+    QString terminal(qgetenv("TERM"));
+
+    if (terminal.isEmpty()){
+        QMessageBox::critical(this, "Error", "The terminal environment variable $TERM is not set");
+        return;
+    }else{
+        QProcess *terminalProcess = new QProcess(this);
+        QString option("-e");
+        QString argument(QString("cd ") + currentDUA + " && /bin/bash");
+        QStringList arguments;
+        arguments << option << argument;
+        terminalProcess->start(terminal, arguments);
+    }
 }
