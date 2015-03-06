@@ -13,12 +13,14 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 
 QT_BEGIN_NAMESPACE
 
@@ -28,13 +30,17 @@ public:
     QFormLayout *formLayout;
     QLabel *lblGraphDepth;
     QLineEdit *letGraphDepth;
-    QDialogButtonBox *buttonBox;
+    QCheckBox *chkNavigate;
+    QCheckBox *chcReadable;
+    QLabel *lblStartupDirectory;
+    QPushButton *btnStartuoDirectory;
+    QDialogButtonBox *bbxOkCancel;
 
     void setupUi(QDialog *SettingsDialog)
     {
         if (SettingsDialog->objectName().isEmpty())
             SettingsDialog->setObjectName(QStringLiteral("SettingsDialog"));
-        SettingsDialog->resize(382, 274);
+        SettingsDialog->resize(539, 274);
         formLayout = new QFormLayout(SettingsDialog);
         formLayout->setObjectName(QStringLiteral("formLayout"));
         lblGraphDepth = new QLabel(SettingsDialog);
@@ -47,17 +53,38 @@ public:
 
         formLayout->setWidget(0, QFormLayout::FieldRole, letGraphDepth);
 
-        buttonBox = new QDialogButtonBox(SettingsDialog);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        chkNavigate = new QCheckBox(SettingsDialog);
+        chkNavigate->setObjectName(QStringLiteral("chkNavigate"));
+        chkNavigate->setChecked(true);
 
-        formLayout->setWidget(1, QFormLayout::SpanningRole, buttonBox);
+        formLayout->setWidget(1, QFormLayout::LabelRole, chkNavigate);
+
+        chcReadable = new QCheckBox(SettingsDialog);
+        chcReadable->setObjectName(QStringLiteral("chcReadable"));
+
+        formLayout->setWidget(2, QFormLayout::LabelRole, chcReadable);
+
+        lblStartupDirectory = new QLabel(SettingsDialog);
+        lblStartupDirectory->setObjectName(QStringLiteral("lblStartupDirectory"));
+
+        formLayout->setWidget(3, QFormLayout::LabelRole, lblStartupDirectory);
+
+        btnStartuoDirectory = new QPushButton(SettingsDialog);
+        btnStartuoDirectory->setObjectName(QStringLiteral("btnStartuoDirectory"));
+
+        formLayout->setWidget(3, QFormLayout::FieldRole, btnStartuoDirectory);
+
+        bbxOkCancel = new QDialogButtonBox(SettingsDialog);
+        bbxOkCancel->setObjectName(QStringLiteral("bbxOkCancel"));
+        bbxOkCancel->setOrientation(Qt::Horizontal);
+        bbxOkCancel->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+
+        formLayout->setWidget(4, QFormLayout::FieldRole, bbxOkCancel);
 
 
         retranslateUi(SettingsDialog);
-        QObject::connect(buttonBox, SIGNAL(accepted()), SettingsDialog, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), SettingsDialog, SLOT(reject()));
+        QObject::connect(bbxOkCancel, SIGNAL(accepted()), SettingsDialog, SLOT(accept()));
+        QObject::connect(bbxOkCancel, SIGNAL(rejected()), SettingsDialog, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(SettingsDialog);
     } // setupUi
@@ -66,6 +93,10 @@ public:
     {
         SettingsDialog->setWindowTitle(QApplication::translate("SettingsDialog", "Dialog", 0));
         lblGraphDepth->setText(QApplication::translate("SettingsDialog", "Maximum graph depth:", 0));
+        chkNavigate->setText(QApplication::translate("SettingsDialog", "Navigate through chart", 0));
+        chcReadable->setText(QApplication::translate("SettingsDialog", "Display sizes in human readble format", 0));
+        lblStartupDirectory->setText(QString());
+        btnStartuoDirectory->setText(QApplication::translate("SettingsDialog", "Change Startup Directory", 0));
     } // retranslateUi
 
 };

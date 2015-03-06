@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
+    <width>539</width>
     <height>274</height>
    </rect>
   </property>
@@ -24,8 +24,39 @@
    <item row="0" column="1">
     <widget class="QLineEdit" name="letGraphDepth"/>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QDialogButtonBox" name="buttonBox">
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="chkNavigate">
+     <property name="text">
+      <string>Navigate through chart</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="chcReadable">
+     <property name="text">
+      <string>Display sizes in human readble format</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lblStartupDirectory">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="btnStartuoDirectory">
+     <property name="text">
+      <string>Change Startup Directory</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QDialogButtonBox" name="bbxOkCancel">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -39,7 +70,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>bbxOkCancel</sender>
    <signal>accepted()</signal>
    <receiver>SettingsDialog</receiver>
    <slot>accept()</slot>
@@ -55,7 +86,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>bbxOkCancel</sender>
    <signal>rejected()</signal>
    <receiver>SettingsDialog</receiver>
    <slot>reject()</slot>

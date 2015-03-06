@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     frame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
     connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
-
+    settingsDialog = 0;
 }
 
 
@@ -194,5 +194,8 @@ void MainWindow::on_actionExploreDirectory_triggered(){
 }
 
 void MainWindow::on_actionSettings_triggered(){
-
+    if(!settingsDialog){
+        settingsDialog = new SettingsDialog(this);
+    }
+    settingsDialog->show();
 }

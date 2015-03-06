@@ -8,6 +8,7 @@
 #include <QWebFrame>
 
 #include "directoryanalyzer.h"
+#include "settingsdialog.h"
 
 
 namespace Ui {
@@ -58,6 +59,7 @@ private:
     QFileSystemModel *model;
     DirectoryAnalyzer *analyzer;
     QWebFrame *frame;
+    SettingsDialog *settingsDialog;
     QString currentPath;
     QString currentDUA;
     QThread analysisThread;
