@@ -27,11 +27,13 @@
 #define FLAG_SHOW_LINKS 256
 #define FLAG_SHOW_OWNER 512
 #define FLAG_SHOW_HUMAN_FORMAT 1024
+#define FLAG_ONLY_FILES_AND_DIRS 2048
 
-#define MAX_NAME_SIZE 256
+
+#define MAX_NAME_SIZE 2048
 #define MAX_USER_SIZE 64
 #define MAX_GROUP_SIZE 64
-#define MAX_FULL_PATH_SIZE 512
+#define MAX_FULL_PATH_SIZE 2048
 
 typedef enum {BLOCK_DEVICE, CHARACTER_DEVICE, DIRECTORY, FIFO_PIPE, SYMLINK, REGULAR_FILE, SOCKET, UNKNOWN} FILE_TYPE;
 
@@ -49,7 +51,7 @@ struct file_stat{
 
 int stat_file(char *path, char *name, struct file_stat *stat_buf, int flags);
 void print_stat(struct file_stat *st, int flags);
-long long get_dir_size(char *r_dir);
+long long get_dir_size(char *r_dir, int flags);
 int get_human_format(long long number, char *format);
 
 
@@ -59,7 +61,7 @@ int main(int argc, char **argv){
   DIR *dir_d;
   struct dirent *dir_inode;
   struct stat buf;
-  int stat, fd, flags = 0, opt, argv_count = 0, i;
+  int stat, flags = 0, opt, argv_count = 0, i;
   struct file_stat stat_buf;
   long long total_size = 0;
 
@@ -67,7 +69,7 @@ int main(int argc, char **argv){
     if(argv[i][0] != '-')
       argv_count++;
 
-  while ((opt = getopt(argc, argv, "irbsdaAtloh")) != -1) {
+  while ((opt = getopt(argc, argv, "irbsdaAtloHhf")) != -1) {
       switch (opt) {
         case 'i':
           flags |= FLAG_SHOW_INODE;
@@ -99,17 +101,39 @@ int main(int argc, char **argv){
         case 'o':
           flags |= FLAG_SHOW_OWNER;
           break;
-        case 'h':
+        case 'H':
           flags |= FLAG_SHOW_HUMAN_FORMAT;
+          break;
+        case 'h':
+          printf("Disk Analyzer 0.1\n");
+          printf("Usage: %s [-options] <path>\n", argv[0]);
+          printf("Options: \n");
+          printf("-H\tShow sizes in human readable format\n");
+          printf("-f\tCalculate regular files and directoris only\n");
+          printf("-h\tDisplay this help\n");
+          printf("-i\tShow inode value\n");
+          printf("-r\tAnalyze directories recursively\n");
+          printf("-b\tShow occupied blocks on the disk\n");
+          printf("-s\tShow file size\n");
+          printf("-d\tShow directories\n");
+          printf("-a\tShow all files including hidden files\n");
+          printf("-A\tShow all attributes\n");
+          printf("-t\tShow file type\n");
+          printf("-l\tShow links\n");
+          printf("-o\tShow file owner\n");
+          exit(0);
+          break;
+        case 'f':
+          flags |= FLAG_ONLY_FILES_AND_DIRS;
           break;   
         default:
-           fprintf(stderr, "Usage: %s [-option] <path>\n", argv[0]);
+           fprintf(stderr, "Invalid option %c, Usage: %s [-options] <path>\n", opt, argv[0]);
            exit(EXIT_FAILURE);
       }
   }
 
   if (argv_count > 1){
-    fprintf(stderr, "Usage: %s [-option] <path>\n", argv[0]);
+    fprintf(stderr, "Usage: %s [-options] <path>\n", argv[0]);
     exit(1);
   }else if (argv_count == 0)
     dir = "/";
@@ -118,15 +142,11 @@ int main(int argc, char **argv){
 
   if(strcmp(dir, ".") != 0 && strcmp(dir, "..") != 0){
       
-      if ((fd=open(dir, O_RDONLY)) < 0){
-        fprintf(stderr, "Cannot open %s or does not exist\n", dir);
-      }
 
-      if (fstat(fd, &buf) == -1) {
+      if (lstat(dir, &buf) == -1) {
                perror("stat");
       }
 
-      close(fd);
       total_size = (long long) buf.st_size;
       
   }
@@ -147,7 +167,7 @@ int main(int argc, char **argv){
         sprintf(full_path, "Stat error while opening %s%s", dir, dir_inode->d_name);
         perror(full_path);
       }else{
-        print_stat(&stat_buf, flags);
+        //print_stat(&stat_buf, flags);
         total_size += stat_buf.total_size;
       }
         
@@ -181,7 +201,7 @@ int stat_file(char *path, char *name, struct file_stat *stat_buf, int flags){
      return -1;
   }
 
-  if (stat(full_path, &buf) == -1) {
+  if (lstat(full_path, &buf) == -1) {
     return -1;
   }
 
@@ -201,11 +221,16 @@ int stat_file(char *path, char *name, struct file_stat *stat_buf, int flags){
  stat_buf->links = (long) buf.st_nlink;
  strcpy(stat_buf->user, getpwuid(buf.st_uid)->pw_name);
  strcpy(stat_buf->group, getgrgid(buf.st_gid)->gr_name);
- stat_buf->size = (long long) buf.st_size;
- stat_buf->total_size = (long long) buf.st_size;
+ if (((!(flags & FLAG_ONLY_FILES_AND_DIRS)) || ((buf.st_mode & S_IFMT) == S_IFDIR) || ((buf.st_mode & S_IFMT) == S_IFREG)) && !(buf.st_blocks == 0)){
+   stat_buf->size = (long long) buf.st_size;
+   stat_buf->total_size = (long long) buf.st_size;
+ }else{
+   stat_buf->size = 0;
+   stat_buf->total_size = (long long) 0;
+ }
  if (((flags & FLAG_RECURSE_MASK) || (flags & FLAG_SHOW_ALL_ATTRS)) && stat_buf->type == DIRECTORY){
    // printf("Recursing: %s\n", full_path);
-    stat_buf->total_size += get_dir_size(full_path);
+    stat_buf->total_size += get_dir_size(full_path, flags);
  }
  
  stat_buf->number_of_blocks = (long long) buf.st_blocks;
@@ -254,13 +279,12 @@ void print_stat(struct file_stat *st, int flags){
       printf("%5lldb ", st->number_of_blocks);
    printf("%s \n", st->name);
 }
-
-long long get_dir_size(char *r_dir){
+// proc root run sys tmp
+long long get_dir_size(char *r_dir, int flags){
   DIR *dir_d;
   struct dirent *dir_inode;
-  int fd;
   struct stat buf;
-  char full_path[256];
+  char full_path[MAX_FULL_PATH_SIZE];
   long long total_size = 0;
 
   if (r_dir[strlen(r_dir) - 1] != '/')
@@ -277,19 +301,15 @@ long long get_dir_size(char *r_dir){
     if(strcmp(dir_inode->d_name, ".") != 0 && strcmp(dir_inode->d_name, "..") != 0){    
       strcpy(full_path, r_dir);
       strcat(full_path, dir_inode->d_name);
-      if ((fd=open(full_path, O_RDONLY)) < 0){
-        perror("Opening Error");
-        printf("%s\n", full_path);
-            continue;
-      }
-      if (fstat(fd, &buf) == -1) {
+      if (lstat(full_path, &buf) == -1) {
                 perror("stat");
                 continue;
         }
-        close(fd);
-        total_size += (long long) buf.st_size;
-        if(buf.st_mode & S_IFMT & S_IFDIR){
-            total_size += get_dir_size(full_path);
+
+        if (((!(flags & FLAG_ONLY_FILES_AND_DIRS)) || ((buf.st_mode & S_IFMT) == S_IFDIR) || ((buf.st_mode & S_IFMT) == S_IFREG)) && !(buf.st_blocks == 0))
+          total_size += (long long) buf.st_size;
+        if((buf.st_mode & S_IFMT & S_IFDIR) && !((buf.st_mode & S_IFMT & S_IFLNK))){
+            total_size += get_dir_size(full_path, flags);
         }
     }
     }

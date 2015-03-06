@@ -4,6 +4,11 @@
 #include <QMainWindow>
 #include <QFileSystemModel>
 #include <QSet>
+#include <QThread>
+#include <QWebFrame>
+
+#include "directoryanalyzer.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -18,58 +23,34 @@ public:
     ~MainWindow();
 
     void centerWindow();
-    void setDirectoryJson(QString, QString);
+
+signals:
+    void startAnalysis(QString, QString, int);
+
 private slots:
     void on_actionAnalyzeDirectory_triggered();
 
     void on_twgDirViewer_doubleClicked(const QModelIndex &index);
 
+    void on_twgDirViewer_expanded(const QModelIndex &index);
+
+    void on_actionRefresh_triggered();
+
+    void analysisComplete();
+
 public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);
+    void setDirectoryJson(QString, QString);
 
 private:
     Ui::MainWindow *ui;
     QFileSystemModel *model;
+    DirectoryAnalyzer *analyzer;
+    QWebFrame *frame;
     QString currentPath;
+    QThread analysisThread;
 };
-
-class DirectoryEntry;
-
-class DirectoryEntry{
-
-public:
-    DirectoryEntry(QString, QString, long long, int, DirectoryEntry * = 0, QSet<DirectoryEntry *> = QSet<DirectoryEntry *> ());
-
-    QString getName() const;
-    void setName(const QString &value);
-
-    QString getPath() const;
-    void setPath(const QString &value);
-
-    int getDepth() const;
-    void setDepth(int value);
-
-    long long getEntrySize() const;
-    void setEntrySize(long long value);
-
-    DirectoryEntry *getSource() const;
-    void setSource(DirectoryEntry *value);
-
-    QSet<DirectoryEntry *> getChildren() const;
-    void setChildren(const QSet<DirectoryEntry *> &value);
-    void addChild(DirectoryEntry *value);
-    void removeChild(DirectoryEntry* value);
-
-private:
-    QString name;
-    QString path;
-    int depth;
-    long long entrySize;
-    DirectoryEntry *source;
-    QSet<DirectoryEntry *> children;
-};
-
 
 
 #endif // MAINWINDOW_H

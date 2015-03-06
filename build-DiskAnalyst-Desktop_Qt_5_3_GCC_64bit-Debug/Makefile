@@ -46,12 +46,18 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../DiskAnalyst/main.cpp \
-		../DiskAnalyst/mainwindow.cpp qrc_files.cpp \
-		moc_mainwindow.cpp
+		../DiskAnalyst/mainwindow.cpp \
+		../DiskAnalyst/directoryentry.cpp \
+		../DiskAnalyst/directoryanalyzer.cpp qrc_files.cpp \
+		moc_mainwindow.cpp \
+		moc_directoryanalyzer.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		directoryentry.o \
+		directoryanalyzer.o \
 		qrc_files.o \
-		moc_mainwindow.o
+		moc_mainwindow.o \
+		moc_directoryanalyzer.o
 DIST          = /opt/Qt5.3.2/5.3/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt5.3.2/5.3/gcc_64/mkspecs/common/shell-unix.conf \
 		/opt/Qt5.3.2/5.3/gcc_64/mkspecs/common/unix.conf \
@@ -160,7 +166,9 @@ DIST          = /opt/Qt5.3.2/5.3/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt5.3.2/5.3/gcc_64/mkspecs/features/yacc.prf \
 		/opt/Qt5.3.2/5.3/gcc_64/mkspecs/features/lex.prf \
 		../DiskAnalyst/DiskAnalyst.pro ../DiskAnalyst/main.cpp \
-		../DiskAnalyst/mainwindow.cpp
+		../DiskAnalyst/mainwindow.cpp \
+		../DiskAnalyst/directoryentry.cpp \
+		../DiskAnalyst/directoryanalyzer.cpp
 QMAKE_TARGET  = DiskAnalyst
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = DiskAnalyst
@@ -431,7 +439,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/DiskAnalyst1.0.0 || mkdir -p .tmp/DiskAnalyst1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/files.qrc .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/mainwindow.h ../DiskAnalyst/file_analyzer.h .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/main.cpp ../DiskAnalyst/mainwindow.cpp .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/mainwindow.ui .tmp/DiskAnalyst1.0.0/ && (cd `dirname .tmp/DiskAnalyst1.0.0` && $(TAR) DiskAnalyst1.0.0.tar DiskAnalyst1.0.0 && $(COMPRESS) DiskAnalyst1.0.0.tar) && $(MOVE) `dirname .tmp/DiskAnalyst1.0.0`/DiskAnalyst1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/DiskAnalyst1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/files.qrc .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/mainwindow.h ../DiskAnalyst/directoryanalyzer.h ../DiskAnalyst/directoryentry.h .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/main.cpp ../DiskAnalyst/mainwindow.cpp ../DiskAnalyst/directoryentry.cpp ../DiskAnalyst/directoryanalyzer.cpp .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/mainwindow.ui .tmp/DiskAnalyst1.0.0/ && (cd `dirname .tmp/DiskAnalyst1.0.0` && $(TAR) DiskAnalyst1.0.0.tar DiskAnalyst1.0.0 && $(COMPRESS) DiskAnalyst1.0.0.tar) && $(MOVE) `dirname .tmp/DiskAnalyst1.0.0`/DiskAnalyst1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/DiskAnalyst1.0.0
 
 
 clean:compiler_clean 
@@ -463,6 +471,7 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/settings-icon.png \
 		../DiskAnalyst/Icons/analysis-icon.png \
 		../DiskAnalyst/Icons/Open-icon.png \
+		../DiskAnalyst/Icons/Stop-icon.png \
 		../DiskAnalyst/Charts/css.css \
 		../DiskAnalyst/Charts/d3.v3.min.js \
 		../DiskAnalyst/Charts/sequences.css \
@@ -473,9 +482,9 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Charts/jquery.min.js
 	/opt/Qt5.3.2/5.3/gcc_64/bin/rcc -name files ../DiskAnalyst/files.qrc -o qrc_files.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_directoryanalyzer.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_directoryanalyzer.cpp
 moc_mainwindow.cpp: /opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qwidget.h \
@@ -585,8 +594,90 @@ moc_mainwindow.cpp: /opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdir.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfileinfo.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdiriterator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSet \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QThread \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qthread.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebFrame \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QObject \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/QSslConfiguration \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslsocket.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qtcpsocket.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslerror.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslcertificate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcryptographichash.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdatetime.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qssl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QFlags \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../DiskAnalyst/directoryanalyzer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QList \
+		../DiskAnalyst/directoryentry.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QString \
 		../DiskAnalyst/mainwindow.h
 	/opt/Qt5.3.2/5.3/gcc_64/bin/moc $(DEFINES) -I/opt/Qt5.3.2/5.3/gcc_64/mkspecs/linux-g++ -I/home/ahmed/Documents/Git/disk-analyzer/DiskAnalyst -I/opt/Qt5.3.2/5.3/gcc_64/include -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork -I/opt/Qt5.3.2/5.3/gcc_64/include/QtGui -I/opt/Qt5.3.2/5.3/gcc_64/include/QtCore -I. ../DiskAnalyst/mainwindow.h -o moc_mainwindow.cpp
+
+moc_directoryanalyzer.cpp: /opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QObject \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobject.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfeatures.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypetraits.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv7.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv6.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv5.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_ia64.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_mips.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_x86.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_gcc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_unix.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnumeric.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmetatype.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qisenum.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobject_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QList \
+		../DiskAnalyst/directoryentry.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QString \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSet \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qset.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qhash.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qpair.h \
+		../DiskAnalyst/directoryanalyzer.h
+	/opt/Qt5.3.2/5.3/gcc_64/bin/moc $(DEFINES) -I/opt/Qt5.3.2/5.3/gcc_64/mkspecs/linux-g++ -I/home/ahmed/Documents/Git/disk-analyzer/DiskAnalyst -I/opt/Qt5.3.2/5.3/gcc_64/include -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork -I/opt/Qt5.3.2/5.3/gcc_64/include/QtGui -I/opt/Qt5.3.2/5.3/gcc_64/include/QtCore -I. ../DiskAnalyst/directoryanalyzer.h -o moc_directoryanalyzer.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -717,6 +808,29 @@ main.o: ../DiskAnalyst/main.cpp ../DiskAnalyst/mainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdir.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfileinfo.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdiriterator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSet \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QThread \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qthread.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebFrame \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QObject \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/QSslConfiguration \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslsocket.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qtcpsocket.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslerror.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslcertificate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcryptographichash.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdatetime.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qssl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QFlags \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../DiskAnalyst/directoryanalyzer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QList \
+		../DiskAnalyst/directoryentry.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QString \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QApplication \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qapplication.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreapplication.h \
@@ -848,16 +962,11 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qfilesystemmodel.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdiriterator.h \
-		ui_mainwindow.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebView \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebview.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit/qwebkitglobal.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebpage.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit/qwebsettings.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpainter.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtextoption.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpen.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSet \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QThread \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qthread.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebFrame \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebframe.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QObject \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/QSslConfiguration \
@@ -871,6 +980,20 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdatetime.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qssl.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QFlags \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../DiskAnalyst/directoryanalyzer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QList \
+		../DiskAnalyst/directoryentry.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QString \
+		ui_mainwindow.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit/qwebsettings.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpainter.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtextoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpen.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAction \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qaction.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
@@ -912,8 +1035,6 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMessageBox \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmessagebox.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebPage \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebFrame \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebframe.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QJsonObject \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qjsonobject.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qjsonvalue.h \
@@ -921,16 +1042,144 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qjsondocument.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QJsonArray \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qjsonarray.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QDebug \
-		../DiskAnalyst/file_analyzer.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QList
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../DiskAnalyst/mainwindow.cpp
+
+directoryentry.o: ../DiskAnalyst/directoryentry.cpp ../DiskAnalyst/directoryentry.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QString \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfeatures.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypetraits.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv7.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv6.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv5.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_ia64.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_mips.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_x86.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_gcc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_unix.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnumeric.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSet \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qset.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qhash.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qpair.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o directoryentry.o ../DiskAnalyst/directoryentry.cpp
+
+directoryanalyzer.o: ../DiskAnalyst/directoryanalyzer.cpp ../DiskAnalyst/directoryanalyzer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QObject \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobject.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfeatures.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypetraits.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv7.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv6.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv5.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_ia64.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_mips.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_x86.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_gcc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_unix.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnumeric.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmetatype.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qisenum.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobject_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QList \
+		../DiskAnalyst/directoryentry.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QString \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSet \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qset.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qhash.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QDebug \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdebug.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtextstream.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qiodevice.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlocale.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvariant.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringlist.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdatastream.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregexp.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qshareddata.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QJsonObject \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qjsonobject.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qjsonvalue.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QJsonArray \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qjsonarray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QJsonDocument \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qjsondocument.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o directoryanalyzer.o ../DiskAnalyst/directoryanalyzer.cpp
 
 qrc_files.o: qrc_files.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_files.o qrc_files.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_directoryanalyzer.o: moc_directoryanalyzer.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_directoryanalyzer.o moc_directoryanalyzer.cpp
 
 ####### Install
 

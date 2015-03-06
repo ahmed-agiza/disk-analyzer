@@ -13,10 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    directoryentry.cpp \
+    directoryanalyzer.cpp
 
 HEADERS  += mainwindow.h \
-    file_analyzer.h
+    directoryanalyzer.h \
+    directoryentry.h
 
 FORMS    += mainwindow.ui
 

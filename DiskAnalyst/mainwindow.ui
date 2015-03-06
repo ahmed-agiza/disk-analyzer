@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1070</width>
+    <width>1224</width>
     <height>693</height>
    </rect>
   </property>
@@ -38,7 +38,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>200</width>
+        <width>300</width>
         <height>0</height>
        </size>
       </property>
@@ -78,7 +78,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1070</width>
+     <width>1224</width>
      <height>20</height>
     </rect>
    </property>
@@ -94,7 +94,9 @@
    <addaction name="actionExploreDirectory"/>
    <addaction name="actionOpen_Terminal"/>
    <addaction name="separator"/>
+   <addaction name="actionStop"/>
    <addaction name="actionRefresh"/>
+   <addaction name="separator"/>
    <addaction name="actionSettings"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -171,6 +173,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="icon">
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/Stop-icon.png</normaloff>:/icons/Icons/Stop-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop Current Analysis</string>
    </property>
   </action>
  </widget>

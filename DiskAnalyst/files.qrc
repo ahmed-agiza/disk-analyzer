@@ -7,15 +7,16 @@
         <file>Icons/analysis-icon.png</file>
         <file>Icons/Actions-view-refresh-icon.png</file>
         <file>Icons/Awicons-Vista-Artistic-Chart-search.ico</file>
+        <file>Icons/Stop-icon.png</file>
     </qresource>
     <qresource prefix="/charts">
         <file>Charts/index.html</file>
         <file>Charts/visit-sequences.csv</file>
         <file>Charts/css.css</file>
         <file>Charts/d3.v3.min.js</file>
-        <file>Charts/data.json</file>
         <file>Charts/sequences.css</file>
         <file>Charts/sequences.js</file>
         <file>Charts/jquery.min.js</file>
+        <file>Charts/data.json</file>
     </qresource>
 </RCC>

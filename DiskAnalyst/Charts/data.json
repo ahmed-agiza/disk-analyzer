@@ -4,7 +4,6 @@
   {
    "name": "analytics",
    "children": [
-    {"name": "dummy", "size": 10000, "dummy": true},
     {
      "name": "cluster",
      "children": [
