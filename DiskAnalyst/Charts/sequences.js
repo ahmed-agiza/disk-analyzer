@@ -227,7 +227,7 @@ function fpdPoints(d, i) {
 // Interactive: When a node is clicked this will trigger
 function click(d){
     path = getPath(d);
-    alert(path);
+    mainWindow.navigateTo(path);
 }
 
 // Function to clear html
@@ -253,6 +253,6 @@ function getPath(node) {
         path = current.name + '/' + path;
         current = current.parent;
     }
-    path = current.name + '/' + path;
+    //path = current.name + '/' + path;
     return path;
 }

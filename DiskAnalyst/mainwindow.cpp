@@ -17,7 +17,7 @@
 MainWindow::MainWindow(QWidget *parent)
     :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(new DirectoryAnalyzer(this)){
     ui->setupUi(this);
-    setCurrentPath("/home/");
+    setCurrentPath("~/");
     ui->twgDirViewer->setModel(model);
     ui->twgDirViewer->hideColumn(1);
     ui->twgDirViewer->hideColumn(3);
@@ -48,7 +48,7 @@ MainWindow::~MainWindow(){
 
 void MainWindow::exposeObjectsToJS(){
     //qDebug() << "Adding objects" << endl;
-    //frame->addToJavaScriptWindowObject(QString("name"), objecy, QWebFrame::ScriptOwnership);
+    frame->addToJavaScriptWindowObject(QString("mainWindow"), this, QWebFrame::ScriptOwnership);
 }
 
 void MainWindow::setCurrentPath(QString newPath){
@@ -78,10 +78,6 @@ void MainWindow::centerWindow(){
     move ( x, y );
 }
 
-typedef QPair<QString, long long> ItemEntryPair;
-typedef QSet<ItemEntryPair> FileEntriesSet;
-typedef  QMap<QString, FileEntriesSet> DirectoryTreeStructure;
-
 void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 {
     analyzer->startAnalysis(dirStr, nodeName);
@@ -91,16 +87,45 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
     frame->evaluateJavaScript(jsCommand);
 }
 
-void MainWindow::on_actionAnalyzeDirectory_triggered(){
-    //QString dir("/home/");
-   //setDirectoryJson(dir, "home");
+void MainWindow::navigateTo(QString path){
+    if(path.isEmpty())
+        return;
+    if (path.startsWith("/"))
+        path.remove(0, 1);
 
+    if (path.endsWith("/"))
+            path.remove(path.length() - 1, 1);
+
+    QString fullPath = currentDUA + path;
+    QFileInfo pathInfo(fullPath);
+    if(pathInfo.isDir()){
+        QString directory = pathInfo.absoluteDir().absolutePath() + QString("/");
+        QString fileName = pathInfo.baseName();
+        setCurrentDUA(directory + fileName);
+        setDirectoryJson(directory, fileName);
+    }
+}
+QString MainWindow::getCurrentDUA() const{
+    return currentDUA;
+}
+
+void MainWindow::setCurrentDUA(const QString &value){
+    currentDUA = value;
+    if (!value.endsWith("/"))
+        currentDUA.append("/");
+}
+
+
+void MainWindow::on_actionAnalyzeDirectory_triggered(){
+    QModelIndex index = ui->twgDirViewer->currentIndex();
+    on_twgDirViewer_doubleClicked(index);
 }
 
 void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){   
     if(model->isDir(index)){
         QString directory = model->fileInfo(index).absoluteDir().absolutePath() + QString("/");
         QString fileName = model->fileInfo(index).baseName();
+        setCurrentDUA(directory + fileName);
         setDirectoryJson(directory, fileName);
     }
 }

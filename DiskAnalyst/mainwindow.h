@@ -24,6 +24,9 @@ public:
 
     void centerWindow();
 
+    QString getCurrentDUA() const;
+    void setCurrentDUA(const QString &value);
+
 signals:
     void startAnalysis(QString, QString, int);
 
@@ -42,6 +45,7 @@ public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);
     void setDirectoryJson(QString, QString);
+    void navigateTo(QString);
 
 private:
     Ui::MainWindow *ui;
@@ -49,6 +53,7 @@ private:
     DirectoryAnalyzer *analyzer;
     QWebFrame *frame;
     QString currentPath;
+    QString currentDUA;
     QThread analysisThread;
 };
 
