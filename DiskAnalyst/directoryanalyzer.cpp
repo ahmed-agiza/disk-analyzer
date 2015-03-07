@@ -5,13 +5,16 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
+
+//#define DEBUG_SEPERATOR
+
 DirectoryEntry *DirectoryAnalyzer::statFile(char *path, char *name, int flags, int depth, DirectoryEntry *source){
     struct stat buf;
     char full_path[MAX_FULL_PATH_SIZE];
 
     (void)flags;
 #ifdef DEBUG_SEPERATOR
-    qDebug() << "Stating: " << path << " : " << name;
+    //qDebug() << "Stating: " << path << " : " << name;
 #endif
 
     if (path[strlen(path) - 1] != '/'){
@@ -208,8 +211,13 @@ void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags
         directory.append("/");
     }
 
+
     strcpy(pathCharArray, directory.toLocal8Bit().data());
     strcpy(nameCharArray, name.toLocal8Bit().data());
+
+    qDebug() << "Cat: " << pathCharArray << " - " << nameCharArray;
+
+
     sprintf(fullPathArray, "%s%s", pathCharArray, nameCharArray);
 
     if (strcmp(fullPathArray, ".") == 0 || strcmp(fullPathArray, "..") == 0)
@@ -219,7 +227,7 @@ void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags
     root = rootEntry;
     entries.append(rootEntry);
     if (rootEntry->isDirectory()){
-        if (!name.endsWith("/")){
+        if (!name.isEmpty() && !name.endsWith("/")){
 #ifdef DEBUG_SEPERATOR
             qDebug() << "Name " << name;
             qDebug() << "Adding / to " << nameCharArray;

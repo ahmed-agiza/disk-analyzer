@@ -61,6 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
     settingsDialog = 0;
     statDialog = 0;
     dupesDialog = 0;
+
+    ui->twgDirViewer->setRootIsDecorated(true);
 }
 
 
@@ -77,10 +79,18 @@ void MainWindow::setCurrentPath(QString newPath){
         QMessageBox::critical(this, "Error", "Invalid directory " + newPath);
         return;
     }
+
     currentPath = newPath;
-    model->setRootPath(newPath);
-    QModelIndex rootIndex = model->index(newPath);
-    ui->twgDirViewer->setRootIndex(rootIndex);
+    if (newPath == QDir::rootPath()){
+        model->setRootPath("/");
+        QModelIndex rootIndex = model->index("");
+        ui->twgDirViewer->setRootIndex(rootIndex);
+    }else{
+        model->setRootPath(newPath);
+        QModelIndex rootIndex = model->index(newPath);
+        ui->twgDirViewer->setRootIndex(rootIndex);
+    }
+
 }
 
 void MainWindow::centerWindow(){
@@ -107,7 +117,9 @@ void MainWindow::centerWindow(){
 
 void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 {
+    qDebug() << "Analyzing..";
     analyzer->startAnalysis(dirStr, nodeName);
+    qDebug() << "Analyzed..";
     DirectoryEntry *rootEntry = analyzer->getRoot();
     QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
     QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
@@ -130,7 +142,7 @@ void MainWindow::navigateTo(QString path){
         QString directory = pathInfo.absoluteDir().absolutePath() + QString("/");
         QString fileName = pathInfo.baseName();
         setCurrentDUA(directory + fileName);
-        setDirectoryJson(directory, fileName);
+        //setDirectoryJson(directory, fileName);
     }else if(pathInfo.exists()){
         struct stat sb;
         printf("Test");
@@ -142,14 +154,14 @@ void MainWindow::navigateTo(QString path){
 
         QString fileType;
         switch (sb.st_mode & S_IFMT) {
-            case S_IFBLK:  fileType = "Block Device";       break;
-            case S_IFCHR:  fileType = "Character Device";   break;
-            case S_IFDIR:  fileType = "Directory";          break;
-            case S_IFIFO:  fileType = "FIFO/pipe";          break;
-            case S_IFLNK:  fileType = "System Link";        break;
-            case S_IFREG:  fileType = "Regular File";       break;
-            case S_IFSOCK: fileType = "Socket";             break;
-            default:       fileType = "Unknown";            break;
+        case S_IFBLK:  fileType = "Block Device";       break;
+        case S_IFCHR:  fileType = "Character Device";   break;
+        case S_IFDIR:  fileType = "Directory";          break;
+        case S_IFIFO:  fileType = "FIFO/pipe";          break;
+        case S_IFLNK:  fileType = "System Link";        break;
+        case S_IFREG:  fileType = "Regular File";       break;
+        case S_IFSOCK: fileType = "Socket";             break;
+        default:       fileType = "Unknown";            break;
         }
 
         QString mode;
@@ -226,7 +238,9 @@ void MainWindow::on_actionAnalyzeDirectory_triggered(){
 
 void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){   
     if(model->isDir(index)){
-        QString directory = model->fileInfo(index).absoluteDir().absolutePath() + QString("/");
+        QString directory = model->fileInfo(index).absoluteDir().absolutePath();
+        if (directory != QDir::rootPath() && !directory.endsWith("/"))
+            directory.append("/");
         QString fileName = model->fileInfo(index).baseName();
         setCurrentDUA(directory + fileName);
         setDirectoryJson(directory, fileName);
@@ -386,7 +400,7 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
                             duplicates.append(QPair<QString, QString>(matchingSize[j], entryPath));
                         }else{
                             qDebug() << "Entries " << entryPath << " and " << matchingSize[j]
-                                     << " have the same size but different hashing";
+                                        << " have the same size but different hashing";
                         }
                     }
                 }
