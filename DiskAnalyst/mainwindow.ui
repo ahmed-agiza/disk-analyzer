@@ -28,7 +28,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QTreeView" name="twgDirViewer">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
@@ -44,7 +44,7 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item row="1" column="1">
      <widget class="QWebView" name="wvwCharts">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
@@ -103,7 +103,7 @@
   <action name="actionAnalyzeDirectory">
    <property name="icon">
     <iconset resource="files.qrc">
-     <normaloff>:/icons/Icons/analysis-icon.png</normaloff>:/icons/Icons/analysis-icon.png</iconset>
+     <normaloff>:/icons/Icons/file-explore-icon.png</normaloff>:/icons/Icons/file-explore-icon.png</iconset>
    </property>
    <property name="text">
     <string>Analyze Directory</string>
@@ -118,7 +118,7 @@
   <action name="actionExploreDirectory">
    <property name="icon">
     <iconset resource="files.qrc">
-     <normaloff>:/icons/Icons/Open-icon.png</normaloff>:/icons/Icons/Open-icon.png</iconset>
+     <normaloff>:/icons/Icons/Folder-Open-icon (1).png</normaloff>:/icons/Icons/Folder-Open-icon (1).png</iconset>
    </property>
    <property name="text">
     <string>Explore Directory</string>
@@ -133,7 +133,7 @@
   <action name="actionOpen_Terminal">
    <property name="icon">
     <iconset resource="files.qrc">
-     <normaloff>:/icons/Icons/Apps-konsole-icon.png</normaloff>:/icons/Icons/Apps-konsole-icon.png</iconset>
+     <normaloff>:/icons/Icons/Apps-Terminal-Pc-104-icon.png</normaloff>:/icons/Icons/Apps-Terminal-Pc-104-icon.png</iconset>
    </property>
    <property name="text">
     <string>Open Terminal</string>
@@ -148,7 +148,7 @@
   <action name="actionRefresh">
    <property name="icon">
     <iconset resource="files.qrc">
-     <normaloff>:/icons/Icons/Actions-view-refresh-icon.png</normaloff>:/icons/Icons/Actions-view-refresh-icon.png</iconset>
+     <normaloff>:/icons/Icons/Button-Refresh-icon.png</normaloff>:/icons/Icons/Button-Refresh-icon.png</iconset>
    </property>
    <property name="text">
     <string>Refresh</string>
@@ -163,7 +163,7 @@
   <action name="actionSettings">
    <property name="icon">
     <iconset resource="files.qrc">
-     <normaloff>:/icons/Icons/settings-icon.png</normaloff>:/icons/Icons/settings-icon.png</iconset>
+     <normaloff>:/icons/Icons/settings-3-icon.png</normaloff>:/icons/Icons/settings-3-icon.png</iconset>
    </property>
    <property name="text">
     <string>Settings</string>
@@ -178,13 +178,13 @@
   <action name="actionUp">
    <property name="icon">
     <iconset resource="files.qrc">
-     <normaloff>:/icons/Icons/Button-Upload-icon.png</normaloff>:/icons/Icons/Button-Upload-icon.png</iconset>
+     <normaloff>:/icons/Icons/Button-Upload-icon (1).png</normaloff>:/icons/Icons/Button-Upload-icon (1).png</iconset>
    </property>
    <property name="text">
     <string>Up</string>
    </property>
    <property name="toolTip">
-    <string>Navigate up one directory</string>
+    <string>Navigate Up One directory</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+U</string>

@@ -9,6 +9,14 @@
         <file>Icons/Awicons-Vista-Artistic-Chart-search.ico</file>
         <file>Icons/Stop-icon.png</file>
         <file>Icons/Button-Upload-icon.png</file>
+        <file>Icons/Apps-Terminal-Pc-104-icon.png</file>
+        <file>Icons/Developer-icon.png</file>
+        <file>Icons/file-explore-icon.png</file>
+        <file>Icons/Folder-Open-icon (1).png</file>
+        <file>Icons/terminal-green-icon.png</file>
+        <file>Icons/settings-3-icon.png</file>
+        <file>Icons/Button-Refresh-icon.png</file>
+        <file>Icons/Button-Upload-icon (1).png</file>
     </qresource>
     <qresource prefix="/charts">
         <file>Charts/index.html</file>

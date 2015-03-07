@@ -22,6 +22,9 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
+    void passGraphParamters();
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();

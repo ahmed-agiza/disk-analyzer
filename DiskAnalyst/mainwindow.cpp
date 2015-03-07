@@ -29,6 +29,8 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "settingsmanager.h"
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -108,6 +110,7 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
     QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
     QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
     frame->evaluateJavaScript(jsCommand);
+    passGraphParamters();
 }
 
 void MainWindow::navigateTo(QString path){
@@ -271,8 +274,11 @@ void MainWindow::on_actionSettings_triggered(){
     if(!settingsDialog){
         settingsDialog = new SettingsDialog(this);
     }
-    settingsDialog->show();
     settingsDialog->setModal(true);
+    settingsDialog->exec();
+    if(settingsDialog->result() == QDialog::Accepted){
+        passGraphParamters();
+    }
 }
 
 void MainWindow::on_actionUp_triggered(){
@@ -292,4 +298,9 @@ void MainWindow::on_actionUp_triggered(){
         }else
             qDebug() << "Invalid path.";
     }
+}
+
+
+void MainWindow::passGraphParamters(){
+
 }
