@@ -8,6 +8,7 @@
 #include <QWebFrame>
 
 #include "directoryanalyzer.h"
+#include "settingsdialog.h"
 
 
 namespace Ui {
@@ -24,6 +25,9 @@ public:
 
     void centerWindow();
 
+    QString getCurrentDUA() const;
+    void setCurrentDUA(const QString &value);
+
 signals:
     void startAnalysis(QString, QString, int);
 
@@ -38,17 +42,26 @@ private slots:
 
     void analysisComplete();
 
+    void on_actionOpen_Terminal_triggered();
+
+    void on_actionExploreDirectory_triggered();
+
+    void on_actionSettings_triggered();
+
 public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);
     void setDirectoryJson(QString, QString);
+    void navigateTo(QString);
 
 private:
     Ui::MainWindow *ui;
     QFileSystemModel *model;
     DirectoryAnalyzer *analyzer;
     QWebFrame *frame;
+    SettingsDialog *settingsDialog;
     QString currentPath;
+    QString currentDUA;
     QThread analysisThread;
 };
 

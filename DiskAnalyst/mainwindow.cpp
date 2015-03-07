@@ -2,8 +2,6 @@
 #include <QDockWidget>
 #include <QHBoxLayout>
 #include <QFileDialog>
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <QWebPage>
 #include <QWebFrame>
@@ -12,13 +10,18 @@
 #include <QJsonArray>
 #include <QDebug>
 #include <QFileSystemModel>
+#include <QProcess>
+#include <QMessageBox>
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
     :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(new DirectoryAnalyzer(this)){
     ui->setupUi(this);
-    setCurrentPath("/home/");
     ui->twgDirViewer->setModel(model);
+    setCurrentPath(QDir::homePath ());
     ui->twgDirViewer->hideColumn(1);
     ui->twgDirViewer->hideColumn(3);
     centerWindow();
@@ -38,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     frame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
     connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
-
+    settingsDialog = 0;
 }
 
 
@@ -47,13 +50,18 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::exposeObjectsToJS(){
-    //qDebug() << "Adding objects" << endl;
-    //frame->addToJavaScriptWindowObject(QString("name"), objecy, QWebFrame::ScriptOwnership);
+    frame->addToJavaScriptWindowObject(QString("mainWindow"), this, QWebFrame::ScriptOwnership);
 }
 
 void MainWindow::setCurrentPath(QString newPath){
+    if (!QFileInfo(newPath).isDir()){
+        QMessageBox::critical(this, "Error", "Invalid directory " + newPath);
+        return;
+    }
     currentPath = newPath;
     model->setRootPath(newPath);
+    QModelIndex rootIndex = model->index(newPath);
+    ui->twgDirViewer->setRootIndex(rootIndex);
 }
 
 void MainWindow::centerWindow(){
@@ -78,10 +86,6 @@ void MainWindow::centerWindow(){
     move ( x, y );
 }
 
-typedef QPair<QString, long long> ItemEntryPair;
-typedef QSet<ItemEntryPair> FileEntriesSet;
-typedef  QMap<QString, FileEntriesSet> DirectoryTreeStructure;
-
 void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 {
     analyzer->startAnalysis(dirStr, nodeName);
@@ -91,16 +95,46 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
     frame->evaluateJavaScript(jsCommand);
 }
 
-void MainWindow::on_actionAnalyzeDirectory_triggered(){
-    //QString dir("/home/");
-   //setDirectoryJson(dir, "home");
+void MainWindow::navigateTo(QString path){
+    if(path.isEmpty())
+        return;
+    if (path.startsWith("/"))
+        path.remove(0, 1);
 
+    if (path.endsWith("/"))
+            path.remove(path.length() - 1, 1);
+
+    QString fullPath = currentDUA + path;
+    QFileInfo pathInfo(fullPath);
+    if(pathInfo.isDir()){
+        QString directory = pathInfo.absoluteDir().absolutePath() + QString("/");
+        QString fileName = pathInfo.baseName();
+        setCurrentDUA(directory + fileName);
+        setDirectoryJson(directory, fileName);
+    }
+}
+QString MainWindow::getCurrentDUA() const{
+    return currentDUA;
+}
+
+void MainWindow::setCurrentDUA(const QString &value){
+    currentDUA = value;
+    if (!value.endsWith("/"))
+        currentDUA.append("/");
+}
+
+
+void MainWindow::on_actionAnalyzeDirectory_triggered(){
+    QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", currentDUA);
+    if (fileName.trimmed() != "")
+        setCurrentPath(fileName);
 }
 
 void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){   
     if(model->isDir(index)){
         QString directory = model->fileInfo(index).absoluteDir().absolutePath() + QString("/");
         QString fileName = model->fileInfo(index).baseName();
+        setCurrentDUA(directory + fileName);
         setDirectoryJson(directory, fileName);
     }
 }
@@ -117,4 +151,51 @@ void MainWindow::on_actionRefresh_triggered(){
 
 void MainWindow::analysisComplete(){
 
+}
+
+void MainWindow::on_actionOpen_Terminal_triggered(){
+    if(currentDUA.isEmpty())
+        return;
+
+    QFileInfo pathInfo(currentDUA);
+    if(!pathInfo.isDir()){
+        QMessageBox::critical(this, "Error", "Invalid directory " + currentDUA);
+        return;
+    }
+
+    QString terminal(qgetenv("TERM"));
+
+    if (terminal.isEmpty()){
+        QMessageBox::critical(this, "Error", "The terminal environment variable $TERM is not set");
+        return;
+    }else{
+        QProcess *terminalProcess = new QProcess(this);
+        QString option("-e");
+        QString argument(QString("cd ") + currentDUA + " && /bin/bash");
+        QStringList arguments;
+        arguments << option << argument;
+        terminalProcess->start(terminal, arguments);
+    }
+}
+
+void MainWindow::on_actionExploreDirectory_triggered(){
+    if(currentDUA.isEmpty())
+        return;
+    QFileInfo pathInfo(currentDUA);
+    if(!pathInfo.isDir()){
+        QMessageBox::critical(this, "Error", "Invalid directory " + currentDUA);
+        return;
+    }
+
+    QProcess *fileManagerProcess = new QProcess(this);
+    QStringList arguments;
+    arguments << currentDUA;
+    fileManagerProcess->start("xdg-open", arguments);
+}
+
+void MainWindow::on_actionSettings_triggered(){
+    if(!settingsDialog){
+        settingsDialog = new SettingsDialog(this);
+    }
+    settingsDialog->show();
 }

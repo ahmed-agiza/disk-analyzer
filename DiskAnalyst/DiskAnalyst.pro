@@ -15,13 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     directoryentry.cpp \
-    directoryanalyzer.cpp
+    directoryanalyzer.cpp \
+    settingsdialog.cpp
 
 HEADERS  += mainwindow.h \
     directoryanalyzer.h \
-    directoryentry.h
+    directoryentry.h \
+    settingsdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    settingsdialog.ui
 
 RESOURCES += \
     files.qrc
