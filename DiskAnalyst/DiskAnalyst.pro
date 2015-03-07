@@ -23,7 +23,8 @@ HEADERS  += mainwindow.h \
     directoryanalyzer.h \
     directoryentry.h \
     settingsdialog.h \
-    filestatdialog.h
+    filestatdialog.h \
+    settingsmanager.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \

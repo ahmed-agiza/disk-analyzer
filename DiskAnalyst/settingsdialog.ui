@@ -7,24 +7,55 @@
     <x>0</x>
     <y>0</y>
     <width>539</width>
-    <height>274</height>
+    <height>227</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
-   <item row="0" column="0">
+   <property name="fieldGrowthPolicy">
+    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+   </property>
+   <item row="2" column="0">
     <widget class="QLabel" name="lblGraphDepth">
      <property name="text">
       <string>Maximum graph depth:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="letGraphDepth"/>
+   <item row="4" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QRadioButton" name="rbtSize">
+       <property name="text">
+        <string>Size</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbtBlocks">
+       <property name="text">
+        <string>Allocated blocks</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="1" column="0">
+   <item row="5" column="0">
+    <widget class="QCheckBox" name="chkReadable">
+     <property name="text">
+      <string>Display sizes in readble format</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
     <widget class="QCheckBox" name="chkNavigate">
      <property name="text">
       <string>Navigate through chart</string>
@@ -34,34 +65,60 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="chcReadable">
+   <item row="7" column="0">
+    <widget class="QCheckBox" name="chkFading">
      <property name="text">
-      <string>Display sizes in human readble format</string>
+      <string>Fading Animation</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="lblStartupDirectory">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QPushButton" name="btnStartuoDirectory">
+   <item row="8" column="1">
+    <widget class="QPushButton" name="btnStartupDirectory">
      <property name="text">
       <string>Change Startup Directory</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="10" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="bbxOkCancel">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lblEntriesBy">
+     <property name="text">
+      <string>List entries by:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QSpinBox" name="sbxGraphDepth">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>5</number>
+     </property>
+     <property name="value">
+      <number>4</number>
      </property>
     </widget>
    </item>
