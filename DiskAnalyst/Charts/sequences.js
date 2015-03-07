@@ -81,7 +81,8 @@ function visualize(root){
         .style("fill", function(d) {return color((d.children ? d : d.parent).name);})
         .style("opacity", 1)
         .on("mouseover", mouseover)
-        .on("click", click)
+        //.on("click", click)
+        .on("dblclick", dblclick)
 
     // Remove transparency if hovering out of the graph
     d3.select("#container").on("mouseleave", mouseleave);
@@ -224,8 +225,9 @@ function fpdPoints(d, i) {
     return points.join(" ");
 }
 
+
 // Interactive: When a node is clicked this will trigger
-function click(d){
+function dblclick(d){
     path = getPath(d);
     mainWindow.navigateTo(path);
 }

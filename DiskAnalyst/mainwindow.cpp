@@ -13,6 +13,20 @@
 #include <QProcess>
 #include <QMessageBox>
 
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <time.h>
+#include <stdlib.h>
+#include <dirent.h>
+#include <string.h>
+#include <pwd.h>
+#include <grp.h>
+#include <stdbool.h>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -42,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
     settingsDialog = 0;
+    statDialog = 0;
 }
 
 
@@ -102,7 +117,7 @@ void MainWindow::navigateTo(QString path){
         path.remove(0, 1);
 
     if (path.endsWith("/"))
-            path.remove(path.length() - 1, 1);
+        path.remove(path.length() - 1, 1);
 
     QString fullPath = currentDUA + path;
     QFileInfo pathInfo(fullPath);
@@ -111,6 +126,85 @@ void MainWindow::navigateTo(QString path){
         QString fileName = pathInfo.baseName();
         setCurrentDUA(directory + fileName);
         setDirectoryJson(directory, fileName);
+    }else if(pathInfo.exists()){
+        //qDebug() << "Stating" << pathInfo.absoluteFilePath();
+        struct stat sb;
+        printf("Test");
+
+        if (stat(pathInfo.absoluteFilePath().toLocal8Bit().data(), &sb) == -1) {
+            qDebug() << "Stat error";
+            return;
+        }
+
+        QString fileType;
+        switch (sb.st_mode & S_IFMT) {
+            case S_IFBLK:  fileType = "Block Device";       break;
+            case S_IFCHR:  fileType = "Character Device";   break;
+            case S_IFDIR:  fileType = "Directory";          break;
+            case S_IFIFO:  fileType = "FIFO/pipe";          break;
+            case S_IFLNK:  fileType = "System Link";        break;
+            case S_IFREG:  fileType = "Regular File";       break;
+            case S_IFSOCK: fileType = "Socket";             break;
+            default:       fileType = "Unknown";            break;
+        }
+
+        QString mode;
+        if(sb.st_mode &  S_IRUSR ) mode.append("r"); else mode.append("-");
+        if(sb.st_mode &  S_IWUSR ) mode.append("w"); else mode.append("-");
+        if(sb.st_mode &  S_IXUSR ) mode.append("x"); else mode.append("-");
+        if(sb.st_mode &  S_IRGRP ) mode.append("r"); else mode.append("-");
+        if(sb.st_mode &  S_IWGRP ) mode.append("w"); else mode.append("-");
+        if(sb.st_mode &  S_IXGRP ) mode.append("x"); else mode.append("-");
+        if(sb.st_mode &  S_IROTH ) mode.append("r"); else mode.append("-");
+        if(sb.st_mode &  S_IWOTH ) mode.append("w"); else mode.append("-");
+        if(sb.st_mode &  S_IXOTH ) mode.append("x"); else mode.append("-");
+
+        long inodeNumber = (long) sb.st_ino;
+        //unsigned long mode = (unsigned long) sb.st_mode;
+        long linkCount = (long) sb.st_nlink;
+        long uid = (long) sb.st_uid;
+        long gid = (long) sb.st_gid;
+        QString uname(getpwuid(sb.st_uid)->pw_name);
+        QString gname(getgrgid(sb.st_gid)->gr_name);
+        long preferredIOSize = (long) sb.st_blksize;
+        long fileSize = (long long) sb.st_size;
+        long long blocks = (long long) sb.st_blocks;
+        QString lastStatusChange(ctime(&sb.st_ctime));
+        QString lastFileAccess(ctime(&sb.st_atime));
+        QString lastFileModification(ctime(&sb.st_mtime));
+
+        if(!statDialog)
+            statDialog = new FileStatDialog(this);
+
+        statDialog->setFileName(pathInfo.baseName())->setFileExtenstion(pathInfo.completeSuffix())->setFilePath(pathInfo.absolutePath())
+                ->setFileType(fileType)->setInodeNumber(inodeNumber)
+                ->setMode(mode)->setLinkCount(linkCount)->setPreferredIOSize(preferredIOSize)
+                ->setOwnership(uname + "(" + QString::number(uid) + "):" + gname + "(" + QString::number(gid) + ")")
+                ->setSize(fileSize)->setNumberOfBlocks(blocks)->setLastStatusChange(lastStatusChange)
+                ->setLastFileAccess(lastFileAccess)->setLastModification(lastFileModification);
+        statDialog->setWindowTitle("File Status: " + pathInfo.baseName());
+        statDialog->show();
+        statDialog->setModal(true);
+
+
+
+
+        //qDebug() << mode;
+        /*qDebug() << fileType;
+        qDebug() << inodeNumber;
+        qDebug() << mode;
+        qDebug() << linkCount;
+        qDebug() << uid << "  " << uname;
+        qDebug() << gid << "  " << gname;
+        qDebug() << preferredIOSize;
+        qDebug() << fileSize;
+        qDebug() << blocks;
+        qDebug() << lastStatusChange;
+        qDebug() << lastFileAccess;
+        qDebug() << lastFileModification;*/
+
+    }else{
+        qDebug() << pathInfo.absoluteFilePath() << " does not exist";
     }
 }
 QString MainWindow::getCurrentDUA() const{
@@ -141,7 +235,7 @@ void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){
 
 
 void MainWindow::on_twgDirViewer_expanded(const QModelIndex &){
-     ui->twgDirViewer->resizeColumnToContents(0);
+    ui->twgDirViewer->resizeColumnToContents(0);
 }
 
 void MainWindow::on_actionRefresh_triggered(){
@@ -198,4 +292,9 @@ void MainWindow::on_actionSettings_triggered(){
         settingsDialog = new SettingsDialog(this);
     }
     settingsDialog->show();
+    settingsDialog->setModal(true);
+}
+
+void MainWindow::on_actionUp_triggered(){
+
 }

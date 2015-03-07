@@ -10,8 +10,10 @@ const QString STARTUP_DIRECTORY_KEY("startup directory");
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent), settings("AUC Egypt", "Disk Analyzer"), ui(new Ui::SettingsDialog){
     ui->setupUi(this);
-    if(!settings.contains(STARTUP_DIRECTORY_KEY));
+    if(!settings.contains(STARTUP_DIRECTORY_KEY))
         ui->lblStartupDirectory->setText(QDir::homePath());
+    setModal(true);
+    setWindowTitle("Settings");
 }
 
 SettingsDialog::~SettingsDialog(){

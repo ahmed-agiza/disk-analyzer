@@ -33,6 +33,7 @@ public:
     QAction *actionOpen_Terminal;
     QAction *actionRefresh;
     QAction *actionSettings;
+    QAction *actionUp;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTreeView *twgDirViewer;
@@ -76,6 +77,11 @@ public:
         QIcon icon5;
         icon5.addFile(QStringLiteral(":/icons/Icons/settings-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSettings->setIcon(icon5);
+        actionUp = new QAction(MainWindow);
+        actionUp->setObjectName(QStringLiteral("actionUp"));
+        QIcon icon6;
+        icon6.addFile(QStringLiteral(":/icons/Icons/Button-Upload-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionUp->setIcon(icon6);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -120,6 +126,7 @@ public:
         mainToolBar->addAction(actionExploreDirectory);
         mainToolBar->addAction(actionOpen_Terminal);
         mainToolBar->addSeparator();
+        mainToolBar->addAction(actionUp);
         mainToolBar->addAction(actionRefresh);
         mainToolBar->addSeparator();
         mainToolBar->addAction(actionSettings);
@@ -157,6 +164,11 @@ public:
         actionSettings->setToolTip(QApplication::translate("MainWindow", "Settings", 0));
 #endif // QT_NO_TOOLTIP
         actionSettings->setShortcut(QApplication::translate("MainWindow", "Ctrl+M", 0));
+        actionUp->setText(QApplication::translate("MainWindow", "Up", 0));
+#ifndef QT_NO_TOOLTIP
+        actionUp->setToolTip(QApplication::translate("MainWindow", "Navigate up one directory", 0));
+#endif // QT_NO_TOOLTIP
+        actionUp->setShortcut(QApplication::translate("MainWindow", "Ctrl+U", 0));
     } // retranslateUi
 
 };

@@ -94,6 +94,7 @@
    <addaction name="actionExploreDirectory"/>
    <addaction name="actionOpen_Terminal"/>
    <addaction name="separator"/>
+   <addaction name="actionUp"/>
    <addaction name="actionRefresh"/>
    <addaction name="separator"/>
    <addaction name="actionSettings"/>
@@ -172,6 +173,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionUp">
+   <property name="icon">
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/Button-Upload-icon.png</normaloff>:/icons/Icons/Button-Upload-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Up</string>
+   </property>
+   <property name="toolTip">
+    <string>Navigate up one directory</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
  </widget>

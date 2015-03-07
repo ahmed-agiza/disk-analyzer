@@ -9,6 +9,9 @@
 
 #include "directoryanalyzer.h"
 #include "settingsdialog.h"
+#include "filestatdialog.h"
+
+
 
 
 namespace Ui {
@@ -48,6 +51,8 @@ private slots:
 
     void on_actionSettings_triggered();
 
+    void on_actionUp_triggered();
+
 public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);
@@ -60,6 +65,7 @@ private:
     DirectoryAnalyzer *analyzer;
     QWebFrame *frame;
     SettingsDialog *settingsDialog;
+    FileStatDialog *statDialog;
     QString currentPath;
     QString currentDUA;
     QThread analysisThread;

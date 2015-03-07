@@ -8,6 +8,7 @@
         <file>Icons/Actions-view-refresh-icon.png</file>
         <file>Icons/Awicons-Vista-Artistic-Chart-search.ico</file>
         <file>Icons/Stop-icon.png</file>
+        <file>Icons/Button-Upload-icon.png</file>
     </qresource>
     <qresource prefix="/charts">
         <file>Charts/index.html</file>
