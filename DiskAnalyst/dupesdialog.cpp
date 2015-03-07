@@ -51,7 +51,7 @@ void DupesDialog::setDuplicates(QList<StringPair> dupes){
     for(int i = 0; i < ui->tblDuplicates->colorCount(); i++){
         totalWidth += ui->tblDuplicates->columnWidth(i);
     }
-    setFixedWidth(totalWidth + 20);
+    resize(totalWidth + 20, height());
 }
 
 DupesDialog::~DupesDialog(){
@@ -63,17 +63,28 @@ void DupesDialog::showEvent(QShowEvent *event){
 
 }
 
-bool DupesDialog::deleteFile(QString filePath){
+int DupesDialog::deleteFile(QString filePath){
     if (QMessageBox::critical(this, "Delete File", QString("Are you sure you want to delete the file: \n") + filePath + "?", QMessageBox::No | QMessageBox::Yes, QMessageBox::No)
         != QMessageBox::Yes)
-        return false;
+        return 1;
     QFile file(filePath);
     return file.remove();
 }
 
 
 void DupesDialog::openFolder(QString filePath){
-    MainWindow::openDirectory(filePath, this);
+    QString openPath;
+    QFileInfo fileInfo(filePath);
+    if (fileInfo.isDir())
+        openPath = filePath;
+    else if (!fileInfo.exists()){
+        qDebug() << filePath << " does not exits";
+        return;
+    }else{
+        openPath = fileInfo.absolutePath();
+        qDebug() << "Opening " << openPath;
+    }
+    MainWindow::openDirectory(openPath, this);
 }
 
 void DupesDialog::on_tblDuplicates_clicked(const QModelIndex &index){
@@ -81,17 +92,19 @@ void DupesDialog::on_tblDuplicates_clicked(const QModelIndex &index){
         openFolder(ui->tblDuplicates->item(index.row(), 0)->text());
     }else if (index.column() == 2){
         QString deletePath = ui->tblDuplicates->item(index.row(), 0)->text();
-        if(deleteFile(deletePath)){
+        int returnCode = deleteFile(deletePath);
+        if(!returnCode){
             removeAllEntries(deletePath);
-        }else
+        }else if (returnCode != 1)
             QMessageBox::critical(this, "Error", "Could not remove the file " + deletePath);
     }else if (index.column() == 4){
         openFolder(ui->tblDuplicates->item(index.row(), 3)->text());
     }else if (index.column() == 5){
         QString deletePath = ui->tblDuplicates->item(index.row(), 3)->text();
-        if(deleteFile(deletePath)){
+         int returnCode = deleteFile(deletePath);
+        if(!returnCode){
             removeAllEntries(deletePath);
-        }else
+        }else if (returnCode != 1)
             QMessageBox::critical(this, "Error", "Could not remove the file " + deletePath);
     }
 

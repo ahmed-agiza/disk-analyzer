@@ -6,6 +6,7 @@
 #include <QSet>
 #include <QThread>
 #include <QWebFrame>
+#include <QProgressBar>
 
 #include "directoryanalyzer.h"
 #include "settingsdialog.h"
@@ -77,6 +78,7 @@ private:
     QWebFrame *frame;
     SettingsDialog *settingsDialog;
     FileStatDialog *statDialog;
+    QProgressBar *progress;
     DupesDialog *dupesDialog;
     QString currentPath;
     QString currentDUA;

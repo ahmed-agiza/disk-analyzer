@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     centerWindow();
 
     setWindowState(Qt::WindowMaximized);
-    setFixedSize(width(), height() + 40);
+    //setFixedSize(width(), height() + 40);
     centerWindow();
     statusBar()->setSizeGripEnabled(false);
 
@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
     settingsDialog = 0;
     statDialog = 0;
     dupesDialog = 0;
+    progress = 0;
 
     ui->twgDirViewer->setRootIsDecorated(true);
 }
@@ -357,6 +358,10 @@ QString MainWindow::hashFile(QString filePath){
 }
 
 void MainWindow::on_actionDuplicateFilesChecker_triggered(){
+    if (currentDUA.isEmpty()){
+        QMessageBox::critical(this, "Error", "You need to open a directory first");
+        return;
+    }
     DirectoryAnalyzer checkerAnalyzer;
     QString dupCheckDUA = currentDUA;
     if (dupCheckDUA.endsWith("/") && dupCheckDUA != QDir::rootPath())
@@ -378,7 +383,15 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
     QMap<QString, QString> hashCache;
     QList<QPair<QString, QString> > duplicates;
     DirectoryEntry *rootEntry = analyzer->getRoot();
+    if(!progress){
+        progress = new QProgressBar(this);
+        statusBar()->addWidget(progress);
+    }
+    progress->setValue(0);
+    progress->show();
+
     for(int i = 0; i < entries.size(); i++){
+        progress->setValue(((i*1.0)/entries.size()) * 100);
         if (entries[i] == rootEntry)
             continue;
         if (entries[i]->isValid() && entries[i]->isRegularFile()){
@@ -387,9 +400,9 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
                 sizesTable[entries[i]->getEntrySize()].append(entryPath);
             }else{
                 QList<QString> &matchingSize = sizesTable[entries[i]->getEntrySize()];
-                qDebug() << "Size: " << entries[i]->getEntrySize();
-                qDebug() << "Entry: " << entryPath;
-                qDebug() << "Older entries: " << matchingSize;
+                //qDebug() << "Size: " << entries[i]->getEntrySize();
+                //qDebug() << "Entry: " << entryPath;
+                //qDebug() << "Older entries: " << matchingSize;
                 QString entryHash;
                 if(hashCache.contains(entryPath))
                     entryHash = hashCache[entryPath];
@@ -416,10 +429,10 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
                             qDebug() << "Cannot hash " << matchingSize[j];
                         }else if (fileHash == entryHash){
                             duplicates.append(QPair<QString, QString>(matchingSize[j], entryPath));
-                        }else{
-                            qDebug() << "Entries " << entryPath << " and " << matchingSize[j]
-                                        << " have the same size but different hashing";
-                        }
+                        }//else{
+                           // qDebug() << "Entries " << entryPath << " and " << matchingSize[j]
+                             //           << " have the same size but different hashing";
+                       // }
                     }
                 }
                 matchingSize.append(entryPath);
@@ -427,7 +440,8 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
 
         }
     }
-
+    progress->setValue(100);
+    progress->hide();
     if (duplicates.size() == 0){
         QMessageBox::information(this, "No Duplicates", "No duplicate file entries were found in the scanned directory");
         return;

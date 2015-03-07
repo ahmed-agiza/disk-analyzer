@@ -62,7 +62,7 @@ static const uint qt_meta_data_DupesDialog[] = {
        5,    1,   35,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Bool, QMetaType::QString,    3,
+    QMetaType::Int, QMetaType::QString,    3,
     QMetaType::Void, QMetaType::QString,    3,
     QMetaType::Void, QMetaType::QModelIndex,    6,
 
@@ -74,8 +74,8 @@ void DupesDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     if (_c == QMetaObject::InvokeMetaMethod) {
         DupesDialog *_t = static_cast<DupesDialog *>(_o);
         switch (_id) {
-        case 0: { bool _r = _t->deleteFile((*reinterpret_cast< QString(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 0: { int _r = _t->deleteFile((*reinterpret_cast< QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
         case 1: _t->openFolder((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 2: _t->on_tblDuplicates_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
         default: ;

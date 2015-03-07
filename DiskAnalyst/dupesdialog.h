@@ -20,7 +20,7 @@ public:
 protected:
     void showEvent(QShowEvent *event);
 private slots:
-    bool deleteFile(QString filePath);
+    int deleteFile(QString filePath);
     void openFolder(QString filePath);
 
     void on_tblDuplicates_clicked(const QModelIndex &index);
