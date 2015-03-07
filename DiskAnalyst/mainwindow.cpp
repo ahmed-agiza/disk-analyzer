@@ -26,7 +26,6 @@
 #include <string.h>
 #include <pwd.h>
 #include <grp.h>
-#include <stdbool.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -35,7 +34,11 @@
 
 
 MainWindow::MainWindow(QWidget *parent)
-    :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(new DirectoryAnalyzer(this)){
+    :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(0), dupesAnalyzer(0){
+
+    qRegisterMetaType<DirectoryEntriesList>("DirectoryEntriesList");
+    qRegisterMetaType<DirectoryEntry>("DirectoryEntry");
+    qRegisterMetaType<QList<QPair<QString,QString> > >("StringPairList");
     ui->setupUi(this);
     ui->twgDirViewer->setModel(model);
     setCurrentPath(QDir::homePath ());
@@ -68,6 +71,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 MainWindow::~MainWindow(){
+    analysisThread.quit();
+    analysisThread.wait();
+    dupesCheckerThread.quit();
+    dupesCheckerThread.wait();
     delete ui;
 }
 
@@ -115,17 +122,60 @@ void MainWindow::centerWindow(){
 
     move ( x, y );
 }
+void MainWindow::stopAnalyzer(){
+    if (analysisThread.isRunning()){
+        qDebug() << "Terminating";
+        emit stopAnalysis(true);
+        analysisThread.quit();
+        analysisThread.wait();
+        qDebug() << "Terminated";
+    }
+}
+
+void MainWindow::stopDupesAnalyzer(){
+    if (dupesCheckerThread.isRunning()){
+        qDebug() << "Terminating";
+        emit stopScanning(true);
+        dupesCheckerThread.quit();
+        dupesCheckerThread.wait();
+        qDebug() << "Terminated";
+        stopDupesChecking();
+    }
+}
+
+void MainWindow::stopDupesChecking(){
+    if(dupesHashingThread.isRunning()){
+        qDebug() << "Terminating";
+        emit stopHashing(true);
+        dupesHashingThread.quit();
+        dupesHashingThread.wait();
+        qDebug() << "Terminated";
+        progress->hide();
+    }
+}
+
+void MainWindow::onDupesProgress(int value){
+    progress->setValue(value);
+}
 
 void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 {
+    stopAnalyzer();
+    analyzer = new DirectoryAnalyzer;
+    analyzer->moveToThread(&analysisThread);
+    connect(&analysisThread, SIGNAL(finished()), analyzer, SLOT(deleteLater()));
+    connect(this, SIGNAL(startAnalysis(QString,QString,int)), analyzer, SLOT(startAnalysis(QString,QString,int)));
+    connect(analyzer, SIGNAL(analysisComplete()), this, SLOT(analysisComplete()));
+    connect(this, SIGNAL(stopAnalysis(bool)), analyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
+    emit stopAnalysis(false);
+    analysisThread.start();
+    qDebug() << "Thread running? " << analysisThread.isRunning();
+
+
     qDebug() << "Analyzing..";
-    analyzer->startAnalysis(dirStr, nodeName);
-    qDebug() << "Analyzed..";
-    DirectoryEntry *rootEntry = analyzer->getRoot();
-    QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
-    QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
-    frame->evaluateJavaScript(jsCommand);
-    passGraphParamters();
+    emit startAnalysis(dirStr, nodeName, 0);
+    //analyzer->startAnalysis(dirStr, nodeName);
+
 }
 
 void MainWindow::navigateTo(QString path){
@@ -205,6 +255,8 @@ void MainWindow::navigateTo(QString path){
         qDebug() << pathInfo.absoluteFilePath() << " does not exist";
     }
 }
+
+
 QString MainWindow::getCurrentDUA() const{
     return currentDUA;
 }
@@ -259,7 +311,82 @@ void MainWindow::on_actionRefresh_triggered(){
 }
 
 void MainWindow::analysisComplete(){
+    qDebug() << "Analysis complete";
+    if (analyzer->getAnalysisDone()){
+        qDebug() << "Analyzed..";
+        DirectoryEntry *rootEntry = analyzer->getRoot();
+        QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
+        QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
+        frame->evaluateJavaScript(jsCommand);
+        passGraphParamters();
+    }
+}
 
+void MainWindow::scanComplete(){
+    qDebug() << "Done initial scanning";
+    if (dupesAnalyzer->getAnalysisDone()){
+
+        if(!progress){
+            progress = new QProgressBar(this);
+            statusBar()->addWidget(progress);
+        }
+
+        progress->setValue(0);
+        progress->show();
+
+        stopDupesChecking();
+        dupesChecker = new DupesChecker;
+        dupesChecker->moveToThread(&dupesHashingThread);
+        connect(&dupesHashingThread, SIGNAL(finished()), dupesChecker, SLOT(deleteLater()));
+        connect(this, SIGNAL(startHashing(DirectoryEntriesList, DirectoryEntry*)), dupesChecker, SLOT(startAnalysis(DirectoryEntriesList, DirectoryEntry *)));
+        connect(dupesChecker, SIGNAL(analysisComplete(QList<QPair<QString,QString> >)), this, SLOT(hashingComplete(QList<QPair<QString,QString> >)));
+        connect(dupesChecker, SIGNAL(onProgress(int)), this, SLOT(onDupesProgress(int)));
+        connect(this, SIGNAL(stopHashing(bool)), dupesChecker, SLOT(setStopped(bool)), Qt::DirectConnection);
+        emit stopHashing(false);
+        dupesHashingThread.start();
+        qDebug() << "Thread running? " << dupesHashingThread.isRunning();
+
+
+        qDebug() << "Scanning..";
+        emit startHashing(dupesAnalyzer->getEntries(), dupesAnalyzer->getRoot());
+
+
+
+
+    }
+}
+
+void MainWindow::hashingComplete(QList<QPair<QString, QString> > duplicates){
+    qDebug() << "Hashing complete";
+    if (dupesChecker->getAnalysisDone()){
+        qDebug() << "Analysis done";
+        progress->setValue(100);
+        progress->hide();
+        QDir currentDir(dupCheckDUA);
+        QFileInfo pathInfo(dupCheckDUA);
+        QString fileName = pathInfo.baseName();
+
+        QString directory;
+        if (currentDir.isRoot())
+            directory = "";
+        else
+            directory = pathInfo.absolutePath() + QString("/");
+
+
+
+        if (duplicates.size() == 0){
+            QMessageBox::information(this, "No Duplicates", "No duplicate file entries were found in the scanned directory");
+            return;
+        }
+
+        if(!dupesDialog)
+            dupesDialog = new DupesDialog(this);
+
+        dupesDialog->setDuplicates(duplicates);
+        dupesDialog->exec();
+        setDirectoryJson(directory, fileName);
+    }else if (progress)
+        progress->hide();
 }
 
 void MainWindow::on_actionOpen_Terminal_triggered(){
@@ -345,17 +472,7 @@ void MainWindow::passGraphParamters(bool displayUnit){
 
 }
 
-QString MainWindow::hashFile(QString filePath){
-    QFile file(filePath);
-    if(file.open(QIODevice::ReadOnly))
-    {
-        QString hash = QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5).toHex().constData();
-        file.close();
-        return hash;
-    }
 
-    return "";
-}
 
 void MainWindow::on_actionDuplicateFilesChecker_triggered(){
     if (currentDUA.isEmpty()){
@@ -363,7 +480,7 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
         return;
     }
     DirectoryAnalyzer checkerAnalyzer;
-    QString dupCheckDUA = currentDUA;
+    dupCheckDUA = currentDUA;
     if (dupCheckDUA.endsWith("/") && dupCheckDUA != QDir::rootPath())
         dupCheckDUA.remove(dupCheckDUA.length() - 1, 1);
     QDir currentDir(dupCheckDUA);
@@ -377,82 +494,29 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
         directory = pathInfo.absolutePath() + QString("/");
 
 
-    checkerAnalyzer.startAnalysis(directory, fileName);
-    QList<DirectoryEntry *> entries = checkerAnalyzer.getEntries();
-    QMap<long long, QStringList> sizesTable;
-    QMap<QString, QString> hashCache;
-    QList<QPair<QString, QString> > duplicates;
-    DirectoryEntry *rootEntry = analyzer->getRoot();
-    if(!progress){
-        progress = new QProgressBar(this);
-        statusBar()->addWidget(progress);
-    }
-    progress->setValue(0);
-    progress->show();
 
-    for(int i = 0; i < entries.size(); i++){
-        progress->setValue(((i*1.0)/entries.size()) * 100);
-        if (entries[i] == rootEntry)
-            continue;
-        if (entries[i]->isValid() && entries[i]->isRegularFile()){
-            QString entryPath = entries[i]->getPath() + entries[i]->getName();
-            if(!sizesTable.contains(entries[i]->getEntrySize())){
-                sizesTable[entries[i]->getEntrySize()].append(entryPath);
-            }else{
-                QList<QString> &matchingSize = sizesTable[entries[i]->getEntrySize()];
-                //qDebug() << "Size: " << entries[i]->getEntrySize();
-                //qDebug() << "Entry: " << entryPath;
-                //qDebug() << "Older entries: " << matchingSize;
-                QString entryHash;
-                if(hashCache.contains(entryPath))
-                    entryHash = hashCache[entryPath];
-                else{
-                    entryHash = hashFile(entryPath);
-                    if (entryHash != "")
-                        hashCache[entryPath] = entryHash;
-                }
 
-                if (entryHash == ""){
-                    qDebug() << "Cannot hash " << entries[i]->getPath() + entries[i]->getName();
-                }else{
-                    for(int j = 0; j < matchingSize.size(); j++){
-                        QString fileHash;
-                        if(hashCache.contains(matchingSize[j]))
-                            fileHash = hashCache[matchingSize[j]];
-                        else{
-                            fileHash = hashFile(matchingSize[j]);
-                            if(fileHash != "")
-                                hashCache[matchingSize[j]] = fileHash;
-                        }
+    stopDupesAnalyzer();
+    dupesAnalyzer = new DirectoryAnalyzer;
+    dupesAnalyzer->moveToThread(&dupesCheckerThread);
+    connect(&dupesCheckerThread, SIGNAL(finished()), dupesAnalyzer, SLOT(deleteLater()));
+    connect(this, SIGNAL(startScanning(QString,QString,int)), dupesAnalyzer, SLOT(startAnalysis(QString,QString,int)));
+    connect(dupesAnalyzer, SIGNAL(analysisComplete()), this, SLOT(scanComplete()));
+    connect(this, SIGNAL(stopScanning(bool)), dupesAnalyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
+    emit stopScanning(false);
+    dupesCheckerThread.start();
+    qDebug() << "Thread running? " << dupesCheckerThread.isRunning();
 
-                        if(fileHash == ""){
-                            qDebug() << "Cannot hash " << matchingSize[j];
-                        }else if (fileHash == entryHash){
-                            duplicates.append(QPair<QString, QString>(matchingSize[j], entryPath));
-                        }//else{
-                           // qDebug() << "Entries " << entryPath << " and " << matchingSize[j]
-                             //           << " have the same size but different hashing";
-                       // }
-                    }
-                }
-                matchingSize.append(entryPath);
-            }
 
-        }
-    }
-    progress->setValue(100);
-    progress->hide();
-    if (duplicates.size() == 0){
-        QMessageBox::information(this, "No Duplicates", "No duplicate file entries were found in the scanned directory");
-        return;
-    }
+    qDebug() << "Scanning..";
+    emit startScanning(directory, fileName, 0);
+    //analyzer->startAnalysis(dirStr, nodeName);
 
-    if(!dupesDialog)
-        dupesDialog = new DupesDialog(this);
 
-    dupesDialog->setDuplicates(duplicates);
-    dupesDialog->exec();
-    setDirectoryJson(directory, fileName);
+
+
+    //checkerAnalyzer.startAnalysis(directory, fileName);
+
 
 }
 

@@ -9,6 +9,7 @@ typedef enum {BLOCK_DEVICE, CHARACTER_DEVICE, DIRECTORY, FIFO_PIPE, SYMLINK, REG
 class DirectoryEntry{
 
 public:
+    DirectoryEntry();
     DirectoryEntry(QString, QString, long long, long long, int, DirectoryEntry * = 0, QSet<DirectoryEntry *> = QSet<DirectoryEntry *> ());
 
     QString getName() const;
@@ -57,6 +58,8 @@ private:
     ENTRY_TYPE type;
 
 };
+
+typedef QList<DirectoryEntry *> DirectoryEntriesList;
 
 
 #endif // DIRECTORYENTRY_H

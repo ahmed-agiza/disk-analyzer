@@ -18,7 +18,9 @@ SOURCES += main.cpp\
     directoryanalyzer.cpp \
     settingsdialog.cpp \
     filestatdialog.cpp \
-    dupesdialog.cpp
+    dupesdialog.cpp \
+    dupeschecker.cpp \
+    duplicatesdatamodel.cpp
 
 HEADERS  += mainwindow.h \
     directoryanalyzer.h \
@@ -26,7 +28,9 @@ HEADERS  += mainwindow.h \
     settingsdialog.h \
     filestatdialog.h \
     settingsmanager.h \
-    dupesdialog.h
+    dupesdialog.h \
+    dupeschecker.h \
+    duplicatesdatamodel.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
