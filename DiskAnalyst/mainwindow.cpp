@@ -127,7 +127,6 @@ void MainWindow::navigateTo(QString path){
         setCurrentDUA(directory + fileName);
         setDirectoryJson(directory, fileName);
     }else if(pathInfo.exists()){
-        //qDebug() << "Stating" << pathInfo.absoluteFilePath();
         struct stat sb;
         printf("Test");
 
@@ -160,7 +159,6 @@ void MainWindow::navigateTo(QString path){
         if(sb.st_mode &  S_IXOTH ) mode.append("x"); else mode.append("-");
 
         long inodeNumber = (long) sb.st_ino;
-        //unsigned long mode = (unsigned long) sb.st_mode;
         long linkCount = (long) sb.st_nlink;
         long uid = (long) sb.st_uid;
         long gid = (long) sb.st_gid;
@@ -185,24 +183,6 @@ void MainWindow::navigateTo(QString path){
         statDialog->setWindowTitle("File Status: " + pathInfo.baseName());
         statDialog->show();
         statDialog->setModal(true);
-
-
-
-
-        //qDebug() << mode;
-        /*qDebug() << fileType;
-        qDebug() << inodeNumber;
-        qDebug() << mode;
-        qDebug() << linkCount;
-        qDebug() << uid << "  " << uname;
-        qDebug() << gid << "  " << gname;
-        qDebug() << preferredIOSize;
-        qDebug() << fileSize;
-        qDebug() << blocks;
-        qDebug() << lastStatusChange;
-        qDebug() << lastFileAccess;
-        qDebug() << lastFileModification;*/
-
     }else{
         qDebug() << pathInfo.absoluteFilePath() << " does not exist";
     }
@@ -296,5 +276,20 @@ void MainWindow::on_actionSettings_triggered(){
 }
 
 void MainWindow::on_actionUp_triggered(){
+    if(!currentDUA.isEmpty() && currentDUA != "/"){
+        QDir currentDir(currentDUA);
+        if(currentDir.cdUp()){
+            QFileInfo pathInfo(currentDir.absolutePath());
+            QString fileName = pathInfo.baseName();
 
+            QString directory;
+            if (currentDir.isRoot())
+                directory = "";
+            else
+                directory = pathInfo.absolutePath() + QString("/");
+            setCurrentDUA(directory + fileName);
+            setDirectoryJson(directory, fileName);
+        }else
+            qDebug() << "Invalid path.";
+    }
 }
