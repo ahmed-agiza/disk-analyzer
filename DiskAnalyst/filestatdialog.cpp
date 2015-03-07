@@ -69,13 +69,13 @@ FileStatDialog *FileStatDialog::setSize(long long value){
             ui->lblFileSize->setText(QString::number(value/1000000000.0, 'f', 2) + "GB");
           }
     }else{
-        ui->lblFileSize->setText(QString::number(value) + " B");
+        ui->lblFileSize->setText(QString::number(value) + "B");
     }
     return this;
 }
 
 FileStatDialog *FileStatDialog::setNumberOfBlocks(long long value){
-    ui->lblBlocksAllocated->setText(QString::number(value) + "Blocks");
+    ui->lblBlocksAllocated->setText(QString::number(value) + " Blocks");
     return this;
 }
 
