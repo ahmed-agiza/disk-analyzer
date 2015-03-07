@@ -184,7 +184,7 @@
     <string>Up</string>
    </property>
    <property name="toolTip">
-    <string>Navigate up one directory</string>
+    <string>Navigate Up One directory</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+U</string>

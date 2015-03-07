@@ -475,6 +475,10 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_files.cpp
 qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/Folder-Open-icon.png \
+		../DiskAnalyst/Icons/settings-3-icon.png \
+		../DiskAnalyst/Icons/Apps-Terminal-Pc-104-icon.png \
+		../DiskAnalyst/Icons/file-explore-icon.png \
+		../DiskAnalyst/Icons/terminal-green-icon.png \
 		../DiskAnalyst/Icons/Apps-konsole-icon.png \
 		../DiskAnalyst/Icons/Awicons-Vista-Artistic-Chart-search.ico \
 		../DiskAnalyst/Icons/Actions-view-refresh-icon.png \
@@ -483,6 +487,8 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/Open-icon.png \
 		../DiskAnalyst/Icons/Stop-icon.png \
 		../DiskAnalyst/Icons/Button-Upload-icon.png \
+		../DiskAnalyst/Icons/Developer-icon.png \
+		../DiskAnalyst/Icons/Button-Refresh-icon.png \
 		../DiskAnalyst/Charts/css.css \
 		../DiskAnalyst/Charts/d3.v3.min.js \
 		../DiskAnalyst/Charts/sequences.css \
@@ -1592,16 +1598,12 @@ settingsdialog.o: ../DiskAnalyst/settingsdialog.cpp ../DiskAnalyst/settingsdialo
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLabel \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlabel.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLineEdit \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlineedit.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtextcursor.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtextformat.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpen.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtextoption.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QPushButton \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QRadioButton \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qradiobutton.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QSpinBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qspinbox.h \
 		../DiskAnalyst/settingsmanager.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QFileDialog \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qfiledialog.h \
