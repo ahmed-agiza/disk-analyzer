@@ -130,6 +130,13 @@ void DirectoryAnalyzer::getChildrenArray(DirectoryEntry *entry, QJsonArray &arra
         entryJson.insert("name", (*i)->getName());
         entryJson.insert("size", (*i)->getEntrySize());
         QJsonArray childrenJsonBuf;
+        if ((*i)->isDirectory()){
+            QJsonObject dummyEntry;
+            dummyEntry.insert("name", "dummy");
+            dummyEntry.insert("size", (*i)->getEntrySize());
+            dummyEntry.insert("dummy", "dummy");
+            childrenJsonBuf.push_front(dummyEntry);
+        }
         getChildrenArray((*i), childrenJsonBuf);
         if(!childrenJsonBuf.isEmpty())
             entryJson.insert("children", childrenJsonBuf);
@@ -166,6 +173,13 @@ QJsonObject DirectoryAnalyzer::getEntriesJson(DirectoryEntry *rootEnry){
         entryJson.insert("name", (*i)->getName());
         entryJson.insert("size", (*i)->getEntrySize());
         QJsonArray childrenBuf;
+        if ((*i)->isDirectory()){
+            QJsonObject dummyEntry;
+            dummyEntry.insert("name", "dummy");
+            dummyEntry.insert("size", (*i)->getEntrySize());
+            dummyEntry.insert("dummy", "dummy");
+            childrenBuf.push_front(dummyEntry);
+        }
         getChildrenArray(*i, childrenBuf);
         if (!childrenBuf.isEmpty())
             entryJson.insert("children", childrenBuf);
