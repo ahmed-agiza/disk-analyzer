@@ -12,6 +12,7 @@ var fpd = {
 };
 
 // Set in applySettings
+var graphNavigation;
 var color;
 var opacity;
 var readable;
@@ -63,9 +64,9 @@ var arc = d3.svg.arc()
 
 // Calling the json function with the disk statistics (Calls json data from file)
 // Invoking from a JSON file
-d3.json("./data.json", function(error, root) {
+/*d3.json("./data.json", function(error, root) {
     visualize(root);
-});
+});*/
 
 // The core visualization function
 function visualize(root){
@@ -102,7 +103,7 @@ function visualize(root){
         .style("fill", function(d) {return color((d.children ? d : d.parent).name);})
         .style("opacity", 1)
         .on("mouseover", mouseover)
-        .on("click", click)
+        .on("dblclick", dblclick)
 
     // Remove transparency if hovering out of the graph
     d3.select("#container").on("mouseleave", mouseleave);
@@ -246,12 +247,14 @@ function fpdPoints(d, i) {
 }
 
 // Interactive: When a node is clicked this will trigger
-function click(d){
+function dblclick(d){
+    if (!graphNavigation)
+        return;
     var p = getPath(d);
     path.transition()
         .duration(750)
         .attrTween("d", arcTween(d));
-    //mainWindow.navigateTo(p);
+    mainWindow.navigateTo(p);
 }
 
 // Function to clear html
@@ -294,7 +297,7 @@ function arcTween(d) {
 }
 
 // function to customize opacity, color, readable format, and units
-function applySettings(op, clr, rd, un){
+function applySettings(op, clr, rd, un, gn){
     if (typeof op == "undefined") opacity = 0.3;
     else opacity = op;
 
@@ -321,4 +324,8 @@ function applySettings(op, clr, rd, un){
 
     if (typeof un == "undefined") units = true;
     else units = un;
+
+     if (typeof gn == "undefined") graphNavigation = true;
+     else graphNavigation = gn;
+
 }
