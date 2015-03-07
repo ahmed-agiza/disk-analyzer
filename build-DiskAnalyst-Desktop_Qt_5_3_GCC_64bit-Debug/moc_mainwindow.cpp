@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[17];
-    char stringdata[347];
+    QByteArrayData data[18];
+    char stringdata[388];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,10 +42,11 @@ QT_MOC_LITERAL(9, 167, 32),
 QT_MOC_LITERAL(10, 200, 35),
 QT_MOC_LITERAL(11, 236, 27),
 QT_MOC_LITERAL(12, 264, 21),
-QT_MOC_LITERAL(13, 286, 17),
-QT_MOC_LITERAL(14, 304, 14),
-QT_MOC_LITERAL(15, 319, 16),
-QT_MOC_LITERAL(16, 336, 10)
+QT_MOC_LITERAL(13, 286, 40),
+QT_MOC_LITERAL(14, 327, 17),
+QT_MOC_LITERAL(15, 345, 14),
+QT_MOC_LITERAL(16, 360, 16),
+QT_MOC_LITERAL(17, 377, 10)
     },
     "MainWindow\0startAnalysis\0\0"
     "on_actionAnalyzeDirectory_triggered\0"
@@ -55,9 +56,10 @@ QT_MOC_LITERAL(16, 336, 10)
     "on_actionOpen_Terminal_triggered\0"
     "on_actionExploreDirectory_triggered\0"
     "on_actionSettings_triggered\0"
-    "on_actionUp_triggered\0exposeObjectsToJS\0"
-    "setCurrentPath\0setDirectoryJson\0"
-    "navigateTo"
+    "on_actionUp_triggered\0"
+    "on_actionDuplicateFilesChecker_triggered\0"
+    "exposeObjectsToJS\0setCurrentPath\0"
+    "setDirectoryJson\0navigateTo"
 };
 #undef QT_MOC_LITERAL
 
@@ -67,7 +69,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      14,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -75,22 +77,23 @@ static const uint qt_meta_data_MainWindow[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,   84,    2, 0x06 /* Public */,
+       1,    3,   89,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       3,    0,   91,    2, 0x08 /* Private */,
-       4,    1,   92,    2, 0x08 /* Private */,
-       6,    1,   95,    2, 0x08 /* Private */,
-       7,    0,   98,    2, 0x08 /* Private */,
-       8,    0,   99,    2, 0x08 /* Private */,
-       9,    0,  100,    2, 0x08 /* Private */,
-      10,    0,  101,    2, 0x08 /* Private */,
-      11,    0,  102,    2, 0x08 /* Private */,
-      12,    0,  103,    2, 0x08 /* Private */,
-      13,    0,  104,    2, 0x0a /* Public */,
-      14,    1,  105,    2, 0x0a /* Public */,
-      15,    2,  108,    2, 0x0a /* Public */,
-      16,    1,  113,    2, 0x0a /* Public */,
+       3,    0,   96,    2, 0x08 /* Private */,
+       4,    1,   97,    2, 0x08 /* Private */,
+       6,    1,  100,    2, 0x08 /* Private */,
+       7,    0,  103,    2, 0x08 /* Private */,
+       8,    0,  104,    2, 0x08 /* Private */,
+       9,    0,  105,    2, 0x08 /* Private */,
+      10,    0,  106,    2, 0x08 /* Private */,
+      11,    0,  107,    2, 0x08 /* Private */,
+      12,    0,  108,    2, 0x08 /* Private */,
+      13,    0,  109,    2, 0x08 /* Private */,
+      14,    0,  110,    2, 0x0a /* Public */,
+      15,    1,  111,    2, 0x0a /* Public */,
+      16,    2,  114,    2, 0x0a /* Public */,
+      17,    1,  119,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,    2,    2,    2,
@@ -99,6 +102,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::QModelIndex,    5,
     QMetaType::Void, QMetaType::QModelIndex,    5,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -128,10 +132,11 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 7: _t->on_actionExploreDirectory_triggered(); break;
         case 8: _t->on_actionSettings_triggered(); break;
         case 9: _t->on_actionUp_triggered(); break;
-        case 10: _t->exposeObjectsToJS(); break;
-        case 11: _t->setCurrentPath((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 12: _t->setDirectoryJson((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
-        case 13: _t->navigateTo((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 10: _t->on_actionDuplicateFilesChecker_triggered(); break;
+        case 11: _t->exposeObjectsToJS(); break;
+        case 12: _t->setCurrentPath((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 13: _t->setDirectoryJson((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 14: _t->navigateTo((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -171,13 +176,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 14)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 14)
+        if (_id < 15)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 14;
+        _id -= 15;
     }
     return _id;
 }

@@ -17,18 +17,21 @@ SOURCES += main.cpp\
     directoryentry.cpp \
     directoryanalyzer.cpp \
     settingsdialog.cpp \
-    filestatdialog.cpp
+    filestatdialog.cpp \
+    dupesdialog.cpp
 
 HEADERS  += mainwindow.h \
     directoryanalyzer.h \
     directoryentry.h \
     settingsdialog.h \
     filestatdialog.h \
-    settingsmanager.h
+    settingsmanager.h \
+    dupesdialog.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
-    filestatdialog.ui
+    filestatdialog.ui \
+    dupesdialog.ui
 
 RESOURCES += \
     files.qrc

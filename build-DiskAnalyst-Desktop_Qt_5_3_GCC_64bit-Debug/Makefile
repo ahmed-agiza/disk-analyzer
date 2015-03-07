@@ -50,22 +50,26 @@ SOURCES       = ../DiskAnalyst/main.cpp \
 		../DiskAnalyst/directoryentry.cpp \
 		../DiskAnalyst/directoryanalyzer.cpp \
 		../DiskAnalyst/settingsdialog.cpp \
-		../DiskAnalyst/filestatdialog.cpp qrc_files.cpp \
+		../DiskAnalyst/filestatdialog.cpp \
+		../DiskAnalyst/dupesdialog.cpp qrc_files.cpp \
 		moc_mainwindow.cpp \
 		moc_directoryanalyzer.cpp \
 		moc_settingsdialog.cpp \
-		moc_filestatdialog.cpp
+		moc_filestatdialog.cpp \
+		moc_dupesdialog.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		directoryentry.o \
 		directoryanalyzer.o \
 		settingsdialog.o \
 		filestatdialog.o \
+		dupesdialog.o \
 		qrc_files.o \
 		moc_mainwindow.o \
 		moc_directoryanalyzer.o \
 		moc_settingsdialog.o \
-		moc_filestatdialog.o
+		moc_filestatdialog.o \
+		moc_dupesdialog.o
 DIST          = /opt/Qt5.3.2/5.3/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt5.3.2/5.3/gcc_64/mkspecs/common/shell-unix.conf \
 		/opt/Qt5.3.2/5.3/gcc_64/mkspecs/common/unix.conf \
@@ -178,7 +182,8 @@ DIST          = /opt/Qt5.3.2/5.3/gcc_64/mkspecs/features/spec_pre.prf \
 		../DiskAnalyst/directoryentry.cpp \
 		../DiskAnalyst/directoryanalyzer.cpp \
 		../DiskAnalyst/settingsdialog.cpp \
-		../DiskAnalyst/filestatdialog.cpp
+		../DiskAnalyst/filestatdialog.cpp \
+		../DiskAnalyst/dupesdialog.cpp
 QMAKE_TARGET  = DiskAnalyst
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = DiskAnalyst
@@ -208,7 +213,7 @@ first: all
 
 all: Makefile $(TARGET)
 
-$(TARGET): ui_mainwindow.h ui_settingsdialog.h ui_filestatdialog.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_settingsdialog.h ui_filestatdialog.h ui_dupesdialog.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../DiskAnalyst/DiskAnalyst.pro /opt/Qt5.3.2/5.3/gcc_64/mkspecs/linux-g++/qmake.conf /opt/Qt5.3.2/5.3/gcc_64/mkspecs/features/spec_pre.prf \
@@ -449,7 +454,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/DiskAnalyst1.0.0 || mkdir -p .tmp/DiskAnalyst1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/files.qrc .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/mainwindow.h ../DiskAnalyst/directoryanalyzer.h ../DiskAnalyst/directoryentry.h ../DiskAnalyst/settingsdialog.h ../DiskAnalyst/filestatdialog.h ../DiskAnalyst/settingsmanager.h .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/main.cpp ../DiskAnalyst/mainwindow.cpp ../DiskAnalyst/directoryentry.cpp ../DiskAnalyst/directoryanalyzer.cpp ../DiskAnalyst/settingsdialog.cpp ../DiskAnalyst/filestatdialog.cpp .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/mainwindow.ui ../DiskAnalyst/settingsdialog.ui ../DiskAnalyst/filestatdialog.ui .tmp/DiskAnalyst1.0.0/ && (cd `dirname .tmp/DiskAnalyst1.0.0` && $(TAR) DiskAnalyst1.0.0.tar DiskAnalyst1.0.0 && $(COMPRESS) DiskAnalyst1.0.0.tar) && $(MOVE) `dirname .tmp/DiskAnalyst1.0.0`/DiskAnalyst1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/DiskAnalyst1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/files.qrc .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/mainwindow.h ../DiskAnalyst/directoryanalyzer.h ../DiskAnalyst/directoryentry.h ../DiskAnalyst/settingsdialog.h ../DiskAnalyst/filestatdialog.h ../DiskAnalyst/settingsmanager.h ../DiskAnalyst/dupesdialog.h .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/main.cpp ../DiskAnalyst/mainwindow.cpp ../DiskAnalyst/directoryentry.cpp ../DiskAnalyst/directoryanalyzer.cpp ../DiskAnalyst/settingsdialog.cpp ../DiskAnalyst/filestatdialog.cpp ../DiskAnalyst/dupesdialog.cpp .tmp/DiskAnalyst1.0.0/ && $(COPY_FILE) --parents ../DiskAnalyst/mainwindow.ui ../DiskAnalyst/settingsdialog.ui ../DiskAnalyst/filestatdialog.ui ../DiskAnalyst/dupesdialog.ui .tmp/DiskAnalyst1.0.0/ && (cd `dirname .tmp/DiskAnalyst1.0.0` && $(TAR) DiskAnalyst1.0.0.tar DiskAnalyst1.0.0 && $(COMPRESS) DiskAnalyst1.0.0.tar) && $(MOVE) `dirname .tmp/DiskAnalyst1.0.0`/DiskAnalyst1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/DiskAnalyst1.0.0
 
 
 clean:compiler_clean 
@@ -474,21 +479,23 @@ compiler_rcc_make_all: qrc_files.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) qrc_files.cpp
 qrc_files.cpp: ../DiskAnalyst/files.qrc \
-		../DiskAnalyst/Icons/Folder-Open-icon.png \
-		../DiskAnalyst/Icons/settings-3-icon.png \
-		../DiskAnalyst/Icons/Apps-Terminal-Pc-104-icon.png \
-		../DiskAnalyst/Icons/file-explore-icon.png \
+		../DiskAnalyst/Icons/Button-Refresh-icon.png \
+		../DiskAnalyst/Icons/Actions-dialog-cancel-icon.png \
+		../DiskAnalyst/Icons/Stop-icon.png \
 		../DiskAnalyst/Icons/terminal-green-icon.png \
+		../DiskAnalyst/Icons/analysis-icon.png \
+		../DiskAnalyst/Icons/Developer-icon.png \
+		../DiskAnalyst/Icons/Apps-Terminal-Pc-104-icon.png \
+		../DiskAnalyst/Icons/Folder-Open-icon.png \
+		../DiskAnalyst/Icons/file-explore-icon.png \
 		../DiskAnalyst/Icons/Apps-konsole-icon.png \
+		../DiskAnalyst/Icons/settings-3-icon.png \
 		../DiskAnalyst/Icons/Awicons-Vista-Artistic-Chart-search.ico \
 		../DiskAnalyst/Icons/Actions-view-refresh-icon.png \
-		../DiskAnalyst/Icons/settings-icon.png \
-		../DiskAnalyst/Icons/analysis-icon.png \
 		../DiskAnalyst/Icons/Open-icon.png \
-		../DiskAnalyst/Icons/Stop-icon.png \
+		../DiskAnalyst/Icons/duplicate-icon-md.png \
+		../DiskAnalyst/Icons/settings-icon.png \
 		../DiskAnalyst/Icons/Button-Upload-icon.png \
-		../DiskAnalyst/Icons/Developer-icon.png \
-		../DiskAnalyst/Icons/Button-Refresh-icon.png \
 		../DiskAnalyst/Charts/css.css \
 		../DiskAnalyst/Charts/d3.v3.min.js \
 		../DiskAnalyst/Charts/sequences.css \
@@ -499,9 +506,9 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Charts/jquery.min.js
 	/opt/Qt5.3.2/5.3/gcc_64/bin/rcc -name files ../DiskAnalyst/files.qrc -o qrc_files.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_directoryanalyzer.cpp moc_settingsdialog.cpp moc_filestatdialog.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_directoryanalyzer.cpp moc_settingsdialog.cpp moc_filestatdialog.cpp moc_dupesdialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_directoryanalyzer.cpp moc_settingsdialog.cpp moc_filestatdialog.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_directoryanalyzer.cpp moc_settingsdialog.cpp moc_filestatdialog.cpp moc_dupesdialog.cpp
 moc_mainwindow.cpp: /opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qwidget.h \
@@ -921,11 +928,115 @@ moc_filestatdialog.cpp: /opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialog \
 		../DiskAnalyst/filestatdialog.h
 	/opt/Qt5.3.2/5.3/gcc_64/bin/moc $(DEFINES) -I/opt/Qt5.3.2/5.3/gcc_64/mkspecs/linux-g++ -I/home/ahmed/Documents/Git/disk-analyzer/DiskAnalyst -I/opt/Qt5.3.2/5.3/gcc_64/include -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork -I/opt/Qt5.3.2/5.3/gcc_64/include/QtGui -I/opt/Qt5.3.2/5.3/gcc_64/include/QtCore -I. ../DiskAnalyst/filestatdialog.h -o moc_filestatdialog.cpp
 
+moc_dupesdialog.cpp: /opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialog \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qwindowdefs.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfeatures.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypetraits.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv7.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv6.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv5.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_ia64.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_mips.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_x86.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_gcc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_unix.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnumeric.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobject.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmetatype.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qisenum.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobject_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qcolor.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringlist.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdatastream.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qiodevice.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregexp.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qbrush.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qregion.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qline.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpixmap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsharedpointer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qshareddata.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qhash.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qfont.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qfontmetrics.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qfontinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qcursor.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qkeysequence.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qevent.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvariant.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdebug.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtextstream.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlocale.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qset.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qurl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qurlquery.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfile.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfiledevice.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvector2d.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../DiskAnalyst/dupesdialog.h
+	/opt/Qt5.3.2/5.3/gcc_64/bin/moc $(DEFINES) -I/opt/Qt5.3.2/5.3/gcc_64/mkspecs/linux-g++ -I/home/ahmed/Documents/Git/disk-analyzer/DiskAnalyst -I/opt/Qt5.3.2/5.3/gcc_64/include -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork -I/opt/Qt5.3.2/5.3/gcc_64/include/QtGui -I/opt/Qt5.3.2/5.3/gcc_64/include/QtCore -I. ../DiskAnalyst/dupesdialog.h -o moc_dupesdialog.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_settingsdialog.h ui_filestatdialog.h
+compiler_uic_make_all: ui_mainwindow.h ui_settingsdialog.h ui_filestatdialog.h ui_dupesdialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_settingsdialog.h ui_filestatdialog.h
+	-$(DEL_FILE) ui_mainwindow.h ui_settingsdialog.h ui_filestatdialog.h ui_dupesdialog.h
 ui_mainwindow.h: ../DiskAnalyst/mainwindow.ui \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebView
 	/opt/Qt5.3.2/5.3/gcc_64/bin/uic ../DiskAnalyst/mainwindow.ui -o ui_mainwindow.h
@@ -935,6 +1046,9 @@ ui_settingsdialog.h: ../DiskAnalyst/settingsdialog.ui
 
 ui_filestatdialog.h: ../DiskAnalyst/filestatdialog.ui
 	/opt/Qt5.3.2/5.3/gcc_64/bin/uic ../DiskAnalyst/filestatdialog.ui -o ui_filestatdialog.h
+
+ui_dupesdialog.h: ../DiskAnalyst/dupesdialog.ui
+	/opt/Qt5.3.2/5.3/gcc_64/bin/uic ../DiskAnalyst/dupesdialog.ui -o ui_dupesdialog.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -1248,6 +1362,7 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdiriterator.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QProcess \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qprocess.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QCryptographicHash \
 		../DiskAnalyst/mainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1759,6 +1874,132 @@ filestatdialog.o: ../DiskAnalyst/filestatdialog.cpp ../DiskAnalyst/filestatdialo
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlabel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filestatdialog.o ../DiskAnalyst/filestatdialog.cpp
 
+dupesdialog.o: ../DiskAnalyst/dupesdialog.cpp ../DiskAnalyst/dupesdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialog \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qwindowdefs.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfeatures.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypetraits.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv7.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv6.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv5.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_ia64.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_mips.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_x86.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_gcc.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_unix.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnumeric.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobject.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmetatype.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qisenum.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qobject_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qcolor.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringlist.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdatastream.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qiodevice.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregexp.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qbrush.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qregion.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qline.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpixmap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsharedpointer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qshareddata.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qhash.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qfont.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qfontmetrics.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qfontinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qcursor.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qkeysequence.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qevent.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qvariant.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmap.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdebug.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtextstream.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlocale.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qset.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qurl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qurlquery.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfile.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfiledevice.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvector2d.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtouchdevice.h \
+		ui_dupesdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTreeWidgetItem \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtreewidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtreeview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtreewidgetitemiterator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dupesdialog.o ../DiskAnalyst/dupesdialog.cpp
+
 qrc_files.o: qrc_files.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_files.o qrc_files.cpp
 
@@ -1773,6 +2014,9 @@ moc_settingsdialog.o: moc_settingsdialog.cpp
 
 moc_filestatdialog.o: moc_filestatdialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_filestatdialog.o moc_filestatdialog.cpp
+
+moc_dupesdialog.o: moc_dupesdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_dupesdialog.o moc_dupesdialog.cpp
 
 ####### Install
 

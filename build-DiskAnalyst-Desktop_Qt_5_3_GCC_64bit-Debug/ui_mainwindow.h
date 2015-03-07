@@ -34,6 +34,7 @@ public:
     QAction *actionRefresh;
     QAction *actionSettings;
     QAction *actionUp;
+    QAction *actionDuplicateFilesChecker;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTreeView *twgDirViewer;
@@ -47,7 +48,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setWindowModality(Qt::WindowModal);
-        MainWindow->resize(1324, 693);
+        MainWindow->resize(1324, 838);
         MainWindow->setMinimumSize(QSize(0, 500));
         QIcon icon;
         icon.addFile(QStringLiteral(":/icons/Icons/Awicons-Vista-Artistic-Chart-search.ico"), QSize(), QIcon::Normal, QIcon::Off);
@@ -82,6 +83,11 @@ public:
         QIcon icon6;
         icon6.addFile(QStringLiteral(":/icons/Icons/Button-Upload-icon (1).png"), QSize(), QIcon::Normal, QIcon::Off);
         actionUp->setIcon(icon6);
+        actionDuplicateFilesChecker = new QAction(MainWindow);
+        actionDuplicateFilesChecker->setObjectName(QStringLiteral("actionDuplicateFilesChecker"));
+        QIcon icon7;
+        icon7.addFile(QStringLiteral(":/icons/Icons/duplicate-icon-md.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionDuplicateFilesChecker->setIcon(icon7);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -125,6 +131,7 @@ public:
         mainToolBar->addAction(actionAnalyzeDirectory);
         mainToolBar->addAction(actionExploreDirectory);
         mainToolBar->addAction(actionOpen_Terminal);
+        mainToolBar->addAction(actionDuplicateFilesChecker);
         mainToolBar->addSeparator();
         mainToolBar->addAction(actionUp);
         mainToolBar->addAction(actionRefresh);
@@ -166,9 +173,13 @@ public:
         actionSettings->setShortcut(QApplication::translate("MainWindow", "Ctrl+M", 0));
         actionUp->setText(QApplication::translate("MainWindow", "Up", 0));
 #ifndef QT_NO_TOOLTIP
-        actionUp->setToolTip(QApplication::translate("MainWindow", "Navigate up one directory", 0));
+        actionUp->setToolTip(QApplication::translate("MainWindow", "Navigate Up One directory", 0));
 #endif // QT_NO_TOOLTIP
         actionUp->setShortcut(QApplication::translate("MainWindow", "Ctrl+U", 0));
+        actionDuplicateFilesChecker->setText(QApplication::translate("MainWindow", "Duplicate Files Checker", 0));
+#ifndef QT_NO_TOOLTIP
+        actionDuplicateFilesChecker->setToolTip(QApplication::translate("MainWindow", "Run Duplicate Files Checker", 0));
+#endif // QT_NO_TOOLTIP
     } // retranslateUi
 
 };

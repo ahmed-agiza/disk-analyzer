@@ -60,6 +60,8 @@ public:
     static QString getEntriesJsonString(DirectoryEntry *rootEnry);
 
     DirectoryEntry *getRoot() const;
+
+    ~DirectoryAnalyzer();
 signals:
     void analysisComplete();
 public slots:

@@ -24,7 +24,12 @@ QString DirectoryEntry::getPath() const{
 }
 
 void DirectoryEntry::setPath(const QString &value){
-    path = value;
+    QString newPath(value);
+    if (newPath.endsWith("//"))
+        newPath.remove(newPath.length() - 1, 1);
+    if (!newPath.endsWith("/"))
+        newPath.append("/");
+    path = newPath;
 }
 int DirectoryEntry::getDepth() const{
     return depth;

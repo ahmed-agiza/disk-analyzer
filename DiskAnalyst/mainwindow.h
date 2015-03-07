@@ -10,6 +10,7 @@
 #include "directoryanalyzer.h"
 #include "settingsdialog.h"
 #include "filestatdialog.h"
+#include "dupesdialog.h"
 
 
 
@@ -24,6 +25,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     void passGraphParamters();
+    QString hashFile(QString);
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -33,6 +35,8 @@ public:
 
     QString getCurrentDUA() const;
     void setCurrentDUA(const QString &value);
+
+    static void openDirectory(QString path, QWidget *parent);
 
 signals:
     void startAnalysis(QString, QString, int);
@@ -56,6 +60,8 @@ private slots:
 
     void on_actionUp_triggered();
 
+    void on_actionDuplicateFilesChecker_triggered();
+
 public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);
@@ -69,6 +75,7 @@ private:
     QWebFrame *frame;
     SettingsDialog *settingsDialog;
     FileStatDialog *statDialog;
+    DupesDialog *dupesDialog;
     QString currentPath;
     QString currentDUA;
     QThread analysisThread;

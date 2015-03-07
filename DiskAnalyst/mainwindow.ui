@@ -93,6 +93,7 @@
    <addaction name="actionAnalyzeDirectory"/>
    <addaction name="actionExploreDirectory"/>
    <addaction name="actionOpen_Terminal"/>
+   <addaction name="actionDuplicateFilesChecker"/>
    <addaction name="separator"/>
    <addaction name="actionUp"/>
    <addaction name="actionRefresh"/>
@@ -188,6 +189,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="actionDuplicateFilesChecker">
+   <property name="icon">
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/duplicate-icon-md.png</normaloff>:/icons/Icons/duplicate-icon-md.png</iconset>
+   </property>
+   <property name="text">
+    <string>Duplicate Files Checker</string>
+   </property>
+   <property name="toolTip">
+    <string>Run Duplicate Files Checker</string>
    </property>
   </action>
  </widget>
