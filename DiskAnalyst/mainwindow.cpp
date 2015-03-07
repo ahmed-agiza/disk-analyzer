@@ -75,6 +75,8 @@ MainWindow::~MainWindow(){
     analysisThread.wait();
     dupesCheckerThread.quit();
     dupesCheckerThread.wait();
+    dupesHashingThread.quit();
+    dupesHashingThread.wait();
     delete ui;
 }
 
@@ -382,6 +384,7 @@ void MainWindow::hashingComplete(QList<QPair<QString, QString> > duplicates){
         if(!dupesDialog)
             dupesDialog = new DupesDialog(this);
 
+        dupesDialog->setWindowTitle(QString("Duplicate Entries in ") + directory + fileName);
         dupesDialog->setDuplicates(duplicates);
         dupesDialog->exec();
         setDirectoryJson(directory, fileName);

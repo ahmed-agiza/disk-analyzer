@@ -18,7 +18,12 @@ DupesDialog::DupesDialog(QWidget *parent) :
 }
 
 void DupesDialog::setDuplicates(QList<StringPair> dupes){
-    ui->tblDuplicates->setRowCount(0);
+    duplicates = dupes;
+    model = new DuplicatesDataModel(this, dupes);
+    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshTableView()));
+    ui->tblDuplicates->setModel(model);
+    ui->tblDuplicates->resizeColumnsToContents();
+    /*ui->tblDuplicates->setRowCount(0);
     for(int i = 0; i < dupes.size(); i++){
         QTableWidgetItem *firstEntry = new QTableWidgetItem(dupes[i].first);
         QTableWidgetItem *firstView = new QTableWidgetItem(QIcon(":/icons/Icons/Folder-Open-icon (1).png"), "");
@@ -51,7 +56,7 @@ void DupesDialog::setDuplicates(QList<StringPair> dupes){
     for(int i = 0; i < ui->tblDuplicates->colorCount(); i++){
         totalWidth += ui->tblDuplicates->columnWidth(i);
     }
-    resize(totalWidth + 20, height());
+    resize(totalWidth + 20, height());*/
 }
 
 DupesDialog::~DupesDialog(){
@@ -66,7 +71,7 @@ void DupesDialog::showEvent(QShowEvent *event){
 int DupesDialog::deleteFile(QString filePath){
     if (QMessageBox::critical(this, "Delete File", QString("Are you sure you want to delete the file: \n") + filePath + "?", QMessageBox::No | QMessageBox::Yes, QMessageBox::No)
         != QMessageBox::Yes)
-        return 1;
+        return 0;
     QFile file(filePath);
     return file.remove();
 }
@@ -87,35 +92,33 @@ void DupesDialog::openFolder(QString filePath){
     MainWindow::openDirectory(openPath, this);
 }
 
+void DupesDialog::refreshTableView(){
+    ui->tblDuplicates->repaint();
+    ui->tblDuplicates->setModel(model);
+}
+
 void DupesDialog::on_tblDuplicates_clicked(const QModelIndex &index){
-    if (index.column() == 1){
-        openFolder(ui->tblDuplicates->item(index.row(), 0)->text());
+   if (index.column() == 1){
+        openFolder(model->firstEntry(index.row()));
     }else if (index.column() == 2){
-        QString deletePath = ui->tblDuplicates->item(index.row(), 0)->text();
+        QString deletePath = model->firstEntry(index.row());
         int returnCode = deleteFile(deletePath);
-        if(!returnCode){
-            removeAllEntries(deletePath);
-        }else if (returnCode != 1)
+        qDebug() << returnCode;
+        if(returnCode == 1){
+            model->removeAllEntries(deletePath);
+        }else if (returnCode)
             QMessageBox::critical(this, "Error", "Could not remove the file " + deletePath);
     }else if (index.column() == 4){
-        openFolder(ui->tblDuplicates->item(index.row(), 3)->text());
+        openFolder(model->secondEntry(index.row()));
     }else if (index.column() == 5){
-        QString deletePath = ui->tblDuplicates->item(index.row(), 3)->text();
-         int returnCode = deleteFile(deletePath);
-        if(!returnCode){
-            removeAllEntries(deletePath);
-        }else if (returnCode != 1)
+        QString deletePath = model->secondEntry(index.row());
+        int returnCode = deleteFile(deletePath);
+        if(returnCode == 1){
+            model->removeAllEntries(deletePath);
+        }else if (returnCode)
             QMessageBox::critical(this, "Error", "Could not remove the file " + deletePath);
     }
 
 }
 
-void DupesDialog::removeAllEntries(QString filePath){
-    for(int i = 0; i < ui->tblDuplicates->rowCount(); i++){
-        if (ui->tblDuplicates->item(i, 0)->text().trimmed() == filePath.trimmed()
-                || ui->tblDuplicates->item(i, 3)->text().trimmed() == filePath.trimmed()){
-            ui->tblDuplicates->removeRow(i);
-            i--;
-        }
-    }
-}
+
