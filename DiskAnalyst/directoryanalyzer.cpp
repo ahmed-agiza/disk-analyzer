@@ -215,9 +215,6 @@ void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags
     strcpy(pathCharArray, directory.toLocal8Bit().data());
     strcpy(nameCharArray, name.toLocal8Bit().data());
 
-    qDebug() << "Cat: " << pathCharArray << " - " << nameCharArray;
-
-
     sprintf(fullPathArray, "%s%s", pathCharArray, nameCharArray);
 
     if (strcmp(fullPathArray, ".") == 0 || strcmp(fullPathArray, "..") == 0)

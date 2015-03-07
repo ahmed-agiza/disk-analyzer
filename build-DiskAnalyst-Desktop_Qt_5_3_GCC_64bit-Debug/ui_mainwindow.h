@@ -48,7 +48,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setWindowModality(Qt::WindowModal);
-        MainWindow->resize(1324, 838);
+        MainWindow->resize(1324, 800);
         MainWindow->setMinimumSize(QSize(0, 500));
         QIcon icon;
         icon.addFile(QStringLiteral(":/icons/Icons/Awicons-Vista-Artistic-Chart-search.ico"), QSize(), QIcon::Normal, QIcon::Off);
