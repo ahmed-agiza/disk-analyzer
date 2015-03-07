@@ -1,7 +1,7 @@
 #include "directoryentry.h"
 #include <QString>
 
-DirectoryEntry::DirectoryEntry(QString name, QString path, long long size, int depth, DirectoryEntry *source, QSet<DirectoryEntry *> children)
+DirectoryEntry::DirectoryEntry(QString name, QString path, long long size, long long numberOfBlock, int depth, DirectoryEntry *source, QSet<DirectoryEntry *> children)
     :valid(false), type(UNKNOWN){
     setName(name);
     setPath(path);
@@ -9,6 +9,7 @@ DirectoryEntry::DirectoryEntry(QString name, QString path, long long size, int d
     setDepth(depth);
     setSource(source);
     setChildren(children);
+    setNumberOfBlocks(numberOfBlocks);
 }
 
 QString DirectoryEntry::getName() const{
@@ -112,4 +113,14 @@ bool DirectoryEntry::isDirectory() const{
 bool DirectoryEntry::isRegularFile() const{
    return (type == REGULAR_FILE);
 }
+long long DirectoryEntry::getNumberOfBlocks() const
+{
+    return numberOfBlocks;
+}
+
+void DirectoryEntry::setNumberOfBlocks(long long value)
+{
+    numberOfBlocks = value;
+}
+
 

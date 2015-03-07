@@ -9,7 +9,7 @@ typedef enum {BLOCK_DEVICE, CHARACTER_DEVICE, DIRECTORY, FIFO_PIPE, SYMLINK, REG
 class DirectoryEntry{
 
 public:
-    DirectoryEntry(QString, QString, long long, int, DirectoryEntry * = 0, QSet<DirectoryEntry *> = QSet<DirectoryEntry *> ());
+    DirectoryEntry(QString, QString, long long, long long, int, DirectoryEntry * = 0, QSet<DirectoryEntry *> = QSet<DirectoryEntry *> ());
 
     QString getName() const;
     void setName(const QString &value);
@@ -42,11 +42,15 @@ public:
     bool isDirectory() const;
     bool isRegularFile() const;
 
+    long long getNumberOfBlocks() const;
+    void setNumberOfBlocks(long long value);
+
 private:
     QString name;
     QString path;
     int depth;
     long long entrySize;
+    long long numberOfBlocks;
     DirectoryEntry *source;
     QSet<DirectoryEntry *> children;
     bool valid;

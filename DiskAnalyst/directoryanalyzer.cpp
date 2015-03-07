@@ -20,7 +20,7 @@ DirectoryEntry *DirectoryAnalyzer::statFile(char *path, char *name, int flags, i
     if (lstat(full_path, &buf) == -1) {
         perror("Stat error");
         qDebug() << full_path;
-        DirectoryEntry *invalidEntry = new DirectoryEntry(QString(name), QString(path), 0, -1);
+        DirectoryEntry *invalidEntry = new DirectoryEntry(QString(name), QString(path), 0, 0, -1);
         invalidEntry->setValidity(false);
         return invalidEntry;
     }
@@ -43,8 +43,9 @@ DirectoryEntry *DirectoryAnalyzer::statFile(char *path, char *name, int flags, i
     long long entrySize = 0;
     if ((buf.st_blocks != 0) && (entryType == DIRECTORY || entryType == REGULAR_FILE))
         entrySize = (long long) buf.st_size;
+    long long numberOfBlocks = (buf.st_blocks);
 
-    DirectoryEntry *entry = new DirectoryEntry(entryName, QString(path), entrySize, depth);
+    DirectoryEntry *entry = new DirectoryEntry(entryName, QString(path), entrySize, numberOfBlocks, depth);
     entry->setType(entryType);
     if (source){
         entry->setSource(source);
