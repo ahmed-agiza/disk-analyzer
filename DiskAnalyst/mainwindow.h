@@ -62,6 +62,8 @@ private slots:
 
     void on_actionDuplicateFilesChecker_triggered();
 
+    void on_actionSelectRootDirectory_triggered();
+
 public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);

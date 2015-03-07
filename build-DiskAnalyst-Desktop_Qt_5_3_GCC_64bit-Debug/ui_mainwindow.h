@@ -35,6 +35,7 @@ public:
     QAction *actionSettings;
     QAction *actionUp;
     QAction *actionDuplicateFilesChecker;
+    QAction *actionSelectRootDirectory;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTreeView *twgDirViewer;
@@ -88,6 +89,11 @@ public:
         QIcon icon7;
         icon7.addFile(QStringLiteral(":/icons/Icons/duplicate-icon-md.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionDuplicateFilesChecker->setIcon(icon7);
+        actionSelectRootDirectory = new QAction(MainWindow);
+        actionSelectRootDirectory->setObjectName(QStringLiteral("actionSelectRootDirectory"));
+        QIcon icon8;
+        icon8.addFile(QStringLiteral(":/icons/Icons/Folder-Add-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSelectRootDirectory->setIcon(icon8);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -128,7 +134,9 @@ public:
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
 
+        mainToolBar->addAction(actionSelectRootDirectory);
         mainToolBar->addAction(actionAnalyzeDirectory);
+        mainToolBar->addSeparator();
         mainToolBar->addAction(actionExploreDirectory);
         mainToolBar->addAction(actionOpen_Terminal);
         mainToolBar->addAction(actionDuplicateFilesChecker);
@@ -148,9 +156,9 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Disk Analyst", 0));
         actionAnalyzeDirectory->setText(QApplication::translate("MainWindow", "Analyze Directory", 0));
 #ifndef QT_NO_TOOLTIP
-        actionAnalyzeDirectory->setToolTip(QApplication::translate("MainWindow", "Open Directory for Analysis", 0));
+        actionAnalyzeDirectory->setToolTip(QApplication::translate("MainWindow", "Analyze Selected Directory", 0));
 #endif // QT_NO_TOOLTIP
-        actionAnalyzeDirectory->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", 0));
+        actionAnalyzeDirectory->setShortcut(QApplication::translate("MainWindow", "Ctrl+A", 0));
         actionExploreDirectory->setText(QApplication::translate("MainWindow", "Explore Directory", 0));
 #ifndef QT_NO_TOOLTIP
         actionExploreDirectory->setToolTip(QApplication::translate("MainWindow", "Explore Directory", 0));
@@ -180,6 +188,11 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionDuplicateFilesChecker->setToolTip(QApplication::translate("MainWindow", "Run Duplicate Files Checker", 0));
 #endif // QT_NO_TOOLTIP
+        actionSelectRootDirectory->setText(QApplication::translate("MainWindow", "Select Root Directory", 0));
+#ifndef QT_NO_TOOLTIP
+        actionSelectRootDirectory->setToolTip(QApplication::translate("MainWindow", "Select Root Directory", 0));
+#endif // QT_NO_TOOLTIP
+        actionSelectRootDirectory->setShortcut(QApplication::translate("MainWindow", "Shift+O", 0));
     } // retranslateUi
 
 };

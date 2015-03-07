@@ -19,6 +19,7 @@
         <file>Icons/Button-Upload-icon (1).png</file>
         <file>Icons/duplicate-icon-md.png</file>
         <file>Icons/Actions-dialog-cancel-icon.png</file>
+        <file>Icons/Folder-Add-icon.png</file>
     </qresource>
     <qresource prefix="/charts">
         <file>Charts/index.html</file>

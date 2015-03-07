@@ -488,6 +488,7 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/Apps-Terminal-Pc-104-icon.png \
 		../DiskAnalyst/Icons/Folder-Open-icon.png \
 		../DiskAnalyst/Icons/file-explore-icon.png \
+		../DiskAnalyst/Icons/Folder-Add-icon.png \
 		../DiskAnalyst/Icons/Apps-konsole-icon.png \
 		../DiskAnalyst/Icons/settings-3-icon.png \
 		../DiskAnalyst/Icons/Awicons-Vista-Artistic-Chart-search.ico \
@@ -650,6 +651,7 @@ moc_mainwindow.cpp: /opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QDir \
 		../DiskAnalyst/filestatdialog.h \
+		../DiskAnalyst/dupesdialog.h \
 		../DiskAnalyst/mainwindow.h
 	/opt/Qt5.3.2/5.3/gcc_64/bin/moc $(DEFINES) -I/opt/Qt5.3.2/5.3/gcc_64/mkspecs/linux-g++ -I/home/ahmed/Documents/Git/disk-analyzer/DiskAnalyst -I/opt/Qt5.3.2/5.3/gcc_64/include -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit -I/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets -I/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork -I/opt/Qt5.3.2/5.3/gcc_64/include/QtGui -I/opt/Qt5.3.2/5.3/gcc_64/include/QtCore -I. ../DiskAnalyst/mainwindow.h -o moc_mainwindow.cpp
 
@@ -1202,6 +1204,7 @@ main.o: ../DiskAnalyst/main.cpp ../DiskAnalyst/mainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QDir \
 		../DiskAnalyst/filestatdialog.h \
+		../DiskAnalyst/dupesdialog.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QApplication \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qapplication.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreapplication.h \
@@ -1382,6 +1385,7 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QDir \
 		../DiskAnalyst/filestatdialog.h \
+		../DiskAnalyst/dupesdialog.h \
 		ui_mainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebView \
@@ -1683,6 +1687,21 @@ settingsdialog.o: ../DiskAnalyst/settingsdialog.cpp ../DiskAnalyst/settingsdialo
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QCheckBox \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qcheckbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QComboBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qcombobox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialogButtonBox \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QFormLayout \
@@ -1697,20 +1716,7 @@ settingsdialog.o: ../DiskAnalyst/settingsdialog.cpp ../DiskAnalyst/settingsdialo
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qheaderview.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLabel \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlabel.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QPushButton \
@@ -1977,9 +1983,24 @@ dupesdialog.o: ../DiskAnalyst/dupesdialog.cpp ../DiskAnalyst/dupesdialog.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtouchdevice.h \
 		ui_dupesdialog.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTreeWidgetItem \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtreewidget.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtreeview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialogButtonBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qheaderview.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
@@ -1990,14 +2011,63 @@ dupesdialog.o: ../DiskAnalyst/dupesdialog.cpp ../DiskAnalyst/dupesdialog.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qicon.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtreewidgetitemiterator.h
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTableWidget \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtablewidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtableview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qgridlayout.h \
+		../DiskAnalyst/mainwindow.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QFileSystemModel \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qfilesystemmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdir.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfileinfo.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdiriterator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSet \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QThread \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qthread.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebFrame \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QObject \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/QSslConfiguration \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslsocket.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qtcpsocket.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslerror.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qsslcertificate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcryptographichash.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdatetime.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtNetwork/qssl.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QFlags \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../DiskAnalyst/directoryanalyzer.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QList \
+		../DiskAnalyst/directoryentry.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QString \
+		../DiskAnalyst/settingsdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSettings \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsettings.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAbstractButton \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QDir \
+		../DiskAnalyst/filestatdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTableWidgetItem \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMessageBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmessagebox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dupesdialog.o ../DiskAnalyst/dupesdialog.cpp
 
 qrc_files.o: qrc_files.cpp 

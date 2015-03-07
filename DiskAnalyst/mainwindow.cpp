@@ -231,9 +231,9 @@ void MainWindow::openDirectory(QString path, QWidget *parent){
 
 
 void MainWindow::on_actionAnalyzeDirectory_triggered(){
-    QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", currentDUA);
-    if (fileName.trimmed() != "")
-        setCurrentPath(fileName);
+    QModelIndex index = ui->twgDirViewer->currentIndex();
+    if (index.isValid())
+        on_twgDirViewer_doubleClicked(index);
 }
 
 void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){   
@@ -440,4 +440,10 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
     dupesDialog->exec();
     setDirectoryJson(directory, fileName);
 
+}
+
+void MainWindow::on_actionSelectRootDirectory_triggered(){
+    QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", currentDUA);
+    if (fileName.trimmed() != "")
+        setCurrentPath(fileName);
 }
