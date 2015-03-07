@@ -10,9 +10,19 @@ DirectoryEntry *DirectoryAnalyzer::statFile(char *path, char *name, int flags, i
     char full_path[MAX_FULL_PATH_SIZE];
 
     (void)flags;
+#ifdef DEBUG_SEPERATOR
+    qDebug() << "Stating: " << path << " : " << name;
+#endif
 
-    if (path[strlen(path) - 1] != '/')
+    if (path[strlen(path) - 1] != '/'){
+#ifdef DEBUG_SEPERATOR
+        qDebug() << "Adding / to " << path;
+#endif
         strcat(path, "/");
+#ifdef DEBUG_SEPERATOR
+        qDebug() << "New path " << path;
+#endif
+    }
 
     sprintf(full_path, "%s%s", path, name);
 
@@ -61,8 +71,15 @@ void DirectoryAnalyzer::recursePath(char *dir, char *name, int flags, int depth,
     (void)flags;
     char fullPathArray[MAX_FULL_PATH_SIZE];
 
-    if (dir[strlen(dir) - 1] != '/')
+    if (dir[strlen(dir) - 1] != '/'){
+#ifdef DEBUG_SEPERATOR
+        qDebug() << "Adding / to " << dir;
+#endif
         strcat(dir, "/");
+#ifdef DEBUG_SEPERATOR
+        qDebug() << "New dir: " << dir;
+#endif
+    }
 
     sprintf(fullPathArray, "%s%s", dir, name);
 
@@ -164,9 +181,14 @@ DirectoryEntry *DirectoryAnalyzer::getRoot() const{
     return root;
 }
 
+DirectoryAnalyzer::~DirectoryAnalyzer(){
+    for(int i = 0; i < entries.size(); i++)
+        if (entries[i])
+            delete entries[i];
+}
+
 
 void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags){
-
     DIR *dir_d;
     struct dirent *dir_inode;
 
@@ -174,10 +196,17 @@ void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags
     char nameCharArray[MAX_FULL_PATH_SIZE];
     char fullPathArray[MAX_FULL_PATH_SIZE];
 
+    for(int i = 0; i < entries.size(); i++)
+        if (entries[i])
+            delete entries[i];
     entries.clear();
 
-    if (!directory.endsWith("/"))
+    if (!directory.endsWith("/")){
+#ifdef DEBUG_SEPERATOR
+        qDebug() << "Appending / to " << directory;
+#endif
         directory.append("/");
+    }
 
     strcpy(pathCharArray, directory.toLocal8Bit().data());
     strcpy(nameCharArray, name.toLocal8Bit().data());
@@ -191,6 +220,11 @@ void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags
     entries.append(rootEntry);
     if (rootEntry->isDirectory()){
         if (!name.endsWith("/")){
+#ifdef DEBUG_SEPERATOR
+            qDebug() << "Name " << name;
+            qDebug() << "Adding / to " << nameCharArray;
+            qDebug() << "Adding / to " << fullPathArray;
+#endif
             strcat(nameCharArray, "/");
             strcat(fullPathArray, "/");
         }
@@ -211,7 +245,6 @@ void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags
             }else{
                 entries.append(newEntry);
                 if (newEntry->isDirectory()){
-                    //qDebug() << "Recursing: " << newEntry->getName();
                     recursePath(fullPathArray, dir_inode->d_name, 0, 2, newEntry);
                 }
             }

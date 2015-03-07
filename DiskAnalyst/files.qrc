@@ -17,6 +17,8 @@
         <file>Icons/settings-3-icon.png</file>
         <file>Icons/Button-Refresh-icon.png</file>
         <file>Icons/Button-Upload-icon (1).png</file>
+        <file>Icons/duplicate-icon-md.png</file>
+        <file>Icons/Actions-dialog-cancel-icon.png</file>
     </qresource>
     <qresource prefix="/charts">
         <file>Charts/index.html</file>

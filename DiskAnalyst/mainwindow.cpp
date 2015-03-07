@@ -12,6 +12,7 @@
 #include <QFileSystemModel>
 #include <QProcess>
 #include <QMessageBox>
+#include <QCryptographicHash>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -59,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
     settingsDialog = 0;
     statDialog = 0;
+    dupesDialog = 0;
 }
 
 
@@ -196,8 +198,23 @@ QString MainWindow::getCurrentDUA() const{
 
 void MainWindow::setCurrentDUA(const QString &value){
     currentDUA = value;
-    if (!value.endsWith("/"))
+    if (!value.endsWith("/") && !(value == "/"))
         currentDUA.append("/");
+}
+
+void MainWindow::openDirectory(QString path, QWidget *parent){
+    if(path.isEmpty())
+        return;
+    QFileInfo pathInfo(path);
+    if(!pathInfo.isDir()){
+        QMessageBox::critical(parent, "Error", "Invalid directory " + path);
+        return;
+    }
+
+    QProcess *fileManagerProcess = new QProcess(parent);
+    QStringList arguments;
+    arguments << path;
+    fileManagerProcess->start("xdg-open", arguments);
 }
 
 
@@ -256,18 +273,7 @@ void MainWindow::on_actionOpen_Terminal_triggered(){
 }
 
 void MainWindow::on_actionExploreDirectory_triggered(){
-    if(currentDUA.isEmpty())
-        return;
-    QFileInfo pathInfo(currentDUA);
-    if(!pathInfo.isDir()){
-        QMessageBox::critical(this, "Error", "Invalid directory " + currentDUA);
-        return;
-    }
-
-    QProcess *fileManagerProcess = new QProcess(this);
-    QStringList arguments;
-    arguments << currentDUA;
-    fileManagerProcess->start("xdg-open", arguments);
+    openDirectory(currentDUA, this);
 }
 
 void MainWindow::on_actionSettings_triggered(){
@@ -293,6 +299,7 @@ void MainWindow::on_actionUp_triggered(){
                 directory = "";
             else
                 directory = pathInfo.absolutePath() + QString("/");
+
             setCurrentDUA(directory + fileName);
             setDirectoryJson(directory, fileName);
         }else
@@ -302,5 +309,103 @@ void MainWindow::on_actionUp_triggered(){
 
 
 void MainWindow::passGraphParamters(){
+
+}
+
+QString MainWindow::hashFile(QString filePath){
+    QFile file(filePath);
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QString hash = QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5).toHex().constData();
+        file.close();
+        return hash;
+    }
+
+    return "";
+}
+
+void MainWindow::on_actionDuplicateFilesChecker_triggered(){
+    DirectoryAnalyzer checkerAnalyzer;
+    QString dupCheckDUA = currentDUA;
+    if (dupCheckDUA.endsWith("/") && dupCheckDUA != QDir::rootPath())
+        dupCheckDUA.remove(dupCheckDUA.length() - 1, 1);
+    QDir currentDir(dupCheckDUA);
+    QFileInfo pathInfo(dupCheckDUA);
+    QString fileName = pathInfo.baseName();
+
+    QString directory;
+    if (currentDir.isRoot())
+        directory = "";
+    else
+        directory = pathInfo.absolutePath() + QString("/");
+
+
+    checkerAnalyzer.startAnalysis(directory, fileName);
+    QList<DirectoryEntry *> entries = checkerAnalyzer.getEntries();
+    QMap<long long, QStringList> sizesTable;
+    QMap<QString, QString> hashCache;
+    QList<QPair<QString, QString> > duplicates;
+    DirectoryEntry *rootEntry = analyzer->getRoot();
+    for(int i = 0; i < entries.size(); i++){
+        if (entries[i] == rootEntry)
+            continue;
+        if (entries[i]->isValid() && entries[i]->isRegularFile()){
+            QString entryPath = entries[i]->getPath() + entries[i]->getName();
+            if(!sizesTable.contains(entries[i]->getEntrySize())){
+                sizesTable[entries[i]->getEntrySize()].append(entryPath);
+            }else{
+                QList<QString> &matchingSize = sizesTable[entries[i]->getEntrySize()];
+                qDebug() << "Size: " << entries[i]->getEntrySize();
+                qDebug() << "Entry: " << entryPath;
+                qDebug() << "Older entries: " << matchingSize;
+                QString entryHash;
+                if(hashCache.contains(entryPath))
+                    entryHash = hashCache[entryPath];
+                else{
+                    entryHash = hashFile(entryPath);
+                    if (entryHash != "")
+                        hashCache[entryPath] = entryHash;
+                }
+
+                if (entryHash == ""){
+                    qDebug() << "Cannot hash " << entries[i]->getPath() + entries[i]->getName();
+                }else{
+                    for(int j = 0; j < matchingSize.size(); j++){
+                        QString fileHash;
+                        if(hashCache.contains(matchingSize[j]))
+                            fileHash = hashCache[matchingSize[j]];
+                        else{
+                            fileHash = hashFile(matchingSize[j]);
+                            if(fileHash != "")
+                                hashCache[matchingSize[j]] = fileHash;
+                        }
+
+                        if(fileHash == ""){
+                            qDebug() << "Cannot hash " << matchingSize[j];
+                        }else if (fileHash == entryHash){
+                            duplicates.append(QPair<QString, QString>(matchingSize[j], entryPath));
+                        }else{
+                            qDebug() << "Entries " << entryPath << " and " << matchingSize[j]
+                                     << " have the same size but different hashing";
+                        }
+                    }
+                }
+                matchingSize.append(entryPath);
+            }
+
+        }
+    }
+
+    if (duplicates.size() == 0){
+        QMessageBox::information(this, "No Duplicates", "No duplicate file entries were found in the scanned directory");
+        return;
+    }
+
+    if(!dupesDialog)
+        dupesDialog = new DupesDialog(this);
+
+    dupesDialog->setDuplicates(duplicates);
+    dupesDialog->exec();
+    setDirectoryJson(directory, fileName);
 
 }
