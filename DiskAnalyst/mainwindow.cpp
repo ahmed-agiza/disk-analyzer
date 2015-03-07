@@ -322,7 +322,25 @@ void MainWindow::on_actionUp_triggered(){
 }
 
 
-void MainWindow::passGraphParamters(){
+void MainWindow::passGraphParamters(bool displayUnit){
+    QString fadeEnabled;
+    if (SettingsManager::getFadeEnabled())
+        fadeEnabled = "0.3, ";
+    else
+        fadeEnabled = "0.0, ";
+    QString colorSet = QString::number(SettingsManager::getColorSet()) + ", ";
+    QString readable = QString::number(SettingsManager::getHumanReadable()) + ", ";
+
+    QString displayUnitParam;
+    if (displayUnit)
+        displayUnitParam = "1, ";
+    else
+        displayUnitParam = "0, ";
+
+    QString navigateGraph = QString::number(SettingsManager::getNavigateChart());
+
+    frame->evaluateJavaScript(QString("applySettings(") + fadeEnabled + colorSet
+                              + readable + displayUnitParam + navigateGraph + QString("); null"));
 
 }
 

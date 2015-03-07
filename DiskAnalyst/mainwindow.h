@@ -24,7 +24,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    void passGraphParamters();
+    void passGraphParamters(bool displayUnit = true);
     QString hashFile(QString);
 
 public:

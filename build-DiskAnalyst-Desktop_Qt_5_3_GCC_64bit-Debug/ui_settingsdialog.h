@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QFormLayout>
@@ -42,12 +43,14 @@ public:
     QDialogButtonBox *bbxOkCancel;
     QLabel *lblEntriesBy;
     QSpinBox *sbxGraphDepth;
+    QLabel *lblColorSet;
+    QComboBox *cmbColorSet;
 
     void setupUi(QDialog *SettingsDialog)
     {
         if (SettingsDialog->objectName().isEmpty())
             SettingsDialog->setObjectName(QStringLiteral("SettingsDialog"));
-        SettingsDialog->resize(539, 227);
+        SettingsDialog->resize(539, 234);
         formLayout = new QFormLayout(SettingsDialog);
         formLayout->setObjectName(QStringLiteral("formLayout"));
         formLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
@@ -70,35 +73,35 @@ public:
         horizontalLayout_2->addWidget(rbtBlocks);
 
 
-        formLayout->setLayout(4, QFormLayout::FieldRole, horizontalLayout_2);
+        formLayout->setLayout(5, QFormLayout::FieldRole, horizontalLayout_2);
 
         chkReadable = new QCheckBox(SettingsDialog);
         chkReadable->setObjectName(QStringLiteral("chkReadable"));
         chkReadable->setChecked(true);
 
-        formLayout->setWidget(5, QFormLayout::LabelRole, chkReadable);
+        formLayout->setWidget(6, QFormLayout::LabelRole, chkReadable);
 
         chkNavigate = new QCheckBox(SettingsDialog);
         chkNavigate->setObjectName(QStringLiteral("chkNavigate"));
         chkNavigate->setChecked(true);
 
-        formLayout->setWidget(6, QFormLayout::LabelRole, chkNavigate);
+        formLayout->setWidget(7, QFormLayout::LabelRole, chkNavigate);
 
         chkFading = new QCheckBox(SettingsDialog);
         chkFading->setObjectName(QStringLiteral("chkFading"));
         chkFading->setChecked(true);
 
-        formLayout->setWidget(7, QFormLayout::LabelRole, chkFading);
+        formLayout->setWidget(8, QFormLayout::LabelRole, chkFading);
 
         lblStartupDirectory = new QLabel(SettingsDialog);
         lblStartupDirectory->setObjectName(QStringLiteral("lblStartupDirectory"));
 
-        formLayout->setWidget(8, QFormLayout::LabelRole, lblStartupDirectory);
+        formLayout->setWidget(9, QFormLayout::LabelRole, lblStartupDirectory);
 
         btnStartupDirectory = new QPushButton(SettingsDialog);
         btnStartupDirectory->setObjectName(QStringLiteral("btnStartupDirectory"));
 
-        formLayout->setWidget(8, QFormLayout::FieldRole, btnStartupDirectory);
+        formLayout->setWidget(9, QFormLayout::FieldRole, btnStartupDirectory);
 
         bbxOkCancel = new QDialogButtonBox(SettingsDialog);
         bbxOkCancel->setObjectName(QStringLiteral("bbxOkCancel"));
@@ -106,12 +109,12 @@ public:
         bbxOkCancel->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults);
         bbxOkCancel->setCenterButtons(true);
 
-        formLayout->setWidget(10, QFormLayout::SpanningRole, bbxOkCancel);
+        formLayout->setWidget(11, QFormLayout::SpanningRole, bbxOkCancel);
 
         lblEntriesBy = new QLabel(SettingsDialog);
         lblEntriesBy->setObjectName(QStringLiteral("lblEntriesBy"));
 
-        formLayout->setWidget(4, QFormLayout::LabelRole, lblEntriesBy);
+        formLayout->setWidget(5, QFormLayout::LabelRole, lblEntriesBy);
 
         sbxGraphDepth = new QSpinBox(SettingsDialog);
         sbxGraphDepth->setObjectName(QStringLiteral("sbxGraphDepth"));
@@ -120,6 +123,16 @@ public:
         sbxGraphDepth->setValue(4);
 
         formLayout->setWidget(2, QFormLayout::FieldRole, sbxGraphDepth);
+
+        lblColorSet = new QLabel(SettingsDialog);
+        lblColorSet->setObjectName(QStringLiteral("lblColorSet"));
+
+        formLayout->setWidget(4, QFormLayout::LabelRole, lblColorSet);
+
+        cmbColorSet = new QComboBox(SettingsDialog);
+        cmbColorSet->setObjectName(QStringLiteral("cmbColorSet"));
+
+        formLayout->setWidget(4, QFormLayout::FieldRole, cmbColorSet);
 
 
         retranslateUi(SettingsDialog);
@@ -141,6 +154,14 @@ public:
         lblStartupDirectory->setText(QString());
         btnStartupDirectory->setText(QApplication::translate("SettingsDialog", "Change Startup Directory", 0));
         lblEntriesBy->setText(QApplication::translate("SettingsDialog", "List entries by:", 0));
+        lblColorSet->setText(QApplication::translate("SettingsDialog", "Color Set:", 0));
+        cmbColorSet->clear();
+        cmbColorSet->insertItems(0, QStringList()
+         << QApplication::translate("SettingsDialog", "Color Set 1", 0)
+         << QApplication::translate("SettingsDialog", "Color Set 2", 0)
+         << QApplication::translate("SettingsDialog", "Color Set 3", 0)
+         << QApplication::translate("SettingsDialog", "Color Set 4", 0)
+        );
     } // retranslateUi
 
 };
