@@ -251,7 +251,7 @@ function click(d){
     path.transition()
         .duration(750)
         .attrTween("d", arcTween(d));
-    //mainWindow.navigateTo(p);
+    mainWindow.navigateTo(p);
 }
 
 // Function to clear html
