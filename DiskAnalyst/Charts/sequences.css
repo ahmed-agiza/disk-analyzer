@@ -3,19 +3,19 @@ body {
   font-size: 12px;
   font-weight: 400;
   background-color: #fff;
-  width: 960px;
+  width: 900px;
   height: 700px;
   margin-top: 10px;
 }
 
 #main {
   float: left;
-  width: 750px;
+  width: 900px;
 }
 
 #sequence {
   width: 900px;
-  height: 70px;
+  height: 120px;
 }
 
 #sequence text {
@@ -25,6 +25,8 @@ body {
 
 #chart {
   position: relative;
+  float: left;
+  width: 750px;
 }
 
 #chart path {
@@ -32,13 +34,14 @@ body {
 }
 
 #explanation {
-  position: absolute;
-  top: 260px;
-  left: 305px;
-  width: 140px;
-  text-align: center;
-  color: #666;
+  /*position: absolute;
   z-index: -1;
+  text-align: center;
+  top: 260px;
+  left: 305px;*/
+  float: right;
+  width: 140px;
+  color: #666;
 }
 
 #size {

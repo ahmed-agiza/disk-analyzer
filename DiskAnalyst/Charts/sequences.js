@@ -3,10 +3,6 @@ var width = 750;
 var height = 600;
 var radius = Math.min(width, height) / 2;
 
-function test(){
-      alert('Test');
-}
-
 // File path graphically
 var fpd = {
     width: 100,
@@ -15,10 +11,14 @@ var fpd = {
     tail: 10
 };
 
-// D3 will generate the colors for the nodes from a set of 20 colors
-var color = d3.scale.category20b();
+// Set in applySettings
+var color;
+var opacity;
+var readable;
+var units;
 
-var totalSize = 0; 
+var path;
+var totalSize = 0;
 
 // Setting start point in the center
 var vis = d3.select("#chart").append("svg:svg")
@@ -31,7 +31,7 @@ var vis = d3.select("#chart").append("svg:svg")
 
 // The layout is a partitioned one to achieve the sunburst structure
 var partition = d3.layout.partition()
-    .size([2 * Math.PI, radius * radius])
+    //.size([2 * Math.PI, radius * radius])
     .value(function(d) {return d.size;})
     .sort(function(a,b){
         if(a.hasOwnProperty("dummy")) return 1;
@@ -40,14 +40,28 @@ var partition = d3.layout.partition()
     //    return 0;
     });
 
-// The arc for drawing the svg
-var arc = d3.svg.arc()
-    .startAngle(function(d) {return d.x;})
-    .endAngle(function(d) {return d.x + d.dx;})
-    .innerRadius(function(d) {return Math.sqrt(d.y);})
-    .outerRadius(function(d) {return Math.sqrt(d.y + d.dy);});
+// Scaling generators
+var x = d3.scale.linear()
+    .range([0, 2 * Math.PI]);
 
-// Calling the json function with the disk statistics
+var y = d3.scale.sqrt()
+    .range([0, radius]);
+
+// The arc for drawing the svg (OLD ARC)
+/*var arc = d3.svg.arc()
+    .startAngle(function(d) {return d.x;})
+    .endAngle(function(d) {return (d.x + d.dx);})
+    .innerRadius(function(d) {return Math.sqrt(d.y);})
+    .outerRadius(function(d) {return Math.sqrt(d.y + d.dy);});*/
+
+// The arc for drawing the svg (Interpolating ARC)
+var arc = d3.svg.arc()
+    .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
+    .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
+    .innerRadius(function(d) { return Math.max(0, y(d.y)); })
+    .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
+
+// Calling the json function with the disk statistics (Calls json data from file)
 // Invoking from a JSON file
 d3.json("./data.json", function(error, root) {
     visualize(root);
@@ -55,6 +69,7 @@ d3.json("./data.json", function(error, root) {
 
 // The core visualization function
 function visualize(root){
+    applySettings();
     clearHtml();
     initializeFilePathDisplay();
     //Bounding circle
@@ -62,13 +77,14 @@ function visualize(root){
         .attr("r", radius)
         .style("opacity", 0);
 
+    // Calculation optimization and getting maxdepth
     var nodes = partition.nodes(root)
         .filter(function(d) {
             return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
         });
 
     // Path building
-    var path = vis.data([root]).selectAll("path")
+    path = vis.data([root]).selectAll("path")
         .data(nodes)
         .enter().append("svg:path")
         .filter(function(d){
@@ -79,15 +95,14 @@ function visualize(root){
                 d3.select("#root")
                     .text(d.name);
             }
-            return d.depth ? null : "none";
+            return true;//d.depth ? null : "none";
         })
         .attr("d", arc)
         .attr("fill-rule", "evenodd")
         .style("fill", function(d) {return color((d.children ? d : d.parent).name);})
         .style("opacity", 1)
         .on("mouseover", mouseover)
-        //.on("click", click)
-        .on("dblclick", dblclick)
+        .on("click", click)
 
     // Remove transparency if hovering out of the graph
     d3.select("#container").on("mouseleave", mouseleave);
@@ -101,7 +116,7 @@ function initializeFilePathDisplay() {
     // Add the svg area
     var trail = d3.select("#sequence").append("svg:svg")
         .attr("width", width)
-        .attr("height", 50)
+        .attr("height", 100)
         .attr("id", "trail");
 
     // Add the label at the end, for the percentage
@@ -112,7 +127,7 @@ function initializeFilePathDisplay() {
 
 // Interactive: This will fade all elements except for the path leading to the node being hovered over
 function mouseover(d){
-    var readableMemory = convert(d.value);
+    var readableMemory = convert(d.value, units);
     var percentage = (100 * d.value / totalSize).toPrecision(3);
     var percentageString = percentage + "%";
     if (percentage < 0.1) {
@@ -120,7 +135,7 @@ function mouseover(d){
     }
 
     d3.select("#size")
-        .text(readableMemory);
+        .text(readable ? readableMemory : d.value);
     d3.select("#explanation")
         .style("visibility", "");
 
@@ -129,7 +144,7 @@ function mouseover(d){
 
     // Fade all parts
     d3.selectAll("path")
-        .style("opacity", 0.3);
+        .style("opacity", opacity);
 
     // Then highlight only those that are an ancestor of the current segment
     vis.selectAll("path")
@@ -197,7 +212,7 @@ function updateFilePathDisplay(nodeArray, percentageString) {
 
     // Set position for entering and updating nodes
     g.attr("transform", function(d, i) {
-        return "translate(" + i * (fpd.width + fpd.spacing) + ", 0)";
+        return "translate(" + (i%6) * (fpd.width + fpd.spacing) + ", " + Math.floor(i/6)*32 + ")";
     });
 
     // Remove exiting nodes
@@ -205,8 +220,8 @@ function updateFilePathDisplay(nodeArray, percentageString) {
 
     // Update percentage at the end
     d3.select("#trail").select("#endlabel")
-        .attr("x", (nodeArray.length + 0.5) * (fpd.width + fpd.spacing))
-        .attr("y", fpd.height / 2)
+        .attr("x", ((nodeArray.length%6) + 0.5) * (fpd.width + fpd.spacing))
+        .attr("y", (Math.floor(nodeArray.length/6)*32) + fpd.height / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
         .text(percentageString);
@@ -230,11 +245,13 @@ function fpdPoints(d, i) {
     return points.join(" ");
 }
 
-
 // Interactive: When a node is clicked this will trigger
-function dblclick(d){
-    path = getPath(d);
-    mainWindow.navigateTo(path);
+function click(d){
+    var p = getPath(d);
+    path.transition()
+        .duration(750)
+        .attrTween("d", arcTween(d));
+    //mainWindow.navigateTo(p);
 }
 
 // Function to clear html
@@ -243,12 +260,12 @@ function clearHtml(){
 }
 
 // Readable memory display
-function convert(bytes){
+function convert(bytes, units){
     var out;
-    if(bytes <= 1000) out = bytes.toPrecision(3) + "B";
-    else if (bytes <= 1000*1000) out = (bytes / 1000.0).toPrecision(3) + "KB";
-    else if (bytes <= 1000*1000*1000) out = (bytes / (1000.0*1000.0)).toPrecision(3) + "MB";
-    else out = (bytes / (1000.0*1000.0*1000.0)).toPrecision(3) + "GB";
+    if(bytes <= 1000) out = bytes.toPrecision(3) + (units ? "B": "");
+    else if (bytes <= 1000*1000) out = (bytes / 1000.0).toPrecision(3) + (units ? "KB": "");
+    else if (bytes <= 1000*1000*1000) out = (bytes / (1000.0*1000.0)).toPrecision(3) + (units ? "MB": "");
+    else out = (bytes / (1000.0*1000.0*1000.0)).toPrecision(3) + (units ? "GB": "");
     return out;
 }
 
@@ -262,4 +279,46 @@ function getPath(node) {
     }
     //path = current.name + '/' + path;
     return path;
+}
+
+// Interpolation to implement zooming
+function arcTween(d) {
+  var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
+      yd = d3.interpolate(y.domain(), [d.y, 1]),
+      yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);
+  return function(d, i) {
+    return i
+        ? function(t) { return arc(d); }
+        : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
+  };
+}
+
+// function to customize opacity, color, readable format, and units
+function applySettings(op, clr, rd, un){
+    if (typeof op == "undefined") opacity = 0.3;
+    else opacity = op;
+
+    if (typeof clr == "undefined") color = d3.scale.category20b();
+    else{
+        switch(clr){
+        case 1:
+            color = d3.scale.category20b();
+            break;
+        case 2:
+            color = d3.scale.category20();
+            break;
+        case 3:
+            color = d3.scale.category20c();
+            break;
+        case 4:
+            color = d3.scale.category10();
+            break;
+        }
+    }
+
+    if (typeof rd == "undefined") readable = true;
+    else readable = rd;
+
+    if (typeof un == "undefined") units = true;
+    else units = un;
 }
