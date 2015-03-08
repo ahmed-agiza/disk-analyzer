@@ -1,8 +1,6 @@
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
+    width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-
-var formatPercent = d3.format(".0%");
 
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1, 1);
@@ -16,26 +14,106 @@ var xAxis = d3.svg.axis()
 
 var yAxis = d3.svg.axis()
     .scale(y)
-    .orient("left")
-    .tickFormat(formatPercent);
+    .orient("left");
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var testx = [A, B, C, D, E, F, G, H];
-var testy = [10, 14, 15, 9, 24, 50, 12, 30];
+var testData = [
+  {
+    name: "A",
+    value: 500
+  },
+  {
+    name: "B",
+    value: 1000
+  },
+  {
+    name: "C",
+    value: 200
+  },
+  {
+    name: "D",
+    value: 2500
+  },
+  {
+    name: "E",
+    value: 1500
+  },
+  {
+    name: "F",
+    value: 5000
+  },
+  {
+    name: "H",
+    value: 100
+  },
+  {
+    name: "I",
+    value: 1000
+  },
+  {
+    name: "J",
+    value: 1200
+  },
+  {
+    name: "K",
+    value: 1300
+  },
+  {
+    name: "L",
+    value: 500
+  },
+  {
+    name: "M",
+    value: 1000
+  },
+  {
+    name: "N",
+    value: 200
+  },
+  {
+    name: "O",
+    value: 2500
+  },
+  {
+    name: "P",
+    value: 1500
+  },
+  {
+    name: "Q",
+    value: 5000
+  },
+  {
+    name: "R",
+    value: 100
+  },
+  {
+    name: "S",
+    value: 1000
+  },
+  {
+    name: "T",
+    value: 1200
+  },
+  {
+    name: "U",
+    value: 1300
+  }
+];
 
 d3.tsv("data.tsv", function(error, data) {
-
   data.forEach(function(d) {
     d.frequency = +d.frequency;
   });
 
-  x.domain(testx);
-  y.domain([0, d3.max(testy)]);
+  //x.domain(data.map(function(d) { return d.letter; }));
+  //y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+  x.domain(testData.map(function(d){return d.name;}));
+  y.domain([0, d3.max(testData, function(d){return d.value;})]);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -45,21 +123,21 @@ d3.tsv("data.tsv", function(error, data) {
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
-    .append("text")
+      .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Frequency");
+      .text("Value");
 
   svg.selectAll(".bar")
-      .data(data)
-    .enter().append("rect")
+      .data(testData)
+      .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x(d.letter); })
+      .attr("x", function(d) { return x(d.name); })
       .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.frequency); })
-      .attr("height", function(d) { return height - y(d.frequency); });
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); });
 
   d3.select("input").on("change", change);
 
@@ -71,10 +149,10 @@ d3.tsv("data.tsv", function(error, data) {
     clearTimeout(sortTimeout);
 
     // Copy-on-write since tweens are evaluated after a delay.
-    var x0 = x.domain(data.sort(this.checked
-        ? function(a, b) { return b.frequency - a.frequency; }
-        : function(a, b) { return d3.ascending(a.letter, b.letter); })
-        .map(function(d) { return d.letter; }))
+    var x0 = x.domain(testData.sort(this.checked
+        ? function(a, b) { return b.value - a.value; }
+        : function(a, b) { return d3.ascending(a.name, b.name); })
+        .map(function(d) { return d.name; }))
         .copy();
 
     var transition = svg.transition().duration(750),
@@ -82,11 +160,11 @@ d3.tsv("data.tsv", function(error, data) {
 
     transition.selectAll(".bar")
         .delay(delay)
-        .attr("x", function(d) { return x0(d.letter); });
+        .attr("x", function(d) { return x0(d.name); });
 
     transition.select(".x.axis")
         .call(xAxis)
-      .selectAll("g")
+        .selectAll("g")
         .delay(delay);
   }
 });

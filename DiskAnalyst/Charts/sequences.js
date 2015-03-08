@@ -64,9 +64,9 @@ var arc = d3.svg.arc()
 
 // Calling the json function with the disk statistics (Calls json data from file)
 // Invoking from a JSON file
-/*d3.json("./data.json", function(error, root) {
+d3.json("./data.json", function(error, root) {
     visualize(root);
-});*/
+});
 
 // The core visualization function
 function visualize(root){
@@ -100,6 +100,7 @@ function visualize(root){
         })
         .attr("d", arc)
         .attr("fill-rule", "evenodd")
+        //.attrTween("tween", null)
         .style("fill", function(d) {return color((d.children ? d : d.parent).name);})
         .style("opacity", 1)
         .on("mouseover", mouseover)
@@ -110,7 +111,7 @@ function visualize(root){
 
     // Get total size of the tree = value of root node from partition
     totalSize = path.node().__data__.value;
-    console.log(path.node().__data__);
+    //console.log(path.node().__data__);
 }
 
 function initializeFilePathDisplay() {
