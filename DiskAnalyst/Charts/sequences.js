@@ -3,14 +3,6 @@ var width = 750;
 var height = 600;
 var radius = Math.min(width, height) / 2;
 
-// File path graphically
-var fpd = {
-    width: 100,
-    height: 30,
-    spacing: 3,
-    tail: 10
-};
-
 // Set in applySettings
 var graphNavigation;
 var color;
@@ -18,6 +10,7 @@ var opacity;
 var readable;
 var units;
 
+// Global variables
 var path;
 var totalSize = 0;
 
@@ -38,8 +31,7 @@ var partition = d3.layout.partition()
         if(a.hasOwnProperty("dummy")) return 1;
         else if(b.hasOwnProperty("dummy")) return -1;
         else return b.value < a.value ? -1 : b.value > a.value ? 1 : b.value >= a.value ? 0 : NaN;
-    //    return 0;
-    });
+});
 
 // Scaling generators
 var x = d3.scale.linear()
@@ -47,13 +39,6 @@ var x = d3.scale.linear()
 
 var y = d3.scale.sqrt()
     .range([0, radius]);
-
-// The arc for drawing the svg (OLD ARC)
-/*var arc = d3.svg.arc()
-    .startAngle(function(d) {return d.x;})
-    .endAngle(function(d) {return (d.x + d.dx);})
-    .innerRadius(function(d) {return Math.sqrt(d.y);})
-    .outerRadius(function(d) {return Math.sqrt(d.y + d.dy);});*/
 
 // The arc for drawing the svg (Interpolating ARC)
 var arc = d3.svg.arc()
@@ -71,14 +56,15 @@ d3.json("./data.json", function(error, root) {
 // The core visualization function
 function visualize(root){
     applySettings();
-    clearHtml();
+    clearChart();
     initializeFilePathDisplay();
+
     //Bounding circle
     vis.append("svg:circle")
         .attr("r", radius)
         .style("opacity", 0);
 
-    // Calculation optimization and getting maxdepth
+    // Calculation optimization
     var nodes = partition.nodes(root)
         .filter(function(d) {
             return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
@@ -89,18 +75,17 @@ function visualize(root){
         .data(nodes)
         .enter().append("svg:path")
         .filter(function(d){
-            return (!d.hasOwnProperty("dummy")); // && d.depth <= 5;
+            return (!d.hasOwnProperty("dummy"));
         })
         .attr("display", function(d) {
             if (!d.depth){
                 d3.select("#root")
                     .text(d.name);
             }
-            return true;//d.depth ? null : "none";
+            return true;
         })
         .attr("d", arc)
         .attr("fill-rule", "evenodd")
-        //.attrTween("tween", null)
         .style("fill", function(d) {return color((d.children ? d : d.parent).name);})
         .style("opacity", 1)
         .on("mouseover", mouseover)
@@ -111,7 +96,6 @@ function visualize(root){
 
     // Get total size of the tree = value of root node from partition
     totalSize = path.node().__data__.value;
-    //console.log(path.node().__data__);
 }
 
 function initializeFilePathDisplay() {
@@ -247,30 +231,41 @@ function fpdPoints(d, i) {
     return points.join(" ");
 }
 
+// Interpolation to implement zooming
+function arcTween(d) {
+    var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
+        yd = d3.interpolate(y.domain(), [d.y, 1]),
+        yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);
+    return function(d, i) {
+        return i
+            ? function(t) { return arc(d); }
+            : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
+    };
+}
+
 // Interactive: When a node is clicked this will trigger
 function dblclick(d){
-    if (!graphNavigation)
-        return;
-    var p = getPath(d);
+    if (!graphNavigation) return;
+
+    d3.select("#root")
+        .text(d.name);
+
     path.transition()
         .duration(750)
         .attrTween("d", arcTween(d));
+
+    var p = getPath(d);
     mainWindow.navigateTo(p);
 }
 
 // Function to clear html
-function clearHtml(){
+function clearChart(){
     $('#container').empty();
-}
 
-// Readable memory display
-function convert(bytes, units){
-    var out;
-    if(bytes <= 1000) out = bytes.toPrecision(3) + (units ? "B": "");
-    else if (bytes <= 1000*1000) out = (bytes / 1000.0).toPrecision(3) + (units ? "KB": "");
-    else if (bytes <= 1000*1000*1000) out = (bytes / (1000.0*1000.0)).toPrecision(3) + (units ? "MB": "");
-    else out = (bytes / (1000.0*1000.0*1000.0)).toPrecision(3) + (units ? "GB": "");
-    return out;
+    x = d3.scale.linear()
+        .range([0, 2 * Math.PI]);
+    y = d3.scale.sqrt()
+        .range([0, radius]);
 }
 
 // Get Readable path name to selected node
@@ -281,20 +276,17 @@ function getPath(node) {
         path = current.name + '/' + path;
         current = current.parent;
     }
-    //path = current.name + '/' + path;
     return path;
 }
 
-// Interpolation to implement zooming
-function arcTween(d) {
-  var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
-      yd = d3.interpolate(y.domain(), [d.y, 1]),
-      yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);
-  return function(d, i) {
-    return i
-        ? function(t) { return arc(d); }
-        : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
-  };
+// Readable memory display
+function convert(bytes, units){
+    var out;
+    if(bytes <= 1000) out = bytes.toPrecision(3) + (units ? "B": "");
+    else if (bytes <= 1000*1000) out = (bytes / 1000.0).toPrecision(3) + (units ? "KB": "");
+    else if (bytes <= 1000*1000*1000) out = (bytes / (1000.0*1000.0)).toPrecision(3) + (units ? "MB": "");
+    else out = (bytes / (1000.0*1000.0*1000.0)).toPrecision(3) + (units ? "GB": "");
+    return out;
 }
 
 // function to customize opacity, color, readable format, and units
@@ -326,7 +318,14 @@ function applySettings(op, clr, rd, un, gn){
     if (typeof un == "undefined") units = true;
     else units = un;
 
-     if (typeof gn == "undefined") graphNavigation = true;
-     else graphNavigation = gn;
+    if (typeof gn == "undefined") graphNavigation = true;
+    else graphNavigation = gn;
 
 }
+
+// The arc for drawing the svg (OLD ARC)
+/*var arc = d3.svg.arc()
+    .startAngle(function(d) {return d.x;})
+    .endAngle(function(d) {return (d.x + d.dx);})
+    .innerRadius(function(d) {return Math.sqrt(d.y);})
+    .outerRadius(function(d) {return Math.sqrt(d.y + d.dy);});*/

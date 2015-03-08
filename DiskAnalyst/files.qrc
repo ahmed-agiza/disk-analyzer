@@ -30,5 +30,8 @@
         <file>Charts/sequences.js</file>
         <file>Charts/jquery.min.js</file>
         <file>Charts/data.json</file>
+        <file>Charts/barchart.html</file>
+        <file>Charts/barchart.css</file>
+        <file>Charts/barchart.js</file>
     </qresource>
 </RCC>
