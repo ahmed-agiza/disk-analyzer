@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "duplicatesdatamodel.h"
+
 namespace Ui {
 class DupesDialog;
 }
@@ -12,7 +14,7 @@ typedef QPair<QString, QString> StringPair;
 class DupesDialog : public QDialog
 {
     Q_OBJECT
-    void removeAllEntries(QString filePath);
+    QList<QPair<QString, QString> > duplicates;
 public:
     explicit DupesDialog(QWidget *parent = 0);
     void setDuplicates(QList<StringPair> dupes);
@@ -20,13 +22,15 @@ public:
 protected:
     void showEvent(QShowEvent *event);
 private slots:
-    bool deleteFile(QString filePath);
+    int deleteFile(QString filePath);
     void openFolder(QString filePath);
+    void refreshTableView();
 
     void on_tblDuplicates_clicked(const QModelIndex &index);
 
 private:
     Ui::DupesDialog *ui;
+    DuplicatesDataModel *model;
 };
 
 #endif // DUPESDIALOG_H

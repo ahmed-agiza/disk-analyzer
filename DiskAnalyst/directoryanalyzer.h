@@ -17,7 +17,6 @@
 #include <string.h>
 #include <pwd.h>
 #include <grp.h>
-#include <stdbool.h>
 
 #define BUFF_SIZE 100
 
@@ -46,6 +45,8 @@ class DirectoryAnalyzer : public QObject
     Q_OBJECT
     QList<DirectoryEntry *> entries;
     DirectoryEntry *root;
+    bool stopped;
+    bool analysisDone;
 
     DirectoryEntry *statFile(char *path, char *name, int flags = 0, int depth = -1, DirectoryEntry *source = 0);
     void recursePath(char *dir, char *name, int flags, int depth = -1, DirectoryEntry *source = 0);
@@ -62,10 +63,14 @@ public:
     DirectoryEntry *getRoot() const;
 
     ~DirectoryAnalyzer();
+    bool getAnalysisDone() const;
+
 signals:
     void analysisComplete();
 public slots:
     void startAnalysis(QString directory, QString name, int flags = 0);
+    void setStopped(bool value);
+    void setAnalysisDone(bool value);
 
 };
 

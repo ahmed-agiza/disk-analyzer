@@ -3,7 +3,7 @@
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::NonModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -16,7 +16,7 @@
   <property name="minimumSize">
    <size>
     <width>0</width>
-    <height>500</height>
+    <height>400</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -90,7 +90,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionSelectRootDirectory"/>
    <addaction name="actionAnalyzeDirectory"/>
+   <addaction name="separator"/>
    <addaction name="actionExploreDirectory"/>
    <addaction name="actionOpen_Terminal"/>
    <addaction name="actionDuplicateFilesChecker"/>
@@ -110,10 +112,10 @@
     <string>Analyze Directory</string>
    </property>
    <property name="toolTip">
-    <string>Open Directory for Analysis</string>
+    <string>Analyze Selected Directory</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="actionExploreDirectory">
@@ -201,6 +203,21 @@
    </property>
    <property name="toolTip">
     <string>Run Duplicate Files Checker</string>
+   </property>
+  </action>
+  <action name="actionSelectRootDirectory">
+   <property name="icon">
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/Folder-Add-icon.png</normaloff>:/icons/Icons/Folder-Add-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Select Root Directory</string>
+   </property>
+   <property name="toolTip">
+    <string>Select Root Directory</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+O</string>
    </property>
   </action>
  </widget>

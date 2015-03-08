@@ -9,6 +9,7 @@ const QString NAVIGATE_CHART_KEY("navigate_chart");
 const QString FADING_KEY("fading");
 const QString HUMAN_READABLE_KEY("human_readable");
 const QString STARTUP_DIRECTORY_KEY("startup_directory");
+const QString COLOR_SET_KEY("color_set");
 
 class SettingsManager{
 public:
@@ -83,6 +84,18 @@ public:
     }
     static bool defaultFadeEnabled(){
         return true;
+    }
+
+    static void setColorSet(int value){
+       QSettings settings;
+       settings.setValue(COLOR_SET_KEY, value);
+    }
+    static int getColorSet(){
+        QSettings settings;
+        return settings.value(COLOR_SET_KEY, defaultGraphDepth()).toInt();
+    }
+    static int defaultColorSet(){
+        return 1;
     }
 
 };

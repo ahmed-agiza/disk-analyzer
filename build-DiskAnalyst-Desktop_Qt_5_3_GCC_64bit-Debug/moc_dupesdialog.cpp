@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_DupesDialog_t {
-    QByteArrayData data[7];
-    char stringdata[75];
+    QByteArrayData data[8];
+    char stringdata[92];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,12 +34,13 @@ QT_MOC_LITERAL(1, 12, 10),
 QT_MOC_LITERAL(2, 23, 0),
 QT_MOC_LITERAL(3, 24, 8),
 QT_MOC_LITERAL(4, 33, 10),
-QT_MOC_LITERAL(5, 44, 24),
-QT_MOC_LITERAL(6, 69, 5)
+QT_MOC_LITERAL(5, 44, 16),
+QT_MOC_LITERAL(6, 61, 24),
+QT_MOC_LITERAL(7, 86, 5)
     },
     "DupesDialog\0deleteFile\0\0filePath\0"
-    "openFolder\0on_tblDuplicates_clicked\0"
-    "index"
+    "openFolder\0refreshTableView\0"
+    "on_tblDuplicates_clicked\0index"
 };
 #undef QT_MOC_LITERAL
 
@@ -49,7 +50,7 @@ static const uint qt_meta_data_DupesDialog[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -57,14 +58,16 @@ static const uint qt_meta_data_DupesDialog[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   29,    2, 0x08 /* Private */,
-       4,    1,   32,    2, 0x08 /* Private */,
-       5,    1,   35,    2, 0x08 /* Private */,
+       1,    1,   34,    2, 0x08 /* Private */,
+       4,    1,   37,    2, 0x08 /* Private */,
+       5,    0,   40,    2, 0x08 /* Private */,
+       6,    1,   41,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Bool, QMetaType::QString,    3,
+    QMetaType::Int, QMetaType::QString,    3,
     QMetaType::Void, QMetaType::QString,    3,
-    QMetaType::Void, QMetaType::QModelIndex,    6,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QModelIndex,    7,
 
        0        // eod
 };
@@ -74,10 +77,11 @@ void DupesDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     if (_c == QMetaObject::InvokeMetaMethod) {
         DupesDialog *_t = static_cast<DupesDialog *>(_o);
         switch (_id) {
-        case 0: { bool _r = _t->deleteFile((*reinterpret_cast< QString(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 0: { int _r = _t->deleteFile((*reinterpret_cast< QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
         case 1: _t->openFolder((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 2: _t->on_tblDuplicates_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
+        case 2: _t->refreshTableView(); break;
+        case 3: _t->on_tblDuplicates_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -108,13 +112,13 @@ int DupesDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 4)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
 }

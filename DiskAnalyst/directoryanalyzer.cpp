@@ -8,11 +8,22 @@
 
 //#define DEBUG_SEPERATOR
 
+
+bool DirectoryAnalyzer::getAnalysisDone() const
+{
+    return analysisDone;
+}
+
+void DirectoryAnalyzer::setAnalysisDone(bool value)
+{
+    analysisDone = value;
+}
 DirectoryEntry *DirectoryAnalyzer::statFile(char *path, char *name, int flags, int depth, DirectoryEntry *source){
     struct stat buf;
     char full_path[MAX_FULL_PATH_SIZE];
 
     (void)flags;
+
 #ifdef DEBUG_SEPERATOR
     //qDebug() << "Stating: " << path << " : " << name;
 #endif
@@ -93,13 +104,13 @@ void DirectoryAnalyzer::recursePath(char *dir, char *name, int flags, int depth,
         if (!source->isDirectory())
             return;
 
-    if((dir_d = opendir(fullPathArray)) == NULL){
+    if((dir_d = opendir(fullPathArray)) == NULL && !stopped){
         perror("opendir");
         qDebug() << fullPathArray;
         return;
     }
 
-    while((dir_inode = readdir(dir_d)) != NULL){
+    while((dir_inode = readdir(dir_d)) != NULL && !stopped){
 
         if (strcmp(dir_inode->d_name, ".") == 0 || strcmp(dir_inode->d_name, "..") == 0 )
             continue;
@@ -130,6 +141,13 @@ void DirectoryAnalyzer::getChildrenArray(DirectoryEntry *entry, QJsonArray &arra
         entryJson.insert("name", (*i)->getName());
         entryJson.insert("size", (*i)->getEntrySize());
         QJsonArray childrenJsonBuf;
+        if ((*i)->isDirectory()){
+            QJsonObject dummyEntry;
+            dummyEntry.insert("name", "dummy");
+            dummyEntry.insert("size", (*i)->getEntrySize());
+            dummyEntry.insert("dummy", "dummy");
+            childrenJsonBuf.push_front(dummyEntry);
+        }
         getChildrenArray((*i), childrenJsonBuf);
         if(!childrenJsonBuf.isEmpty())
             entryJson.insert("children", childrenJsonBuf);
@@ -138,7 +156,7 @@ void DirectoryAnalyzer::getChildrenArray(DirectoryEntry *entry, QJsonArray &arra
 }
 
 DirectoryAnalyzer::DirectoryAnalyzer(QObject *parent) :
-    QObject(parent){
+    QObject(parent), stopped(false), analysisDone(false){
 }
 
 QList<DirectoryEntry *> DirectoryAnalyzer::getEntries(){
@@ -166,6 +184,13 @@ QJsonObject DirectoryAnalyzer::getEntriesJson(DirectoryEntry *rootEnry){
         entryJson.insert("name", (*i)->getName());
         entryJson.insert("size", (*i)->getEntrySize());
         QJsonArray childrenBuf;
+        if ((*i)->isDirectory()){
+            QJsonObject dummyEntry;
+            dummyEntry.insert("name", "dummy");
+            dummyEntry.insert("size", (*i)->getEntrySize());
+            dummyEntry.insert("dummy", "dummy");
+            childrenBuf.push_front(dummyEntry);
+        }
         getChildrenArray(*i, childrenBuf);
         if (!childrenBuf.isEmpty())
             entryJson.insert("children", childrenBuf);
@@ -185,6 +210,7 @@ DirectoryEntry *DirectoryAnalyzer::getRoot() const{
 }
 
 DirectoryAnalyzer::~DirectoryAnalyzer(){
+    qDebug() << "Destructing analyzer";
     for(int i = 0; i < entries.size(); i++)
         if (entries[i])
             delete entries[i];
@@ -233,13 +259,13 @@ void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags
             strcat(nameCharArray, "/");
             strcat(fullPathArray, "/");
         }
-        if((dir_d = opendir(fullPathArray)) == NULL){
+        if((dir_d = opendir(fullPathArray)) == NULL  && !stopped){
             perror("opendir");
             qDebug() << fullPathArray;
             return;
         }
 
-        while((dir_inode = readdir(dir_d)) != NULL){
+        while((dir_inode = readdir(dir_d)) != NULL && !stopped){
 
             if (strcmp(dir_inode->d_name, ".") == 0 || strcmp(dir_inode->d_name, "..") == 0 )
                 continue;
@@ -257,8 +283,13 @@ void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags
         }
         closedir(dir_d);
     }
-
+    analysisDone = (!stopped);
     emit analysisComplete();
 
+}
+
+void DirectoryAnalyzer::setStopped(bool value){
+    qDebug() << "Stop? " << value;
+    stopped = value;
 }
 

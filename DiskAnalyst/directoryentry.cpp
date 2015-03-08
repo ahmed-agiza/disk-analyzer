@@ -1,7 +1,13 @@
 #include "directoryentry.h"
 #include <QString>
 
-DirectoryEntry::DirectoryEntry(QString name, QString path, long long size, long long numberOfBlock, int depth, DirectoryEntry *source, QSet<DirectoryEntry *> children)
+
+
+DirectoryEntry::DirectoryEntry():valid(false), type(UNKNOWN){
+
+}
+
+DirectoryEntry::DirectoryEntry(QString name, QString path, long long size, long long numberOfBlocks, int depth, DirectoryEntry *source, QSet<DirectoryEntry *> children)
     :valid(false), type(UNKNOWN){
     setName(name);
     setPath(path);

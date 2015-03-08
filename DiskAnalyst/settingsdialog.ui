@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>539</width>
-    <height>227</height>
+    <height>234</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="5" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QRadioButton" name="rbtSize">
@@ -45,7 +45,7 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QCheckBox" name="chkReadable">
      <property name="text">
       <string>Display sizes in readble format</string>
@@ -55,7 +55,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="7" column="0">
     <widget class="QCheckBox" name="chkNavigate">
      <property name="text">
       <string>Navigate through chart</string>
@@ -65,7 +65,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <widget class="QCheckBox" name="chkFading">
      <property name="text">
       <string>Fading Animation</string>
@@ -75,21 +75,21 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="lblStartupDirectory">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="9" column="1">
     <widget class="QPushButton" name="btnStartupDirectory">
      <property name="text">
       <string>Change Startup Directory</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="2">
+   <item row="11" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="bbxOkCancel">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -102,7 +102,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="lblEntriesBy">
      <property name="text">
       <string>List entries by:</string>
@@ -120,6 +120,37 @@
      <property name="value">
       <number>4</number>
      </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lblColorSet">
+     <property name="text">
+      <string>Color Set:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QComboBox" name="cmbColorSet">
+     <item>
+      <property name="text">
+       <string>Color Set 1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Color Set 2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Color Set 3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Color Set 4</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>
