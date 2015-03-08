@@ -249,13 +249,15 @@ function fpdPoints(d, i) {
 
 // Interactive: When a node is clicked this will trigger
 function dblclick(d){
-    if (!graphNavigation)
-        return;
-    var p = getPath(d);
-    path.transition()
-        .duration(750)
-        .attrTween("d", arcTween(d));
-    mainWindow.navigateTo(p);
+        if (!graphNavigation)
+            return;
+        var p = getPath(d);
+
+        path.transition()
+            .duration(750)
+            .attrTween("d", arcTween(d));
+
+        mainWindow.navigateTo(p);
 }
 
 // Function to clear html

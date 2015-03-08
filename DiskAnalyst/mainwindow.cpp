@@ -181,6 +181,7 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 }
 
 void MainWindow::navigateTo(QString path){
+    qDebug() << "Navigating: " << path;
     if(path.isEmpty())
         return;
     if (path.startsWith("/"))
@@ -189,13 +190,13 @@ void MainWindow::navigateTo(QString path){
     if (path.endsWith("/"))
         path.remove(path.length() - 1, 1);
 
-    QString fullPath = currentDUA + path;
+    tempNavigationPath = path;
+
+    QString fullPath = getCurrentDUA();
     QFileInfo pathInfo(fullPath);
     if(pathInfo.isDir()){
-        QString directory = pathInfo.absoluteDir().absolutePath() + QString("/");
-        QString fileName = pathInfo.baseName();
-        setCurrentDUA(directory + fileName);
-        setDirectoryJson(directory, fileName);
+        //QString directory = pathInfo.absoluteDir().absolutePath() + QString("/");
+        //QString fileName = pathInfo.baseName();
     }else if(pathInfo.exists()){
         struct stat sb;
         printf("Test");
@@ -260,11 +261,12 @@ void MainWindow::navigateTo(QString path){
 
 
 QString MainWindow::getCurrentDUA() const{
-    return currentDUA;
+    return currentDUA + tempNavigationPath;
 }
 
 void MainWindow::setCurrentDUA(const QString &value){
     currentDUA = value;
+    tempNavigationPath = "";
     if (!value.endsWith("/") && !(value == "/"))
         currentDUA.append("/");
 }
@@ -393,12 +395,12 @@ void MainWindow::hashingComplete(DuplicateEntryList duplicates){
 }
 
 void MainWindow::on_actionOpen_Terminal_triggered(){
-    if(currentDUA.isEmpty())
+    if(getCurrentDUA().isEmpty())
         return;
 
-    QFileInfo pathInfo(currentDUA);
+    QFileInfo pathInfo(getCurrentDUA());
     if(!pathInfo.isDir()){
-        QMessageBox::critical(this, "Error", "Invalid directory " + currentDUA);
+        QMessageBox::critical(this, "Error", "Invalid directory " + getCurrentDUA());
         return;
     }
 
@@ -410,7 +412,7 @@ void MainWindow::on_actionOpen_Terminal_triggered(){
     }else{
         QProcess *terminalProcess = new QProcess(this);
         QString option("-e");
-        QString argument(QString("cd ") + currentDUA + " && /bin/bash");
+        QString argument(QString("cd ") + getCurrentDUA() + " && /bin/bash");
         QStringList arguments;
         arguments << option << argument;
         terminalProcess->start(terminal, arguments);
@@ -418,7 +420,7 @@ void MainWindow::on_actionOpen_Terminal_triggered(){
 }
 
 void MainWindow::on_actionExploreDirectory_triggered(){
-    openDirectory(currentDUA, this);
+    openDirectory(getCurrentDUA(), this);
 }
 
 void MainWindow::on_actionSettings_triggered(){
@@ -433,8 +435,8 @@ void MainWindow::on_actionSettings_triggered(){
 }
 
 void MainWindow::on_actionUp_triggered(){
-    if(!currentDUA.isEmpty() && currentDUA != "/"){
-        QDir currentDir(currentDUA);
+    if(!getCurrentDUA().isEmpty() && getCurrentDUA() != "/"){
+        QDir currentDir(getCurrentDUA());
         if(currentDir.cdUp()){
             QFileInfo pathInfo(currentDir.absolutePath());
             QString fileName = pathInfo.baseName();
@@ -479,12 +481,12 @@ void MainWindow::passGraphParamters(bool displayUnit){
 
 
 void MainWindow::on_actionDuplicateFilesChecker_triggered(){
-    if (currentDUA.isEmpty()){
+    if (getCurrentDUA().isEmpty()){
         QMessageBox::critical(this, "Error", "You need to open a directory first");
         return;
     }
 
-    dupCheckDUA = currentDUA;
+    dupCheckDUA = getCurrentDUA();
     if (dupCheckDUA.endsWith("/") && dupCheckDUA != QDir::rootPath())
         dupCheckDUA.remove(dupCheckDUA.length() - 1, 1);
     QDir currentDir(dupCheckDUA);
@@ -517,7 +519,7 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
 }
 
 void MainWindow::on_actionSelectRootDirectory_triggered(){
-    QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", currentDUA);
+    QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", getCurrentDUA());
     if (fileName.trimmed() != "")
         setCurrentPath(fileName);
 }
