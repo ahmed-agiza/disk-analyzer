@@ -5,6 +5,39 @@
 
 #include "directoryentry.h"
 
+struct DuplicateEntry{
+    QString firstEntry;
+    long long size;
+    QString secondEntry;
+
+    bool operator==(const DuplicateEntry &other) const{
+        return (size == other.size);
+    }
+
+    bool operator!=(const DuplicateEntry &other) const{
+        return (size != other.size);
+    }
+
+    bool operator<(const DuplicateEntry &other) const{
+        return (size < other.size);
+    }
+
+    bool operator>(const DuplicateEntry &other) const{
+        return (size > other.size);
+    }
+
+    bool operator<=(const DuplicateEntry &other) const{
+        return (size <= other.size);
+    }
+
+    bool operator>=(const DuplicateEntry &other) const{
+        return (size >= other.size);
+    }
+};
+
+typedef QList<DuplicateEntry> DuplicateEntryList;
+
+
 
 class DupesChecker : public QObject
 {
@@ -20,7 +53,7 @@ public:
     bool getAnalysisDone() const;
 
 signals:
-    void analysisComplete(QList<QPair<QString, QString> >);
+    void analysisComplete(DuplicateEntryList);
     void onProgress(int);
 
 public slots:

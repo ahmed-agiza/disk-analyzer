@@ -26,7 +26,7 @@ bool DupesChecker::getAnalysisDone() const{
 void DupesChecker::startAnalysis(DirectoryEntriesList entries, DirectoryEntry *rootEntry){
     QMap<long long, QStringList> sizesTable;
     QMap<QString, QString> hashCache;
-    QList<QPair<QString, QString> > duplicates;
+    DuplicateEntryList duplicates;
 
     qDebug() << "Hashing..";
 
@@ -66,7 +66,11 @@ void DupesChecker::startAnalysis(DirectoryEntriesList entries, DirectoryEntry *r
                         if(fileHash == ""){
                             qDebug() << "Cannot hash " << matchingSize[j];
                         }else if (fileHash == entryHash){
-                            duplicates.append(QPair<QString, QString>(matchingSize[j], entryPath));
+                            DuplicateEntry entry;
+                            entry.firstEntry = matchingSize[j];
+                            entry.secondEntry = entryPath;
+                            entry.size = entries[i]->getEntrySize();
+                            duplicates.append(entry);
                         }\
                     }
                 }
@@ -77,6 +81,9 @@ void DupesChecker::startAnalysis(DirectoryEntriesList entries, DirectoryEntry *r
     }
     qDebug() << "Done hashing";
     qDebug() << duplicates.size();
+    qDebug() << "Sorting";
+    qSort(duplicates);
+    for(int k = 0; k < (duplicates.size()/2); k++) duplicates.swap(k, duplicates.size()-(1+k));
     analysisDone = (!stopped);
     qDebug() << analysisDone;
     emit analysisComplete(duplicates);

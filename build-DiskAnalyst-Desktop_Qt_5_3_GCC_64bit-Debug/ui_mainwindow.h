@@ -109,7 +109,7 @@ public:
         twgDirViewer->setSizePolicy(sizePolicy);
         twgDirViewer->setMinimumSize(QSize(300, 0));
 
-        gridLayout->addWidget(twgDirViewer, 1, 0, 1, 1);
+        gridLayout->addWidget(twgDirViewer, 0, 0, 1, 1);
 
         wvwCharts = new QWebView(centralWidget);
         wvwCharts->setObjectName(QStringLiteral("wvwCharts"));
@@ -120,7 +120,7 @@ public:
         wvwCharts->setZoomFactor(1);
         wvwCharts->setRenderHints(QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
 
-        gridLayout->addWidget(wvwCharts, 1, 1, 1, 1);
+        gridLayout->addWidget(wvwCharts, 0, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);

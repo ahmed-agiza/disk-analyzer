@@ -14,10 +14,10 @@ typedef QPair<QString, QString> StringPair;
 class DupesDialog : public QDialog
 {
     Q_OBJECT
-    QList<QPair<QString, QString> > duplicates;
+    DuplicateEntryList duplicates;
 public:
     explicit DupesDialog(QWidget *parent = 0);
-    void setDuplicates(QList<StringPair> dupes);
+    void setDuplicates(DuplicateEntryList dupes);
     ~DupesDialog();
 protected:
     void showEvent(QShowEvent *event);

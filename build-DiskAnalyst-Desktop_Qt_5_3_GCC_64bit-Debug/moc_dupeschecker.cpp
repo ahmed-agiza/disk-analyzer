@@ -9,7 +9,6 @@
 #include "../DiskAnalyst/dupeschecker.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
-#include <QtCore/QList>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'dupeschecker.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
@@ -21,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_DupesChecker_t {
     QByteArrayData data[13];
-    char stringdata[175];
+    char stringdata[163];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,20 +32,20 @@ static const qt_meta_stringdata_DupesChecker_t qt_meta_stringdata_DupesChecker =
 QT_MOC_LITERAL(0, 0, 12),
 QT_MOC_LITERAL(1, 13, 16),
 QT_MOC_LITERAL(2, 30, 0),
-QT_MOC_LITERAL(3, 31, 30),
-QT_MOC_LITERAL(4, 62, 10),
-QT_MOC_LITERAL(5, 73, 13),
-QT_MOC_LITERAL(6, 87, 20),
-QT_MOC_LITERAL(7, 108, 7),
-QT_MOC_LITERAL(8, 116, 15),
-QT_MOC_LITERAL(9, 132, 9),
-QT_MOC_LITERAL(10, 142, 10),
-QT_MOC_LITERAL(11, 153, 5),
-QT_MOC_LITERAL(12, 159, 15)
+QT_MOC_LITERAL(3, 31, 18),
+QT_MOC_LITERAL(4, 50, 10),
+QT_MOC_LITERAL(5, 61, 13),
+QT_MOC_LITERAL(6, 75, 20),
+QT_MOC_LITERAL(7, 96, 7),
+QT_MOC_LITERAL(8, 104, 15),
+QT_MOC_LITERAL(9, 120, 9),
+QT_MOC_LITERAL(10, 130, 10),
+QT_MOC_LITERAL(11, 141, 5),
+QT_MOC_LITERAL(12, 147, 15)
     },
     "DupesChecker\0analysisComplete\0\0"
-    "QList<QPair<QString,QString> >\0"
-    "onProgress\0startAnalysis\0DirectoryEntriesList\0"
+    "DuplicateEntryList\0onProgress\0"
+    "startAnalysis\0DirectoryEntriesList\0"
     "entries\0DirectoryEntry*\0rootEntry\0"
     "setStopped\0value\0setAnalysisDone"
 };
@@ -91,7 +90,7 @@ void DupesChecker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     if (_c == QMetaObject::InvokeMetaMethod) {
         DupesChecker *_t = static_cast<DupesChecker *>(_o);
         switch (_id) {
-        case 0: _t->analysisComplete((*reinterpret_cast< QList<QPair<QString,QString> >(*)>(_a[1]))); break;
+        case 0: _t->analysisComplete((*reinterpret_cast< DuplicateEntryList(*)>(_a[1]))); break;
         case 1: _t->onProgress((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->startAnalysis((*reinterpret_cast< DirectoryEntriesList(*)>(_a[1])),(*reinterpret_cast< DirectoryEntry*(*)>(_a[2]))); break;
         case 3: _t->setStopped((*reinterpret_cast< bool(*)>(_a[1]))); break;
@@ -102,7 +101,7 @@ void DupesChecker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         int *result = reinterpret_cast<int *>(_a[0]);
         void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (DupesChecker::*_t)(QList<QPair<QString,QString> > );
+            typedef void (DupesChecker::*_t)(DuplicateEntryList );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&DupesChecker::analysisComplete)) {
                 *result = 0;
             }
@@ -153,7 +152,7 @@ int DupesChecker::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void DupesChecker::analysisComplete(QList<QPair<QString,QString> > _t1)
+void DupesChecker::analysisComplete(DuplicateEntryList _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

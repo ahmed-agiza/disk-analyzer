@@ -91,14 +91,7 @@ QString DirectoryEntry::toQString(bool humanReadable) const{
     result.append("\n");
     result.append("Size: ");
     if(humanReadable){
-        if (getEntrySize() <= 1000)
-            result.append(QString::number(getEntrySize()) + QString("B"));
-          else if (getEntrySize() <= 1000000)
-            result.append(QString::number(getEntrySize()/1000.0) + QString("KB"));
-          else if(getEntrySize() <= 1000000000)
-            result.append(QString::number(getEntrySize()/1000000.0) + QString("MB"));
-          else
-            result.append(QString::number(getEntrySize()/1000000000.0) + QString("GB"));
+        result.append(getFormattedSize(getEntrySize()));
     }else{
         result.append(QString::number(getEntrySize()));
         result.append("B");
@@ -124,14 +117,23 @@ bool DirectoryEntry::isDirectory() const{
 bool DirectoryEntry::isRegularFile() const{
    return (type == REGULAR_FILE);
 }
-long long DirectoryEntry::getNumberOfBlocks() const
-{
+long long DirectoryEntry::getNumberOfBlocks() const{
     return numberOfBlocks;
 }
 
-void DirectoryEntry::setNumberOfBlocks(long long value)
-{
+void DirectoryEntry::setNumberOfBlocks(long long value){
     numberOfBlocks = value;
+}
+
+QString DirectoryEntry::getFormattedSize(long long size){
+    if (size <= 1000)
+        return QString(QString::number(size) + QString("B"));
+      else if (size <= 1000000)
+        return QString(QString::number(size/1000.0) + QString("KB"));
+      else if(size <= 1000000000)
+        return QString(QString::number(size/1000000.0) + QString("MB"));
+      else
+        return QString(QString::number(size/1000000000.0) + QString("GB"));
 }
 
 

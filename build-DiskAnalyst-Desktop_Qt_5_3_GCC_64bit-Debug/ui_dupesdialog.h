@@ -54,6 +54,7 @@ public:
         tblDuplicates->setDragDropOverwriteMode(false);
         tblDuplicates->setAlternatingRowColors(true);
         tblDuplicates->setSelectionMode(QAbstractItemView::NoSelection);
+        tblDuplicates->setSortingEnabled(true);
         tblDuplicates->horizontalHeader()->setHighlightSections(false);
         tblDuplicates->verticalHeader()->setHighlightSections(false);
 

@@ -64,7 +64,7 @@ private slots:
 
     void analysisComplete();
     void scanComplete();
-    void hashingComplete(QList<QPair<QString, QString> >);
+    void hashingComplete(DuplicateEntryList);
 
     void on_actionOpen_Terminal_triggered();
 
@@ -105,6 +105,7 @@ private:
     QThread analysisThread;
     QThread dupesCheckerThread;
     QThread dupesHashingThread;
+    QString tempNavigationPath;
 };
 
 

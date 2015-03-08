@@ -9,7 +9,6 @@
 #include "../DiskAnalyst/mainwindow.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
-#include <QtCore/QList>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
@@ -21,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[33];
-    char stringdata[654];
+    char stringdata[642];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,21 +47,21 @@ QT_MOC_LITERAL(14, 225, 26),
 QT_MOC_LITERAL(15, 252, 16),
 QT_MOC_LITERAL(16, 269, 12),
 QT_MOC_LITERAL(17, 282, 15),
-QT_MOC_LITERAL(18, 298, 30),
-QT_MOC_LITERAL(19, 329, 32),
-QT_MOC_LITERAL(20, 362, 35),
-QT_MOC_LITERAL(21, 398, 27),
-QT_MOC_LITERAL(22, 426, 21),
-QT_MOC_LITERAL(23, 448, 40),
-QT_MOC_LITERAL(24, 489, 38),
-QT_MOC_LITERAL(25, 528, 17),
-QT_MOC_LITERAL(26, 546, 14),
-QT_MOC_LITERAL(27, 561, 16),
-QT_MOC_LITERAL(28, 578, 10),
-QT_MOC_LITERAL(29, 589, 12),
-QT_MOC_LITERAL(30, 602, 17),
-QT_MOC_LITERAL(31, 620, 17),
-QT_MOC_LITERAL(32, 638, 15)
+QT_MOC_LITERAL(18, 298, 18),
+QT_MOC_LITERAL(19, 317, 32),
+QT_MOC_LITERAL(20, 350, 35),
+QT_MOC_LITERAL(21, 386, 27),
+QT_MOC_LITERAL(22, 414, 21),
+QT_MOC_LITERAL(23, 436, 40),
+QT_MOC_LITERAL(24, 477, 38),
+QT_MOC_LITERAL(25, 516, 17),
+QT_MOC_LITERAL(26, 534, 14),
+QT_MOC_LITERAL(27, 549, 16),
+QT_MOC_LITERAL(28, 566, 10),
+QT_MOC_LITERAL(29, 577, 12),
+QT_MOC_LITERAL(30, 590, 17),
+QT_MOC_LITERAL(31, 608, 17),
+QT_MOC_LITERAL(32, 626, 15)
     },
     "MainWindow\0startAnalysis\0\0stopAnalysis\0"
     "startScanning\0stopScanning\0startHashing\0"
@@ -72,8 +71,7 @@ QT_MOC_LITERAL(32, 638, 15)
     "on_twgDirViewer_expanded\0"
     "on_actionRefresh_triggered\0analysisComplete\0"
     "scanComplete\0hashingComplete\0"
-    "QList<QPair<QString,QString> >\0"
-    "on_actionOpen_Terminal_triggered\0"
+    "DuplicateEntryList\0on_actionOpen_Terminal_triggered\0"
     "on_actionExploreDirectory_triggered\0"
     "on_actionSettings_triggered\0"
     "on_actionUp_triggered\0"
@@ -181,7 +179,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 9: _t->on_actionRefresh_triggered(); break;
         case 10: _t->analysisComplete(); break;
         case 11: _t->scanComplete(); break;
-        case 12: _t->hashingComplete((*reinterpret_cast< QList<QPair<QString,QString> >(*)>(_a[1]))); break;
+        case 12: _t->hashingComplete((*reinterpret_cast< DuplicateEntryList(*)>(_a[1]))); break;
         case 13: _t->on_actionOpen_Terminal_triggered(); break;
         case 14: _t->on_actionExploreDirectory_triggered(); break;
         case 15: _t->on_actionSettings_triggered(); break;
