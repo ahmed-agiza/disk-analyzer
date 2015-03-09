@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[39];
-    char stringdata[729];
+    QByteArrayData data[40];
+    char stringdata[754];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -58,16 +58,17 @@ QT_MOC_LITERAL(25, 454, 27),
 QT_MOC_LITERAL(26, 482, 21),
 QT_MOC_LITERAL(27, 504, 40),
 QT_MOC_LITERAL(28, 545, 38),
-QT_MOC_LITERAL(29, 584, 17),
-QT_MOC_LITERAL(30, 602, 14),
-QT_MOC_LITERAL(31, 617, 16),
-QT_MOC_LITERAL(32, 634, 10),
-QT_MOC_LITERAL(33, 645, 12),
-QT_MOC_LITERAL(34, 658, 17),
-QT_MOC_LITERAL(35, 676, 17),
-QT_MOC_LITERAL(36, 694, 15),
-QT_MOC_LITERAL(37, 710, 13),
-QT_MOC_LITERAL(38, 724, 4)
+QT_MOC_LITERAL(29, 584, 24),
+QT_MOC_LITERAL(30, 609, 17),
+QT_MOC_LITERAL(31, 627, 14),
+QT_MOC_LITERAL(32, 642, 16),
+QT_MOC_LITERAL(33, 659, 10),
+QT_MOC_LITERAL(34, 670, 12),
+QT_MOC_LITERAL(35, 683, 17),
+QT_MOC_LITERAL(36, 701, 17),
+QT_MOC_LITERAL(37, 719, 15),
+QT_MOC_LITERAL(38, 735, 13),
+QT_MOC_LITERAL(39, 749, 4)
     },
     "MainWindow\0startAnalysis\0\0stopAnalysis\0"
     "startScanning\0stopScanning\0startHashing\0"
@@ -86,10 +87,11 @@ QT_MOC_LITERAL(38, 724, 4)
     "on_actionUp_triggered\0"
     "on_actionDuplicateFilesChecker_triggered\0"
     "on_actionSelectRootDirectory_triggered\0"
-    "exposeObjectsToJS\0setCurrentPath\0"
-    "setDirectoryJson\0navigateTo\0stopAnalyzer\0"
-    "stopDupesAnalyzer\0stopDupesChecking\0"
-    "onDupesProgress\0openDirectory\0path"
+    "on_actionAbout_triggered\0exposeObjectsToJS\0"
+    "setCurrentPath\0setDirectoryJson\0"
+    "navigateTo\0stopAnalyzer\0stopDupesAnalyzer\0"
+    "stopDupesChecking\0onDupesProgress\0"
+    "openDirectory\0path"
 };
 #undef QT_MOC_LITERAL
 
@@ -99,7 +101,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      32,   14, // methods
+      33,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -107,40 +109,41 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,  174,    2, 0x06 /* Public */,
-       3,    1,  181,    2, 0x06 /* Public */,
-       4,    3,  184,    2, 0x06 /* Public */,
-       5,    1,  191,    2, 0x06 /* Public */,
-       6,    2,  194,    2, 0x06 /* Public */,
-       9,    1,  199,    2, 0x06 /* Public */,
+       1,    3,  179,    2, 0x06 /* Public */,
+       3,    1,  186,    2, 0x06 /* Public */,
+       4,    3,  189,    2, 0x06 /* Public */,
+       5,    1,  196,    2, 0x06 /* Public */,
+       6,    2,  199,    2, 0x06 /* Public */,
+       9,    1,  204,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    1,  202,    2, 0x08 /* Private */,
-      11,    1,  205,    2, 0x08 /* Private */,
-      12,    1,  208,    2, 0x08 /* Private */,
-      13,    0,  211,    2, 0x08 /* Private */,
-      14,    0,  212,    2, 0x08 /* Private */,
-      15,    1,  213,    2, 0x08 /* Private */,
-      17,    1,  216,    2, 0x08 /* Private */,
-      18,    0,  219,    2, 0x08 /* Private */,
-      19,    1,  220,    2, 0x08 /* Private */,
-      21,    1,  223,    2, 0x08 /* Private */,
-      22,    0,  226,    2, 0x08 /* Private */,
-      23,    0,  227,    2, 0x08 /* Private */,
-      24,    0,  228,    2, 0x08 /* Private */,
-      25,    0,  229,    2, 0x08 /* Private */,
-      26,    0,  230,    2, 0x08 /* Private */,
-      27,    0,  231,    2, 0x08 /* Private */,
-      28,    0,  232,    2, 0x08 /* Private */,
-      29,    0,  233,    2, 0x0a /* Public */,
-      30,    1,  234,    2, 0x0a /* Public */,
-      31,    2,  237,    2, 0x0a /* Public */,
-      32,    1,  242,    2, 0x0a /* Public */,
-      33,    0,  245,    2, 0x0a /* Public */,
-      34,    0,  246,    2, 0x0a /* Public */,
-      35,    0,  247,    2, 0x0a /* Public */,
-      36,    1,  248,    2, 0x0a /* Public */,
-      37,    1,  251,    2, 0x0a /* Public */,
+      10,    1,  207,    2, 0x08 /* Private */,
+      11,    1,  210,    2, 0x08 /* Private */,
+      12,    1,  213,    2, 0x08 /* Private */,
+      13,    0,  216,    2, 0x08 /* Private */,
+      14,    0,  217,    2, 0x08 /* Private */,
+      15,    1,  218,    2, 0x08 /* Private */,
+      17,    1,  221,    2, 0x08 /* Private */,
+      18,    0,  224,    2, 0x08 /* Private */,
+      19,    1,  225,    2, 0x08 /* Private */,
+      21,    1,  228,    2, 0x08 /* Private */,
+      22,    0,  231,    2, 0x08 /* Private */,
+      23,    0,  232,    2, 0x08 /* Private */,
+      24,    0,  233,    2, 0x08 /* Private */,
+      25,    0,  234,    2, 0x08 /* Private */,
+      26,    0,  235,    2, 0x08 /* Private */,
+      27,    0,  236,    2, 0x08 /* Private */,
+      28,    0,  237,    2, 0x08 /* Private */,
+      29,    0,  238,    2, 0x08 /* Private */,
+      30,    0,  239,    2, 0x0a /* Public */,
+      31,    1,  240,    2, 0x0a /* Public */,
+      32,    2,  243,    2, 0x0a /* Public */,
+      33,    1,  248,    2, 0x0a /* Public */,
+      34,    0,  251,    2, 0x0a /* Public */,
+      35,    0,  252,    2, 0x0a /* Public */,
+      36,    0,  253,    2, 0x0a /* Public */,
+      37,    1,  254,    2, 0x0a /* Public */,
+      38,    1,  257,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,    2,    2,    2,
@@ -169,6 +172,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString, QMetaType::QString,    2,    2,
     QMetaType::Void, QMetaType::QString,    2,
@@ -176,7 +180,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, QMetaType::QString,   38,
+    QMetaType::Void, QMetaType::QString,   39,
 
        0        // eod
 };
@@ -209,15 +213,16 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 20: _t->on_actionUp_triggered(); break;
         case 21: _t->on_actionDuplicateFilesChecker_triggered(); break;
         case 22: _t->on_actionSelectRootDirectory_triggered(); break;
-        case 23: _t->exposeObjectsToJS(); break;
-        case 24: _t->setCurrentPath((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 25: _t->setDirectoryJson((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
-        case 26: _t->navigateTo((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 27: _t->stopAnalyzer(); break;
-        case 28: _t->stopDupesAnalyzer(); break;
-        case 29: _t->stopDupesChecking(); break;
-        case 30: _t->onDupesProgress((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 31: _t->openDirectory((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 23: _t->on_actionAbout_triggered(); break;
+        case 24: _t->exposeObjectsToJS(); break;
+        case 25: _t->setCurrentPath((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 26: _t->setDirectoryJson((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 27: _t->navigateTo((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 28: _t->stopAnalyzer(); break;
+        case 29: _t->stopDupesAnalyzer(); break;
+        case 30: _t->stopDupesChecking(); break;
+        case 31: _t->onDupesProgress((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 32: _t->openDirectory((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -287,13 +292,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 32)
+        if (_id < 33)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 32;
+        _id -= 33;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 32)
+        if (_id < 33)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 32;
+        _id -= 33;
     }
     return _id;
 }

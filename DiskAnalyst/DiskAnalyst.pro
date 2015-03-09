@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     dupesdialog.cpp \
     dupeschecker.cpp \
     duplicatesdatamodel.cpp \
-    customprogressbar.cpp
+    customprogressbar.cpp \
+    aboutdialog.cpp
 
 HEADERS  += mainwindow.h \
     directoryanalyzer.h \
@@ -32,12 +33,14 @@ HEADERS  += mainwindow.h \
     dupesdialog.h \
     dupeschecker.h \
     duplicatesdatamodel.h \
-    customprogressbar.h
+    customprogressbar.h \
+    aboutdialog.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
     filestatdialog.ui \
-    dupesdialog.ui
+    dupesdialog.ui \
+    aboutdialog.ui
 
 RESOURCES += \
     files.qrc

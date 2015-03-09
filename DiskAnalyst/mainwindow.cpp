@@ -67,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent)
     statDialog = 0;
     dupesDialog = 0;
     progress = 0;
+    aboutDialog = 0;
 
     ui->twgDirViewer->setRootIsDecorated(true);
     QObject::connect(ui->twgDirViewer, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeMenuRequested(QPoint)), Qt::UniqueConnection);
@@ -651,4 +652,12 @@ void MainWindow::on_actionSelectRootDirectory_triggered(){
     QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", getCurrentDUA());
     if (fileName.trimmed() != "")
         setCurrentPath(fileName);
+}
+
+void MainWindow::on_actionAbout_triggered(){
+    if(!aboutDialog){
+        aboutDialog = new AboutDialog(this);
+        aboutDialog->setModal(true);
+    }
+    aboutDialog->show();
 }

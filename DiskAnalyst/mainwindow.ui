@@ -82,6 +82,32 @@
      <height>20</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuAnalyze">
+    <property name="title">
+     <string>Explore</string>
+    </property>
+    <addaction name="actionAnalyzeDirectory"/>
+    <addaction name="actionSelectRootDirectory"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionExploreDirectory"/>
+    <addaction name="actionOpen_Terminal"/>
+    <addaction name="actionDuplicateFilesChecker"/>
+    <addaction name="separator"/>
+    <addaction name="actionSettings"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuAnalyze"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -218,6 +244,18 @@
    </property>
    <property name="shortcut">
     <string>Shift+O</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="files.qrc">
+     <normaloff>:/icons/Icons/help.png</normaloff>:/icons/Icons/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
+   <property name="toolTip">
+    <string>About</string>
    </property>
   </action>
  </widget>

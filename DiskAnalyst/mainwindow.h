@@ -14,6 +14,8 @@
 #include "dupesdialog.h"
 #include "dupeschecker.h"
 #include "customprogressbar.h"
+#include "mainwindow.h"
+#include "aboutdialog.h"
 
 
 
@@ -64,7 +66,6 @@ private slots:
     void scanComplete();
     void hashingComplete(DuplicateEntryList);
     void treeMenuRequested(QPoint);
-
     void on_actionAnalyzeDirectory_triggered();
     void on_twgDirViewer_doubleClicked(const QModelIndex &index);
     void on_twgDirViewer_expanded(const QModelIndex &index);
@@ -75,6 +76,8 @@ private slots:
     void on_actionUp_triggered();
     void on_actionDuplicateFilesChecker_triggered();
     void on_actionSelectRootDirectory_triggered();
+
+    void on_actionAbout_triggered();
 
 public slots:
     void exposeObjectsToJS();
@@ -98,6 +101,7 @@ private:
     CustomProgressBar *progress;
     DupesDialog *dupesDialog;
     DupesChecker *dupesChecker;
+    AboutDialog *aboutDialog;
     QString currentPath;
     QString currentDUA;
     QString dupCheckDUA;
