@@ -6,6 +6,7 @@ var testData = [
   {name: "D", value: 2500},
   {name: "E", value: 1500},
   {name: "F", value: 5000},
+  {name: "G", value: 5000},
   {name: "H", value: 100},
   {name: "I", value: 1000},
   {name: "J", value: 1200},

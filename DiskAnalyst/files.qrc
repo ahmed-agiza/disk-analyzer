@@ -35,5 +35,11 @@
         <file>Charts/barchart.html</file>
         <file>Charts/barchart.css</file>
         <file>Charts/barchart.js</file>
+        <file>Charts/progress.js</file>
+        <file>Charts/progress.html</file>
+        <file>Charts/progress.css</file>
+        <file>Charts/doughnut.css</file>
+        <file>Charts/doughnut.js</file>
+        <file>Charts/doughnut.html</file>
     </qresource>
 </RCC>
