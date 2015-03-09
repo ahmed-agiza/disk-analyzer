@@ -461,7 +461,7 @@ void MainWindow::passGraphParamters(bool displayUnit){
     if (SettingsManager::getFadeEnabled())
         fadeEnabled = "0.3, ";
     else
-        fadeEnabled = "0.0, ";
+        fadeEnabled = "1.0, ";
     QString colorSet = QString::number(SettingsManager::getColorSet()) + ", ";
     QString readable = QString::number(SettingsManager::getHumanReadable()) + ", ";
 
