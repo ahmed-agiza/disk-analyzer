@@ -13,6 +13,9 @@
 #include "filestatdialog.h"
 #include "dupesdialog.h"
 #include "dupeschecker.h"
+#include "customprogressbar.h"
+#include "mainwindow.h"
+#include "aboutdialog.h"
 
 
 
@@ -50,33 +53,31 @@ signals:
     void stopHashing(bool);
 
 
-
+protected:
+    bool eventFilter(QObject *, QEvent *);
 
 
 private slots:
-    void on_actionAnalyzeDirectory_triggered();
 
-    void on_twgDirViewer_doubleClicked(const QModelIndex &index);
-
-    void on_twgDirViewer_expanded(const QModelIndex &index);
-
-    void on_actionRefresh_triggered();
-
+    void analyzeDirectory(QString);
+    void launchTerminal(QString);
+    void launchDupeChecker(QString);
     void analysisComplete();
     void scanComplete();
     void hashingComplete(DuplicateEntryList);
-
+    void treeMenuRequested(QPoint);
+    void on_actionAnalyzeDirectory_triggered();
+    void on_twgDirViewer_doubleClicked(const QModelIndex &index);
+    void on_twgDirViewer_expanded(const QModelIndex &index);
+    void on_actionRefresh_triggered();
     void on_actionOpen_Terminal_triggered();
-
     void on_actionExploreDirectory_triggered();
-
     void on_actionSettings_triggered();
-
     void on_actionUp_triggered();
-
     void on_actionDuplicateFilesChecker_triggered();
-
     void on_actionSelectRootDirectory_triggered();
+
+    void on_actionAbout_triggered();
 
 public slots:
     void exposeObjectsToJS();
@@ -87,6 +88,7 @@ public slots:
     void stopDupesAnalyzer();
     void stopDupesChecking();
     void onDupesProgress(int);
+    void openDirectory(QString path);
 
 private:
     Ui::MainWindow *ui;
@@ -96,9 +98,10 @@ private:
     QWebFrame *frame;
     SettingsDialog *settingsDialog;
     FileStatDialog *statDialog;
-    QProgressBar *progress;
+    CustomProgressBar *progress;
     DupesDialog *dupesDialog;
     DupesChecker *dupesChecker;
+    AboutDialog *aboutDialog;
     QString currentPath;
     QString currentDUA;
     QString dupCheckDUA;

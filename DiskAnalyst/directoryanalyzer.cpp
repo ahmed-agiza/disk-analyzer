@@ -25,7 +25,7 @@ DirectoryEntry *DirectoryAnalyzer::statFile(char *path, char *name, int flags, i
     (void)flags;
 
 #ifdef DEBUG_SEPERATOR
-    //qDebug() << "Stating: " << path << " : " << name;
+    qDebug() << "Stating: " << path << " : " << name;
 #endif
 
     if (path[strlen(path) - 1] != '/'){
@@ -122,7 +122,6 @@ void DirectoryAnalyzer::recursePath(char *dir, char *name, int flags, int depth,
             entries.append(newEntry);
             if (newEntry->isDirectory()){
                 recursePath(fullPathArray, dir_inode->d_name, 0, depth + 1, newEntry);
-                //qDebug() << "Recursing: " << newEntry->getName();
             }
         }
 

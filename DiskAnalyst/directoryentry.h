@@ -26,7 +26,7 @@ public:
 
     DirectoryEntry *getSource() const;
     void setSource(DirectoryEntry *value);
-//([_A-Za-z][_0-9A-Za-z]*)
+
     bool isValid() const;
     void setValidity(bool value);
 
@@ -46,7 +46,12 @@ public:
     long long getNumberOfBlocks() const;
     void setNumberOfBlocks(long long value);
 
+    QString getFullPath() const;
+
     static QString getFormattedSize(long long);
+
+    long long getTotalSize() const;
+
 
 private:
     QString name;

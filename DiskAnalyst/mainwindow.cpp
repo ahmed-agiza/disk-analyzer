@@ -13,6 +13,10 @@
 #include <QProcess>
 #include <QMessageBox>
 #include <QCryptographicHash>
+#include <QEvent>
+#include <QSignalMapper>
+#include <QMouseEvent>
+#include <QIcon>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -30,8 +34,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "settingsmanager.h"
-
-
 
 MainWindow::MainWindow(QWidget *parent)
     :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(0), dupesAnalyzer(0){
@@ -65,8 +67,11 @@ MainWindow::MainWindow(QWidget *parent)
     statDialog = 0;
     dupesDialog = 0;
     progress = 0;
+    aboutDialog = 0;
 
     ui->twgDirViewer->setRootIsDecorated(true);
+    QObject::connect(ui->twgDirViewer, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeMenuRequested(QPoint)), Qt::UniqueConnection);
+    ui->twgDirViewer->setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 
@@ -78,6 +83,83 @@ MainWindow::~MainWindow(){
     dupesHashingThread.quit();
     dupesHashingThread.wait();
     delete ui;
+}
+
+bool MainWindow::eventFilter(QObject *o, QEvent *e){
+    return QMainWindow::eventFilter(o, e);
+}
+
+void MainWindow::analyzeDirectory(QString path){
+    QFileInfo fileInfo(path);
+    if (fileInfo.isDir()){
+        QString directory =fileInfo.absoluteDir().absolutePath();
+        if (directory != QDir::rootPath() && !directory.endsWith("/"))
+            directory.append("/");
+        QString fileName = fileInfo.baseName();
+        setCurrentDUA(directory + fileName);
+        setDirectoryJson(directory, fileName);
+    }
+
+}
+
+void MainWindow::launchTerminal(QString path){
+    if(path.trimmed().isEmpty())
+        return;
+
+    QFileInfo pathInfo(path);
+    if(!pathInfo.isDir()){
+        QMessageBox::critical(this, "Error", "Invalid directory " + path);
+        return;
+    }
+
+    QString terminal(qgetenv("TERM"));
+
+    if (terminal.trimmed().isEmpty()){
+        QMessageBox::critical(this, "Error", "The terminal environment variable $TERM is not set");
+        return;
+    }else{
+        QProcess *terminalProcess = new QProcess(this);
+        QString option("-e");
+        QString argument(QString("cd ") + path + " && /bin/bash");
+        QStringList arguments;
+        arguments << option << argument;
+        terminalProcess->start(terminal, arguments);
+    }
+}
+
+void MainWindow::launchDupeChecker(QString path){
+    if (path.trimmed().isEmpty()){
+        QMessageBox::critical(this, "Error", "You need to open a directory first");
+        return;
+    }
+
+    dupCheckDUA = path;
+    if (dupCheckDUA.endsWith("/") && dupCheckDUA != QDir::rootPath())
+        dupCheckDUA.remove(dupCheckDUA.length() - 1, 1);
+    QDir currentDir(dupCheckDUA);
+    QFileInfo pathInfo(dupCheckDUA);
+    QString fileName = pathInfo.baseName();
+
+    QString directory;
+    if (currentDir.isRoot())
+        directory = "";
+    else
+        directory = pathInfo.absolutePath() + QString("/");
+
+    stopDupesAnalyzer();
+    dupesAnalyzer = new DirectoryAnalyzer;
+    dupesAnalyzer->moveToThread(&dupesCheckerThread);
+    connect(&dupesCheckerThread, SIGNAL(finished()), dupesAnalyzer, SLOT(deleteLater()));
+    connect(this, SIGNAL(startScanning(QString,QString,int)), dupesAnalyzer, SLOT(startAnalysis(QString,QString,int)));
+    connect(dupesAnalyzer, SIGNAL(analysisComplete()), this, SLOT(scanComplete()));
+    connect(this, SIGNAL(stopScanning(bool)), dupesAnalyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
+    emit stopScanning(false);
+    dupesCheckerThread.start();
+    qDebug() << "Thread running? " << dupesCheckerThread.isRunning();
+
+
+    qDebug() << "Scanning..";
+    emit startScanning(directory, fileName, 0);
 }
 
 void MainWindow::exposeObjectsToJS(){
@@ -160,6 +242,10 @@ void MainWindow::onDupesProgress(int value){
     progress->setValue(value);
 }
 
+void MainWindow::openDirectory(QString path){
+    openDirectory(path, this);
+}
+
 void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 {
     stopAnalyzer();
@@ -181,7 +267,7 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 }
 
 void MainWindow::navigateTo(QString path){
-    qDebug() << "Navigating: " << path;
+    //qDebug() << "Navigating: " << path;
     if(path.isEmpty())
         return;
     if (path.startsWith("/"))
@@ -293,14 +379,17 @@ void MainWindow::on_actionAnalyzeDirectory_triggered(){
         on_twgDirViewer_doubleClicked(index);
 }
 
-void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){   
+void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){
+    if (!index.isValid())
+        return;
     if(model->isDir(index)){
-        QString directory = model->fileInfo(index).absoluteDir().absolutePath();
+        analyzeDirectory(model->fileInfo(index).canonicalFilePath());
+        /*QString directory = model->fileInfo(index).absoluteDir().absolutePath();
         if (directory != QDir::rootPath() && !directory.endsWith("/"))
             directory.append("/");
         QString fileName = model->fileInfo(index).baseName();
         setCurrentDUA(directory + fileName);
-        setDirectoryJson(directory, fileName);
+        setDirectoryJson(directory, fileName);*/
     }
 }
 
@@ -317,12 +406,14 @@ void MainWindow::on_actionRefresh_triggered(){
 void MainWindow::analysisComplete(){
     qDebug() << "Analysis complete";
     if (analyzer->getAnalysisDone()){
+        QList<DirectoryEntry *> entries = analyzer->getEntries();
         qDebug() << "Analyzed..";
         DirectoryEntry *rootEntry = analyzer->getRoot();
         QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
         QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
         frame->evaluateJavaScript(jsCommand);
         passGraphParamters();
+        setWindowTitle("Disk Analyst - " + currentDUA);
     }
 }
 
@@ -331,8 +422,11 @@ void MainWindow::scanComplete(){
     if (dupesAnalyzer->getAnalysisDone()){
 
         if(!progress){
-            progress = new QProgressBar(this);
+            progress = new CustomProgressBar(this);
             statusBar()->addWidget(progress);
+            progress->setDescription("(Double-click here to cancel duplicate checker)");
+            connect(progress, SIGNAL(doubleClicked()), this, SLOT(stopDupesChecking()));
+
         }
 
         progress->setValue(0);
@@ -394,33 +488,95 @@ void MainWindow::hashingComplete(DuplicateEntryList duplicates){
         progress->hide();
 }
 
+void MainWindow::treeMenuRequested(QPoint loc){
+    QModelIndex index = ui->twgDirViewer->indexAt(loc);
+    if (!index.isValid())
+        return;
+
+    QFileInfo itemInfo = model->fileInfo(index);
+    if (itemInfo.exists() && itemInfo.isDir()){
+        QMenu *menu = new QMenu(this);
+        QAction *analyzeAction = new QAction(QIcon(":/icons/Icons/file-explore-icon.png"), "Analyze Directory", this);
+        QAction *openAction = new QAction(QIcon(":/icons/Icons/Folder-Open-icon.png"), "Open Directory", this);
+        QAction *openParentAction = new QAction(QIcon(":/icons/Icons/Folder-Open-icon (1).png"), "Open Containing Directory", this);
+        QAction *terminalAction = new QAction(QIcon(":/icons/Icons/Apps-Terminal-Pc-104-icon.png"), "Launch Terminal", this);
+        QAction *dupesAction = new QAction(QIcon(":/icons/Icons/duplicate-icon-md.png"), "Run Duplicate Files Checker", this);
+
+        QSignalMapper *analyzeMapper = new QSignalMapper(this);
+        QSignalMapper *openMapper = new QSignalMapper(this);
+        QSignalMapper *openParentMapper = new QSignalMapper(this);
+        QSignalMapper *terminalMapper = new QSignalMapper(this);
+        QSignalMapper *dupesMapper = new QSignalMapper(this);
+
+        analyzeMapper->setMapping(analyzeAction, itemInfo.canonicalFilePath());
+        connect(analyzeAction, SIGNAL(triggered()), analyzeMapper, SLOT(map()));
+        connect(analyzeMapper, SIGNAL(mapped(QString)), this, SLOT(analyzeDirectory(QString)));
+
+        openMapper->setMapping(openAction, itemInfo.canonicalFilePath());
+        connect(openAction, SIGNAL(triggered()), openMapper, SLOT(map()));
+        connect(openMapper, SIGNAL(mapped(QString)), this, SLOT(openDirectory(QString)));
+
+        openParentMapper->setMapping(openParentAction, itemInfo.canonicalPath());
+        connect(openParentAction, SIGNAL(triggered()), openParentMapper, SLOT(map()));
+        connect(openParentMapper, SIGNAL(mapped(QString)), this, SLOT(openDirectory(QString)));
+
+        terminalMapper->setMapping(terminalAction, itemInfo.canonicalFilePath());
+        connect(terminalAction, SIGNAL(triggered()), terminalMapper, SLOT(map()));
+        connect(terminalMapper, SIGNAL(mapped(QString)), this, SLOT(launchTerminal(QString)));
+
+        dupesMapper->setMapping(dupesAction, itemInfo.canonicalFilePath());
+        connect(dupesAction, SIGNAL(triggered()), dupesMapper, SLOT(map()));
+        connect(dupesMapper, SIGNAL(mapped(QString)), this, SLOT(launchDupeChecker(QString)));
+
+
+
+        menu->addAction(analyzeAction);
+        menu->addAction(openAction);
+        if (!itemInfo.isRoot())
+            menu->addAction(openParentAction);
+        menu->addSeparator();
+        menu->addAction(terminalAction);
+        menu->addAction(dupesAction);
+        menu->popup(ui->twgDirViewer->viewport()->mapToGlobal(loc));
+    }else if (itemInfo.exists() && !itemInfo.isRoot()){
+        QAction *openParentAction = new QAction(QIcon(":/icons/Icons/Folder-Open-icon (1).png"), "Show Containing Directory", this);
+        QSignalMapper *openParentMapper = new QSignalMapper(this);
+
+        openParentMapper->setMapping(openParentAction, itemInfo.canonicalPath());
+        connect(openParentAction, SIGNAL(triggered()), openParentMapper, SLOT(map()));
+        connect(openParentMapper, SIGNAL(mapped(QString)), this, SLOT(openDirectory(QString)));
+
+        QMenu *menu = new QMenu(this);
+        menu->addAction(openParentAction);
+        menu->popup(ui->twgDirViewer->viewport()->mapToGlobal(loc));
+    }
+
+}
+
 void MainWindow::on_actionOpen_Terminal_triggered(){
-    if(getCurrentDUA().isEmpty())
-        return;
-
-    QFileInfo pathInfo(getCurrentDUA());
-    if(!pathInfo.isDir()){
-        QMessageBox::critical(this, "Error", "Invalid directory " + getCurrentDUA());
-        return;
+    if (getCurrentDUA().trimmed().isEmpty()){
+        QModelIndex index = ui->twgDirViewer->currentIndex();
+        QFileInfo fileInfo = model->fileInfo(index);
+        if (index.isValid() && fileInfo.isDir() && fileInfo.exists() && fileInfo.isReadable()){
+            launchTerminal(fileInfo.canonicalFilePath());
+            return;
+        }
     }
 
-    QString terminal(qgetenv("TERM"));
+    launchTerminal(getCurrentDUA());
 
-    if (terminal.isEmpty()){
-        QMessageBox::critical(this, "Error", "The terminal environment variable $TERM is not set");
-        return;
-    }else{
-        QProcess *terminalProcess = new QProcess(this);
-        QString option("-e");
-        QString argument(QString("cd ") + getCurrentDUA() + " && /bin/bash");
-        QStringList arguments;
-        arguments << option << argument;
-        terminalProcess->start(terminal, arguments);
-    }
 }
 
 void MainWindow::on_actionExploreDirectory_triggered(){
-    openDirectory(getCurrentDUA(), this);
+    if (getCurrentDUA().trimmed().isEmpty()){
+        QModelIndex index = ui->twgDirViewer->currentIndex();
+        QFileInfo fileInfo = model->fileInfo(index);
+        if (index.isValid() && fileInfo.isDir() && fileInfo.exists() && fileInfo.isReadable()){
+            openDirectory(fileInfo.canonicalFilePath());
+            return;
+        }
+    }
+    openDirectory(getCurrentDUA());
 }
 
 void MainWindow::on_actionSettings_triggered(){
@@ -481,45 +637,28 @@ void MainWindow::passGraphParamters(bool displayUnit){
 
 
 void MainWindow::on_actionDuplicateFilesChecker_triggered(){
-    if (getCurrentDUA().isEmpty()){
-        QMessageBox::critical(this, "Error", "You need to open a directory first");
-        return;
+    if (getCurrentDUA().trimmed().isEmpty()){
+        QModelIndex index = ui->twgDirViewer->currentIndex();
+        QFileInfo fileInfo = model->fileInfo(index);
+        if (index.isValid() && fileInfo.isDir() && fileInfo.exists() && fileInfo.isReadable()){
+            launchDupeChecker(fileInfo.canonicalFilePath());
+            return;
+        }
     }
 
-    dupCheckDUA = getCurrentDUA();
-    if (dupCheckDUA.endsWith("/") && dupCheckDUA != QDir::rootPath())
-        dupCheckDUA.remove(dupCheckDUA.length() - 1, 1);
-    QDir currentDir(dupCheckDUA);
-    QFileInfo pathInfo(dupCheckDUA);
-    QString fileName = pathInfo.baseName();
-
-    QString directory;
-    if (currentDir.isRoot())
-        directory = "";
-    else
-        directory = pathInfo.absolutePath() + QString("/");
-
-    stopDupesAnalyzer();
-    dupesAnalyzer = new DirectoryAnalyzer;
-    dupesAnalyzer->moveToThread(&dupesCheckerThread);
-    connect(&dupesCheckerThread, SIGNAL(finished()), dupesAnalyzer, SLOT(deleteLater()));
-    connect(this, SIGNAL(startScanning(QString,QString,int)), dupesAnalyzer, SLOT(startAnalysis(QString,QString,int)));
-    connect(dupesAnalyzer, SIGNAL(analysisComplete()), this, SLOT(scanComplete()));
-    connect(this, SIGNAL(stopScanning(bool)), dupesAnalyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
-    emit stopScanning(false);
-    dupesCheckerThread.start();
-    qDebug() << "Thread running? " << dupesCheckerThread.isRunning();
-
-
-    qDebug() << "Scanning..";
-    emit startScanning(directory, fileName, 0);
-
-
-
+    launchDupeChecker(getCurrentDUA());
 }
 
 void MainWindow::on_actionSelectRootDirectory_triggered(){
     QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", getCurrentDUA());
     if (fileName.trimmed() != "")
         setCurrentPath(fileName);
+}
+
+void MainWindow::on_actionAbout_triggered(){
+    if(!aboutDialog){
+        aboutDialog = new AboutDialog(this);
+        aboutDialog->setModal(true);
+    }
+    aboutDialog->show();
 }

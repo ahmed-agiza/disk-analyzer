@@ -17,6 +17,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -36,11 +37,15 @@ public:
     QAction *actionUp;
     QAction *actionDuplicateFilesChecker;
     QAction *actionSelectRootDirectory;
+    QAction *actionAbout;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTreeView *twgDirViewer;
     QWebView *wvwCharts;
     QMenuBar *menuBar;
+    QMenu *menuAnalyze;
+    QMenu *menuTools;
+    QMenu *menuHelp;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -49,7 +54,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setWindowModality(Qt::NonModal);
-        MainWindow->resize(1324, 800);
+        MainWindow->resize(1324, 843);
         MainWindow->setMinimumSize(QSize(0, 400));
         QIcon icon;
         icon.addFile(QStringLiteral(":/icons/Icons/Awicons-Vista-Artistic-Chart-search.ico"), QSize(), QIcon::Normal, QIcon::Off);
@@ -94,6 +99,11 @@ public:
         QIcon icon8;
         icon8.addFile(QStringLiteral(":/icons/Icons/Folder-Add-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSelectRootDirectory->setIcon(icon8);
+        actionAbout = new QAction(MainWindow);
+        actionAbout->setObjectName(QStringLiteral("actionAbout"));
+        QIcon icon9;
+        icon9.addFile(QStringLiteral(":/icons/Icons/help.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionAbout->setIcon(icon9);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -126,6 +136,12 @@ public:
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 1324, 20));
+        menuAnalyze = new QMenu(menuBar);
+        menuAnalyze->setObjectName(QStringLiteral("menuAnalyze"));
+        menuTools = new QMenu(menuBar);
+        menuTools->setObjectName(QStringLiteral("menuTools"));
+        menuHelp = new QMenu(menuBar);
+        menuHelp->setObjectName(QStringLiteral("menuHelp"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -134,6 +150,17 @@ public:
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
 
+        menuBar->addAction(menuAnalyze->menuAction());
+        menuBar->addAction(menuTools->menuAction());
+        menuBar->addAction(menuHelp->menuAction());
+        menuAnalyze->addAction(actionAnalyzeDirectory);
+        menuAnalyze->addAction(actionSelectRootDirectory);
+        menuTools->addAction(actionExploreDirectory);
+        menuTools->addAction(actionOpen_Terminal);
+        menuTools->addAction(actionDuplicateFilesChecker);
+        menuTools->addSeparator();
+        menuTools->addAction(actionSettings);
+        menuHelp->addAction(actionAbout);
         mainToolBar->addAction(actionSelectRootDirectory);
         mainToolBar->addAction(actionAnalyzeDirectory);
         mainToolBar->addSeparator();
@@ -161,12 +188,12 @@ public:
         actionAnalyzeDirectory->setShortcut(QApplication::translate("MainWindow", "Ctrl+A", 0));
         actionExploreDirectory->setText(QApplication::translate("MainWindow", "Explore Directory", 0));
 #ifndef QT_NO_TOOLTIP
-        actionExploreDirectory->setToolTip(QApplication::translate("MainWindow", "Explore Directory", 0));
+        actionExploreDirectory->setToolTip(QApplication::translate("MainWindow", "Show Containing Directory", 0));
 #endif // QT_NO_TOOLTIP
         actionExploreDirectory->setShortcut(QApplication::translate("MainWindow", "Ctrl+E", 0));
         actionOpen_Terminal->setText(QApplication::translate("MainWindow", "Open Terminal", 0));
 #ifndef QT_NO_TOOLTIP
-        actionOpen_Terminal->setToolTip(QApplication::translate("MainWindow", "Open Terminal in the Current Directory", 0));
+        actionOpen_Terminal->setToolTip(QApplication::translate("MainWindow", "Launch Terminal in the Current Root Directory", 0));
 #endif // QT_NO_TOOLTIP
         actionOpen_Terminal->setShortcut(QApplication::translate("MainWindow", "Ctrl+T", 0));
         actionRefresh->setText(QApplication::translate("MainWindow", "Refresh", 0));
@@ -186,13 +213,20 @@ public:
         actionUp->setShortcut(QApplication::translate("MainWindow", "Ctrl+U", 0));
         actionDuplicateFilesChecker->setText(QApplication::translate("MainWindow", "Duplicate Files Checker", 0));
 #ifndef QT_NO_TOOLTIP
-        actionDuplicateFilesChecker->setToolTip(QApplication::translate("MainWindow", "Run Duplicate Files Checker", 0));
+        actionDuplicateFilesChecker->setToolTip(QApplication::translate("MainWindow", "Run Duplicate Files Checker in the Current Root Directory", 0));
 #endif // QT_NO_TOOLTIP
         actionSelectRootDirectory->setText(QApplication::translate("MainWindow", "Select Root Directory", 0));
 #ifndef QT_NO_TOOLTIP
         actionSelectRootDirectory->setToolTip(QApplication::translate("MainWindow", "Select Root Directory", 0));
 #endif // QT_NO_TOOLTIP
         actionSelectRootDirectory->setShortcut(QApplication::translate("MainWindow", "Shift+O", 0));
+        actionAbout->setText(QApplication::translate("MainWindow", "About", 0));
+#ifndef QT_NO_TOOLTIP
+        actionAbout->setToolTip(QApplication::translate("MainWindow", "About", 0));
+#endif // QT_NO_TOOLTIP
+        menuAnalyze->setTitle(QApplication::translate("MainWindow", "Explore", 0));
+        menuTools->setTitle(QApplication::translate("MainWindow", "Tools", 0));
+        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0));
     } // retranslateUi
 
 };

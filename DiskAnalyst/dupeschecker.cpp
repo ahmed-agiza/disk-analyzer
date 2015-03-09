@@ -51,7 +51,7 @@ void DupesChecker::startAnalysis(DirectoryEntriesList entries, DirectoryEntry *r
                 }
 
                 if (entryHash == ""){
-                    qDebug() << "Cannot hash " << entries[i]->getPath() + entries[i]->getName();
+                    //qDebug() << "Cannot hash " << entries[i]->getPath() + entries[i]->getName();
                 }else{
                     for(int j = 0; j < matchingSize.size(); j++){
                         QString fileHash;
