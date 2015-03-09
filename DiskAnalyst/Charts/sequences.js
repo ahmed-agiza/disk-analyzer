@@ -3,6 +3,14 @@ var width = 750;
 var height = 600;
 var radius = Math.min(width, height) / 2;
 
+// File path graphically
+var fpd = {
+    width: 100,
+    height: 30,
+    spacing: 3,
+    tail: 10
+};
+
 // Set in applySettings
 var graphNavigation;
 var color;
