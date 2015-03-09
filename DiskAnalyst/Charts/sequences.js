@@ -55,12 +55,6 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.max(0, y(d.y)); })
     .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
-// Calling the json function with the disk statistics (Calls json data from file)
-// Invoking from a JSON file
-d3.json("./data.json", function(error, root) {
-    visualize(root);
-});
-
 // The core visualization function
 function visualize(root){
     applySettings();
@@ -330,6 +324,12 @@ function applySettings(op, clr, rd, un, gn){
     else graphNavigation = gn;
 
 }
+
+// Calling the json function with the disk statistics (Calls json data from file)
+// Invoking from a JSON file
+d3.json("./data.json", function(error, root) {
+    visualize(root);
+});
 
 // The arc for drawing the svg (OLD ARC)
 /*var arc = d3.svg.arc()

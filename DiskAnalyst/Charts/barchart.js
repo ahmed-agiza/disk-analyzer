@@ -1,96 +1,40 @@
+// Test Data
 var testData = [
-  {
-    name: "A",
-    value: 500
-  },
-  {
-    name: "B",
-    value: 1000
-  },
-  {
-    name: "C",
-    value: 200
-  },
-  {
-    name: "D",
-    value: 2500
-  },
-  {
-    name: "E",
-    value: 1500
-  },
-  {
-    name: "F",
-    value: 5000
-  },
-  {
-    name: "H",
-    value: 100
-  },
-  {
-    name: "I",
-    value: 1000
-  },
-  {
-    name: "J",
-    value: 1200
-  },
-  {
-    name: "K",
-    value: 1300
-  },
-  {
-    name: "L",
-    value: 500
-  },
-  {
-    name: "M",
-    value: 1000
-  },
-  {
-    name: "N",
-    value: 200
-  },
-  {
-    name: "O",
-    value: 2500
-  },
-  {
-    name: "P",
-    value: 1500
-  },
-  {
-    name: "Q",
-    value: 5000
-  },
-  {
-    name: "R",
-    value: 100
-  },
-  {
-    name: "S",
-    value: 1000
-  },
-  {
-    name: "T",
-    value: 1200
-  },
-  {
-    name: "U",
-    value: 1300
-  }
+  {name: "A", value: 500},
+  {name: "B", value: 1000},
+  {name: "C", value: 200},
+  {name: "D", value: 2500},
+  {name: "E", value: 1500},
+  {name: "F", value: 5000},
+  {name: "H", value: 100},
+  {name: "I", value: 1000},
+  {name: "J", value: 1200},
+  {name: "K", value: 1300},
+  {name: "L", value: 500},
+  {name: "M", value: 1000},
+  {name: "N", value: 200},
+  {name: "O", value: 2500},
+  {name: "P", value: 1500},
+  {name: "Q", value: 5000},
+  {name: "R", value: 100},
+  {name: "S", value: 1000},
+  {name: "T", value: 1200},
+  {name: "U", value: 1300}
 ];
 
+// The margins of the bar chart
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
+// Scale generators
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1, 1);
 
 var y = d3.scale.linear()
     .range([height, 0]);
 
+// Axis generators
 var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");
@@ -99,72 +43,81 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
 
-var svg = d3.select("body").append("svg")
+// Skeleton for the chart
+var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.tsv("data.tsv", function(error, data) {
-  data.forEach(function(d) {
-    d.frequency = +d.frequency;
-  });
+// Defining the domain of the graph
+x.domain(testData.map(function(d){return d.name;}));
+y.domain([0, d3.max(testData, function(d){return d.value;})]);
 
-  //x.domain(data.map(function(d) { return d.letter; }));
-  //y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
-  x.domain(testData.map(function(d){return d.name;}));
-  y.domain([0, d3.max(testData, function(d){return d.value;})]);
+// Plotting axis
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
 
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Value");
 
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Value");
-
-  svg.selectAll(".bar")
-      .data(testData)
-      .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function(d) { return x(d.name); })
-      .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); });
-
-  d3.select("input").on("change", change);
-
-  var sortTimeout = setTimeout(function() {
+// Sort timeout
+var sortTimeout = setTimeout(function() {
     d3.select("input").property("checked", true).each(change);
-  }, 2000);
+}, 2000);
 
-  function change() {
-    clearTimeout(sortTimeout);
+// TEST CALL
+visualize(testData);
 
-    // Copy-on-write since tweens are evaluated after a delay.
-    var x0 = x.domain(testData.sort(this.checked
-        ? function(a, b) { return b.value - a.value; }
-        : function(a, b) { return d3.ascending(a.name, b.name); })
-        .map(function(d) { return d.name; }))
-        .copy();
+function visualize(data){
+    // Plotting the data
+    svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) {return x(d.name);})
+        .attr("width", x.rangeBand())
+        .attr("y", function(d) {return y(d.value);})
+        .attr("height", function(d) {return height - y(d.value);});
 
-    var transition = svg.transition().duration(750),
-        delay = function(d, i) { return i * 50; };
+    d3.select("input").on("change", change);
+}
 
-    transition.selectAll(".bar")
-        .delay(delay)
-        .attr("x", function(d) { return x0(d.name); });
+function change() {
+  clearTimeout(sortTimeout);
 
-    transition.select(".x.axis")
-        .call(xAxis)
-        .selectAll("g")
-        .delay(delay);
-  }
-});
+  // Copy-on-write since tweens are evaluated after a delay.
+  var x0 = x.domain(testData.sort(this.checked
+      ? function(a, b) {return b.value - a.value;}
+      : function(a, b) {return d3.ascending(a.name, b.name);})
+      .map(function(d) {return d.name;}))
+      .copy();
+
+  var transition = svg.transition().duration(750),
+      delay = function(d, i) {return i * 50;};
+
+  transition.selectAll(".bar")
+      .delay(delay)
+      .attr("x", function(d) {return x0(d.name);});
+
+  transition.select(".x.axis")
+      .call(xAxis)
+      .selectAll("g")
+      .delay(delay);
+}
+
+// Data fetching from file
+/*d3.tsv("data.tsv", function(error, data) {
+    data.forEach(function(d) {
+      d.frequency = +d.frequency;
+  });
+});*/
