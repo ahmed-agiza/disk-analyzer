@@ -49,7 +49,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setWindowModality(Qt::NonModal);
-        MainWindow->resize(1324, 800);
+        MainWindow->resize(1324, 843);
         MainWindow->setMinimumSize(QSize(0, 400));
         QIcon icon;
         icon.addFile(QStringLiteral(":/icons/Icons/Awicons-Vista-Artistic-Chart-search.ico"), QSize(), QIcon::Normal, QIcon::Off);
@@ -161,12 +161,12 @@ public:
         actionAnalyzeDirectory->setShortcut(QApplication::translate("MainWindow", "Ctrl+A", 0));
         actionExploreDirectory->setText(QApplication::translate("MainWindow", "Explore Directory", 0));
 #ifndef QT_NO_TOOLTIP
-        actionExploreDirectory->setToolTip(QApplication::translate("MainWindow", "Explore Directory", 0));
+        actionExploreDirectory->setToolTip(QApplication::translate("MainWindow", "Show Containing Directory", 0));
 #endif // QT_NO_TOOLTIP
         actionExploreDirectory->setShortcut(QApplication::translate("MainWindow", "Ctrl+E", 0));
         actionOpen_Terminal->setText(QApplication::translate("MainWindow", "Open Terminal", 0));
 #ifndef QT_NO_TOOLTIP
-        actionOpen_Terminal->setToolTip(QApplication::translate("MainWindow", "Open Terminal in the Current Directory", 0));
+        actionOpen_Terminal->setToolTip(QApplication::translate("MainWindow", "Launch Terminal in the Current Root Directory", 0));
 #endif // QT_NO_TOOLTIP
         actionOpen_Terminal->setShortcut(QApplication::translate("MainWindow", "Ctrl+T", 0));
         actionRefresh->setText(QApplication::translate("MainWindow", "Refresh", 0));
@@ -186,7 +186,7 @@ public:
         actionUp->setShortcut(QApplication::translate("MainWindow", "Ctrl+U", 0));
         actionDuplicateFilesChecker->setText(QApplication::translate("MainWindow", "Duplicate Files Checker", 0));
 #ifndef QT_NO_TOOLTIP
-        actionDuplicateFilesChecker->setToolTip(QApplication::translate("MainWindow", "Run Duplicate Files Checker", 0));
+        actionDuplicateFilesChecker->setToolTip(QApplication::translate("MainWindow", "Run Duplicate Files Checker in the Current Root Directory", 0));
 #endif // QT_NO_TOOLTIP
         actionSelectRootDirectory->setText(QApplication::translate("MainWindow", "Select Root Directory", 0));
 #ifndef QT_NO_TOOLTIP

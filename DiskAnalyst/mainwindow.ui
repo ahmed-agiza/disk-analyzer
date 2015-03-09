@@ -127,7 +127,7 @@
     <string>Explore Directory</string>
    </property>
    <property name="toolTip">
-    <string>Explore Directory</string>
+    <string>Show Containing Directory</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
@@ -142,7 +142,7 @@
     <string>Open Terminal</string>
    </property>
    <property name="toolTip">
-    <string>Open Terminal in the Current Directory</string>
+    <string>Launch Terminal in the Current Root Directory</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
@@ -202,7 +202,7 @@
     <string>Duplicate Files Checker</string>
    </property>
    <property name="toolTip">
-    <string>Run Duplicate Files Checker</string>
+    <string>Run Duplicate Files Checker in the Current Root Directory</string>
    </property>
   </action>
   <action name="actionSelectRootDirectory">

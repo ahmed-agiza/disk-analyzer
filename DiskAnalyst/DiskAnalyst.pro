@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     filestatdialog.cpp \
     dupesdialog.cpp \
     dupeschecker.cpp \
-    duplicatesdatamodel.cpp
+    duplicatesdatamodel.cpp \
+    customprogressbar.cpp
 
 HEADERS  += mainwindow.h \
     directoryanalyzer.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     settingsmanager.h \
     dupesdialog.h \
     dupeschecker.h \
-    duplicatesdatamodel.h
+    duplicatesdatamodel.h \
+    customprogressbar.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
