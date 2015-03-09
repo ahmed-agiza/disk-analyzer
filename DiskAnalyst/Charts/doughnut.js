@@ -1,7 +1,12 @@
-var svg = d3.select("body")
+// Dimentions of the doughnut
+var width = 960,
+    height = 450,
+    radius = Math.min(width, height) / 2;
+
+// Doughnut skeleton
+var svg = d3.select("#chart")
 	.append("svg")
 	.append("g")
-
 svg.append("g")
 	.attr("class", "slices");
 svg.append("g")
@@ -9,16 +14,14 @@ svg.append("g")
 svg.append("g")
 	.attr("class", "lines");
 
-var width = 960,
-    height = 450,
-	radius = Math.min(width, height) / 2;
-
+// Doughnut build
 var pie = d3.layout.pie()
-	.sort(null)
+    .sort(null)
 	.value(function(d) {
 		return d.value;
 	});
 
+// The arcs for the individual elements and the whoe shape
 var arc = d3.svg.arc()
 	.outerRadius(radius * 0.8)
 	.innerRadius(radius * 0.4);
@@ -27,30 +30,32 @@ var outerArc = d3.svg.arc()
 	.innerRadius(radius * 0.9)
 	.outerRadius(radius * 0.9);
 
+// Location of the doughnut
 svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-var key = function(d){ return d.data.label; };
+var key = function(d){ return d.data.name; };
 
 var color = d3.scale.ordinal()
-	.domain(["Lorem ipsum", "dolor sit", "amet", "consectetur", "adipisicing", "elit", "sed", "do", "eiusmod", "tempor", "incididunt"])
-	.range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    .domain(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
-function randomData (){
-	var labels = color.domain();
-	return labels.map(function(label){
-		return { label: label, value: Math.random() }
-	});
-}
+var testData = [
+  {name: "A", value: 500},
+  {name: "B", value: 1000},
+  {name: "C", value: 200},
+  {name: "D", value: 2500},
+  {name: "E", value: 1500},
+  {name: "F", value: 5000},
+  {name: "H", value: 100},
+  {name: "I", value: 1000},
+  {name: "J", value: 1200},
+  {name: "K", value: 1300},
+];
 
-change(randomData());
-
-d3.select(".randomize")
-	.on("click", function(){
-		change(randomData());
-	});
-
+change(testData);
 
 function change(data) {
+    console.log(data);
 
 	/* ------- PIE SLICES -------*/
 	var slice = svg.select(".slices").selectAll("path.slice")
@@ -58,7 +63,7 @@ function change(data) {
 
 	slice.enter()
 		.insert("path")
-		.style("fill", function(d) { return color(d.data.label); })
+        .style("fill", function(d) { return color(d.data.name); })
 		.attr("class", "slice");
 
 	slice		
@@ -84,7 +89,7 @@ function change(data) {
 		.append("text")
 		.attr("dy", ".35em")
 		.text(function(d) {
-			return d.data.label;
+            return d.data.name;
 		});
 	
 	function midAngle(d){
