@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[41];
-    char stringdata[763];
+    QByteArrayData data[42];
+    char stringdata[778];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,53 +32,55 @@ static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
 QT_MOC_LITERAL(0, 0, 10),
 QT_MOC_LITERAL(1, 11, 13),
 QT_MOC_LITERAL(2, 25, 0),
-QT_MOC_LITERAL(3, 26, 12),
-QT_MOC_LITERAL(4, 39, 13),
-QT_MOC_LITERAL(5, 53, 12),
-QT_MOC_LITERAL(6, 66, 12),
-QT_MOC_LITERAL(7, 79, 20),
-QT_MOC_LITERAL(8, 100, 15),
-QT_MOC_LITERAL(9, 116, 11),
-QT_MOC_LITERAL(10, 128, 16),
-QT_MOC_LITERAL(11, 145, 14),
-QT_MOC_LITERAL(12, 160, 17),
-QT_MOC_LITERAL(13, 178, 16),
-QT_MOC_LITERAL(14, 195, 12),
-QT_MOC_LITERAL(15, 208, 15),
-QT_MOC_LITERAL(16, 224, 18),
-QT_MOC_LITERAL(17, 243, 17),
-QT_MOC_LITERAL(18, 261, 35),
-QT_MOC_LITERAL(19, 297, 29),
-QT_MOC_LITERAL(20, 327, 5),
-QT_MOC_LITERAL(21, 333, 24),
-QT_MOC_LITERAL(22, 358, 26),
-QT_MOC_LITERAL(23, 385, 32),
-QT_MOC_LITERAL(24, 418, 35),
-QT_MOC_LITERAL(25, 454, 27),
-QT_MOC_LITERAL(26, 482, 21),
-QT_MOC_LITERAL(27, 504, 40),
-QT_MOC_LITERAL(28, 545, 38),
-QT_MOC_LITERAL(29, 584, 24),
-QT_MOC_LITERAL(30, 609, 17),
-QT_MOC_LITERAL(31, 627, 14),
-QT_MOC_LITERAL(32, 642, 16),
-QT_MOC_LITERAL(33, 659, 10),
-QT_MOC_LITERAL(34, 670, 12),
-QT_MOC_LITERAL(35, 683, 17),
-QT_MOC_LITERAL(36, 701, 17),
-QT_MOC_LITERAL(37, 719, 15),
-QT_MOC_LITERAL(38, 735, 13),
-QT_MOC_LITERAL(39, 749, 4),
-QT_MOC_LITERAL(40, 754, 8)
+QT_MOC_LITERAL(3, 26, 14),
+QT_MOC_LITERAL(4, 41, 12),
+QT_MOC_LITERAL(5, 54, 13),
+QT_MOC_LITERAL(6, 68, 12),
+QT_MOC_LITERAL(7, 81, 12),
+QT_MOC_LITERAL(8, 94, 20),
+QT_MOC_LITERAL(9, 115, 15),
+QT_MOC_LITERAL(10, 131, 11),
+QT_MOC_LITERAL(11, 143, 16),
+QT_MOC_LITERAL(12, 160, 14),
+QT_MOC_LITERAL(13, 175, 17),
+QT_MOC_LITERAL(14, 193, 16),
+QT_MOC_LITERAL(15, 210, 12),
+QT_MOC_LITERAL(16, 223, 15),
+QT_MOC_LITERAL(17, 239, 18),
+QT_MOC_LITERAL(18, 258, 17),
+QT_MOC_LITERAL(19, 276, 35),
+QT_MOC_LITERAL(20, 312, 29),
+QT_MOC_LITERAL(21, 342, 5),
+QT_MOC_LITERAL(22, 348, 24),
+QT_MOC_LITERAL(23, 373, 26),
+QT_MOC_LITERAL(24, 400, 32),
+QT_MOC_LITERAL(25, 433, 35),
+QT_MOC_LITERAL(26, 469, 27),
+QT_MOC_LITERAL(27, 497, 21),
+QT_MOC_LITERAL(28, 519, 40),
+QT_MOC_LITERAL(29, 560, 38),
+QT_MOC_LITERAL(30, 599, 24),
+QT_MOC_LITERAL(31, 624, 17),
+QT_MOC_LITERAL(32, 642, 14),
+QT_MOC_LITERAL(33, 657, 16),
+QT_MOC_LITERAL(34, 674, 10),
+QT_MOC_LITERAL(35, 685, 12),
+QT_MOC_LITERAL(36, 698, 17),
+QT_MOC_LITERAL(37, 716, 17),
+QT_MOC_LITERAL(38, 734, 15),
+QT_MOC_LITERAL(39, 750, 13),
+QT_MOC_LITERAL(40, 764, 4),
+QT_MOC_LITERAL(41, 769, 8)
     },
-    "MainWindow\0startAnalysis\0\0stopAnalysis\0"
-    "startScanning\0stopScanning\0startHashing\0"
-    "DirectoryEntriesList\0DirectoryEntry*\0"
-    "stopHashing\0analyzeDirectory\0"
-    "launchTerminal\0launchDupeChecker\0"
-    "analysisComplete\0scanComplete\0"
-    "hashingComplete\0DuplicateEntryList\0"
-    "treeMenuRequested\0on_actionAnalyzeDirectory_triggered\0"
+    "MainWindow\0startAnalysis\0\0AnalysisTarget\0"
+    "stopAnalysis\0startScanning\0stopScanning\0"
+    "startHashing\0DirectoryEntriesList\0"
+    "DirectoryEntry*\0stopHashing\0"
+    "analyzeDirectory\0launchTerminal\0"
+    "launchDupeChecker\0analysisComplete\0"
+    "scanComplete\0hashingComplete\0"
+    "DuplicateEntryList\0treeMenuRequested\0"
+    "on_actionAnalyzeDirectory_triggered\0"
     "on_twgDirViewer_doubleClicked\0index\0"
     "on_twgDirViewer_expanded\0"
     "on_actionRefresh_triggered\0"
@@ -110,62 +112,62 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,  184,    2, 0x06 /* Public */,
-       3,    1,  191,    2, 0x06 /* Public */,
-       4,    3,  194,    2, 0x06 /* Public */,
-       5,    1,  201,    2, 0x06 /* Public */,
-       6,    2,  204,    2, 0x06 /* Public */,
-       9,    1,  209,    2, 0x06 /* Public */,
+       1,    4,  184,    2, 0x06 /* Public */,
+       4,    1,  193,    2, 0x06 /* Public */,
+       5,    4,  196,    2, 0x06 /* Public */,
+       6,    1,  205,    2, 0x06 /* Public */,
+       7,    2,  208,    2, 0x06 /* Public */,
+      10,    1,  213,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    1,  212,    2, 0x08 /* Private */,
-      11,    1,  215,    2, 0x08 /* Private */,
-      12,    1,  218,    2, 0x08 /* Private */,
-      13,    0,  221,    2, 0x08 /* Private */,
-      14,    0,  222,    2, 0x08 /* Private */,
-      15,    1,  223,    2, 0x08 /* Private */,
-      17,    1,  226,    2, 0x08 /* Private */,
-      18,    0,  229,    2, 0x08 /* Private */,
-      19,    1,  230,    2, 0x08 /* Private */,
-      21,    1,  233,    2, 0x08 /* Private */,
-      22,    0,  236,    2, 0x08 /* Private */,
-      23,    0,  237,    2, 0x08 /* Private */,
-      24,    0,  238,    2, 0x08 /* Private */,
-      25,    0,  239,    2, 0x08 /* Private */,
-      26,    0,  240,    2, 0x08 /* Private */,
-      27,    0,  241,    2, 0x08 /* Private */,
-      28,    0,  242,    2, 0x08 /* Private */,
-      29,    0,  243,    2, 0x08 /* Private */,
-      30,    0,  244,    2, 0x0a /* Public */,
-      31,    1,  245,    2, 0x0a /* Public */,
-      32,    2,  248,    2, 0x0a /* Public */,
-      33,    1,  253,    2, 0x0a /* Public */,
-      34,    0,  256,    2, 0x0a /* Public */,
-      35,    0,  257,    2, 0x0a /* Public */,
-      36,    0,  258,    2, 0x0a /* Public */,
-      37,    1,  259,    2, 0x0a /* Public */,
-      38,    1,  262,    2, 0x0a /* Public */,
-      40,    1,  265,    2, 0x0a /* Public */,
+      11,    1,  216,    2, 0x08 /* Private */,
+      12,    1,  219,    2, 0x08 /* Private */,
+      13,    1,  222,    2, 0x08 /* Private */,
+      14,    1,  225,    2, 0x08 /* Private */,
+      15,    0,  228,    2, 0x08 /* Private */,
+      16,    1,  229,    2, 0x08 /* Private */,
+      18,    1,  232,    2, 0x08 /* Private */,
+      19,    0,  235,    2, 0x08 /* Private */,
+      20,    1,  236,    2, 0x08 /* Private */,
+      22,    1,  239,    2, 0x08 /* Private */,
+      23,    0,  242,    2, 0x08 /* Private */,
+      24,    0,  243,    2, 0x08 /* Private */,
+      25,    0,  244,    2, 0x08 /* Private */,
+      26,    0,  245,    2, 0x08 /* Private */,
+      27,    0,  246,    2, 0x08 /* Private */,
+      28,    0,  247,    2, 0x08 /* Private */,
+      29,    0,  248,    2, 0x08 /* Private */,
+      30,    0,  249,    2, 0x08 /* Private */,
+      31,    0,  250,    2, 0x0a /* Public */,
+      32,    1,  251,    2, 0x0a /* Public */,
+      33,    2,  254,    2, 0x0a /* Public */,
+      34,    1,  259,    2, 0x0a /* Public */,
+      35,    0,  262,    2, 0x0a /* Public */,
+      36,    0,  263,    2, 0x0a /* Public */,
+      37,    0,  264,    2, 0x0a /* Public */,
+      38,    1,  265,    2, 0x0a /* Public */,
+      39,    1,  268,    2, 0x0a /* Public */,
+      41,    1,  271,    2, 0x0a /* Public */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,    2,    2,    2,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int, 0x80000000 | 3,    2,    2,    2,    2,
     QMetaType::Void, QMetaType::Bool,    2,
-    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,    2,    2,    2,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int, 0x80000000 | 3,    2,    2,    2,    2,
     QMetaType::Void, QMetaType::Bool,    2,
-    QMetaType::Void, 0x80000000 | 7, 0x80000000 | 8,    2,    2,
+    QMetaType::Void, 0x80000000 | 8, 0x80000000 | 9,    2,    2,
     QMetaType::Void, QMetaType::Bool,    2,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 16,    2,
+    QMetaType::Void, 0x80000000 | 17,    2,
     QMetaType::Void, QMetaType::QPoint,    2,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QModelIndex,   20,
-    QMetaType::Void, QMetaType::QModelIndex,   20,
+    QMetaType::Void, QMetaType::QModelIndex,   21,
+    QMetaType::Void, QMetaType::QModelIndex,   21,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -182,7 +184,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, QMetaType::QString,   39,
+    QMetaType::Void, QMetaType::QString,   40,
     QMetaType::Void, QMetaType::QString,    2,
 
        0        // eod
@@ -193,16 +195,16 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     if (_c == QMetaObject::InvokeMetaMethod) {
         MainWindow *_t = static_cast<MainWindow *>(_o);
         switch (_id) {
-        case 0: _t->startAnalysis((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
+        case 0: _t->startAnalysis((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< AnalysisTarget(*)>(_a[4]))); break;
         case 1: _t->stopAnalysis((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 2: _t->startScanning((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
+        case 2: _t->startScanning((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< AnalysisTarget(*)>(_a[4]))); break;
         case 3: _t->stopScanning((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 4: _t->startHashing((*reinterpret_cast< DirectoryEntriesList(*)>(_a[1])),(*reinterpret_cast< DirectoryEntry*(*)>(_a[2]))); break;
         case 5: _t->stopHashing((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 6: _t->analyzeDirectory((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 7: _t->launchTerminal((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 8: _t->launchDupeChecker((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 9: _t->analysisComplete(); break;
+        case 9: _t->analysisComplete((*reinterpret_cast< AnalysisTarget(*)>(_a[1]))); break;
         case 10: _t->scanComplete(); break;
         case 11: _t->hashingComplete((*reinterpret_cast< DuplicateEntryList(*)>(_a[1]))); break;
         case 12: _t->treeMenuRequested((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
@@ -233,7 +235,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         int *result = reinterpret_cast<int *>(_a[0]);
         void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (MainWindow::*_t)(QString , QString , int );
+            typedef void (MainWindow::*_t)(QString , QString , int , AnalysisTarget );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::startAnalysis)) {
                 *result = 0;
             }
@@ -245,7 +247,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
             }
         }
         {
-            typedef void (MainWindow::*_t)(QString , QString , int );
+            typedef void (MainWindow::*_t)(QString , QString , int , AnalysisTarget );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::startScanning)) {
                 *result = 2;
             }
@@ -308,9 +310,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void MainWindow::startAnalysis(QString _t1, QString _t2, int _t3)
+void MainWindow::startAnalysis(QString _t1, QString _t2, int _t3, AnalysisTarget _t4)
 {
-    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)), const_cast<void*>(reinterpret_cast<const void*>(&_t4)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
@@ -322,9 +324,9 @@ void MainWindow::stopAnalysis(bool _t1)
 }
 
 // SIGNAL 2
-void MainWindow::startScanning(QString _t1, QString _t2, int _t3)
+void MainWindow::startScanning(QString _t1, QString _t2, int _t3, AnalysisTarget _t4)
 {
-    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)), const_cast<void*>(reinterpret_cast<const void*>(&_t4)) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 

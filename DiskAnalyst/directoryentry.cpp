@@ -8,7 +8,7 @@ DirectoryEntry::DirectoryEntry():valid(false), type(UNKNOWN){
 }
 
 DirectoryEntry::DirectoryEntry(QString name, QString path, long long size, long long numberOfBlocks, int depth, DirectoryEntry *source, QSet<DirectoryEntry *> children)
-    :valid(false), type(UNKNOWN), totalSizeCache(-1){
+    :valid(false), type(UNKNOWN), totalSizeCache(-1), executable(false){
     setName(name);
     setPath(path);
     setEntrySize(size);
@@ -196,6 +196,16 @@ bool DirectoryEntry::operator>=(DirectoryEntry &other){
 bool DirectoryEntry::isLessThan(DirectoryEntry *first, DirectoryEntry *second){
     return first->getTotalSize() < second->getTotalSize();
 }
+bool DirectoryEntry::isExecutable() const
+{
+    return executable;
+}
+
+void DirectoryEntry::setExecutable(bool value)
+{
+    executable = value;
+}
+
 
 
 

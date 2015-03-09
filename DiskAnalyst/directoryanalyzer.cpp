@@ -9,13 +9,11 @@
 //#define DEBUG_SEPERATOR
 
 
-bool DirectoryAnalyzer::getAnalysisDone() const
-{
+bool DirectoryAnalyzer::getAnalysisDone() const{
     return analysisDone;
 }
 
-void DirectoryAnalyzer::setAnalysisDone(bool value)
-{
+void DirectoryAnalyzer::setAnalysisDone(bool value){
     analysisDone = value;
 }
 DirectoryEntry *DirectoryAnalyzer::statFile(char *path, char *name, int flags, int depth, DirectoryEntry *source){
@@ -216,7 +214,7 @@ DirectoryAnalyzer::~DirectoryAnalyzer(){
 }
 
 
-void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags){
+void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags, AnalysisTarget target){
     DIR *dir_d;
     struct dirent *dir_inode;
 
@@ -283,7 +281,7 @@ void DirectoryAnalyzer::startAnalysis(QString directory, QString name, int flags
         closedir(dir_d);
     }
     analysisDone = (!stopped);
-    emit analysisComplete();
+    emit analysisComplete(target);
 
 }
 

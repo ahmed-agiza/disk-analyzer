@@ -39,6 +39,8 @@
 #define MAX_GROUP_SIZE 64
 #define MAX_FULL_PATH_SIZE 2048
 
+enum AnalysisTarget{Unkown = 0, Visualization = 1, DupeChecking = 2, FileSorting = 3, ExtenstionSoring = 4, GroupSorying = 5};
+
 
 
 class DirectoryAnalyzer : public QObject
@@ -67,9 +69,9 @@ public:
     bool getAnalysisDone() const;
 
 signals:
-    void analysisComplete();
+    void analysisComplete(AnalysisTarget);
 public slots:
-    void startAnalysis(QString directory, QString name, int flags = 0);
+    void startAnalysis(QString directory, QString name, int flags = 0, AnalysisTarget = Unkown);
     void setStopped(bool value);
     void setAnalysisDone(bool value);
 

@@ -38,9 +38,11 @@
 MainWindow::MainWindow(QWidget *parent)
     :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(0), dupesAnalyzer(0){
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+
     qRegisterMetaType<DirectoryEntriesList>("DirectoryEntriesList");
     qRegisterMetaType<DirectoryEntry>("DirectoryEntry");
     qRegisterMetaType<DuplicateEntryList>("DuplicateEntryList");
+    qRegisterMetaType<AnalysisTarget>("AnalysisTarget");
 
     ui->setupUi(this);
 
@@ -159,8 +161,8 @@ void MainWindow::launchDupeChecker(QString path){
     dupesAnalyzer = new DirectoryAnalyzer;
     dupesAnalyzer->moveToThread(&dupesCheckerThread);
     connect(&dupesCheckerThread, SIGNAL(finished()), dupesAnalyzer, SLOT(deleteLater()));
-    connect(this, SIGNAL(startScanning(QString,QString,int)), dupesAnalyzer, SLOT(startAnalysis(QString,QString,int)));
-    connect(dupesAnalyzer, SIGNAL(analysisComplete()), this, SLOT(scanComplete()));
+    connect(this, SIGNAL(startScanning(QString,QString,int, AnalysisTarget)), dupesAnalyzer, SLOT(startAnalysis(QString,QString,int, AnalysisTarget)));
+    connect(dupesAnalyzer, SIGNAL(analysisComplete(AnalysisTarget)), this, SLOT(scanComplete()));
     connect(this, SIGNAL(stopScanning(bool)), dupesAnalyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
     emit stopScanning(false);
     dupesCheckerThread.start();
@@ -168,7 +170,7 @@ void MainWindow::launchDupeChecker(QString path){
 
 
     qDebug() << "Scanning..";
-    emit startScanning(directory, fileName, 0);
+    emit startScanning(directory, fileName, 0, DupeChecking);
 }
 
 void MainWindow::exposeObjectsToJS(){
@@ -325,8 +327,8 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
     analyzer = new DirectoryAnalyzer;
     analyzer->moveToThread(&analysisThread);
     connect(&analysisThread, SIGNAL(finished()), analyzer, SLOT(deleteLater()));
-    connect(this, SIGNAL(startAnalysis(QString,QString,int)), analyzer, SLOT(startAnalysis(QString,QString,int)));
-    connect(analyzer, SIGNAL(analysisComplete()), this, SLOT(analysisComplete()));
+    connect(this, SIGNAL(startAnalysis(QString,QString,int, AnalysisTarget)), analyzer, SLOT(startAnalysis(QString, QString, int, AnalysisTarget)));
+    connect(analyzer, SIGNAL(analysisComplete(AnalysisTarget)), this, SLOT(analysisComplete(AnalysisTarget)));
     connect(this, SIGNAL(stopAnalysis(bool)), analyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
     emit stopAnalysis(false);
     analysisThread.start();
@@ -334,7 +336,7 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 
 
     qDebug() << "Analyzing..";
-    emit startAnalysis(dirStr, nodeName, 0);
+    emit startAnalysis(dirStr, nodeName, 0, Visualization);
 
 }
 
@@ -415,8 +417,8 @@ void MainWindow::on_actionRefresh_triggered(){
 
 
 
-void MainWindow::analysisComplete(){
-    qDebug() << "Analysis complete";
+void MainWindow::analysisComplete(AnalysisTarget target){
+    qDebug() << "Analysis complete: " << target;
     if (analyzer->getAnalysisDone()){
         QList<DirectoryEntry *> entries = analyzer->getEntries();
         qDebug() << "Analyzed..";

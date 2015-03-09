@@ -43,10 +43,10 @@ public:
     static void openDirectory(QString path, QWidget *parent);
 
 signals:
-    void startAnalysis(QString, QString, int);
+    void startAnalysis(QString, QString, int, AnalysisTarget);
     void stopAnalysis(bool);
 
-    void startScanning(QString, QString, int);
+    void startScanning(QString, QString, int, AnalysisTarget);
     void stopScanning(bool);
 
     void startHashing(DirectoryEntriesList, DirectoryEntry *);
@@ -62,7 +62,7 @@ private slots:
     void analyzeDirectory(QString);
     void launchTerminal(QString);
     void launchDupeChecker(QString);
-    void analysisComplete();
+    void analysisComplete(AnalysisTarget);
     void scanComplete();
     void hashingComplete(DuplicateEntryList);
     void treeMenuRequested(QPoint);

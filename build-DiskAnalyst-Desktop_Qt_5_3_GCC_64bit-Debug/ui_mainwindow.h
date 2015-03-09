@@ -155,7 +155,7 @@ public:
         wvwCharts->setSizePolicy(sizePolicy1);
         wvwCharts->setMinimumSize(QSize(1000, 0));
         wvwCharts->setUrl(QUrl(QStringLiteral("about:blank")));
-        wvwCharts->setZoomFactor(0.82);
+        wvwCharts->setZoomFactor(1);
         wvwCharts->setRenderHints(QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
 
         horizontalLayout_2->addWidget(wvwCharts);

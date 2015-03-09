@@ -63,6 +63,9 @@ public:
     static bool isLessThan(DirectoryEntry *first, DirectoryEntry *second);
 
 
+    bool isExecutable() const;
+    void setExecutable(bool value);
+
 private:
     QString name;
     QString path;
@@ -74,6 +77,7 @@ private:
     bool valid;
     ENTRY_TYPE type;
     long long totalSizeCache;
+    bool executable;
 
 };
 
