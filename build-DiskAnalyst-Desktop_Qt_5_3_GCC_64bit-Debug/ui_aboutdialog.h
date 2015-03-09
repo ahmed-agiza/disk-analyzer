@@ -60,7 +60,7 @@ public:
     void retranslateUi(QDialog *AboutDialog)
     {
         AboutDialog->setWindowTitle(QApplication::translate("AboutDialog", "Dialog", 0));
-        label->setText(QApplication::translate("AboutDialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt; font-weight:600;\">Disk Analyst</span></p><p align=\"center\"><span style=\" font-family:'arial,sans-serif'; font-size:16px; color:#222222; background-color:#ffffff;\">Copyright \302\251 2015 Ahmed A. Agiza &amp; Mohammed R. Annany</span></p></body></html>", 0));
+        label->setText(QApplication::translate("AboutDialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt; font-weight:600;\">Disk Analyst 1.0</span></p><p align=\"center\"><span style=\" font-family:'arial,sans-serif'; font-size:16px; color:#222222; background-color:#ffffff;\">Copyright \302\251 2015 Ahmed A. Agiza &amp; Mohammed R. Annany</span></p></body></html>", 0));
     } // retranslateUi
 
 };

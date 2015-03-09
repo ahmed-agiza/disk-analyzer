@@ -406,6 +406,7 @@ void MainWindow::on_actionRefresh_triggered(){
 void MainWindow::analysisComplete(){
     qDebug() << "Analysis complete";
     if (analyzer->getAnalysisDone()){
+        QList<DirectoryEntry *> entries = analyzer->getEntries();
         qDebug() << "Analyzed..";
         DirectoryEntry *rootEntry = analyzer->getRoot();
         QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);

@@ -1,4 +1,4 @@
-#include "directoryentry.h"
+﻿#include "directoryentry.h"
 #include <QString>
 
 
@@ -125,6 +125,16 @@ void DirectoryEntry::setNumberOfBlocks(long long value){
     numberOfBlocks = value;
 }
 
+QString DirectoryEntry::getFullPath() const{
+    QString mPath = getPath();
+    QString mName = getName();
+    if (!mPath.endsWith("/"))
+        mPath.append("/");
+    if (mName.startsWith("/"))
+        mName.remove(0, 1);
+    return mPath + mName;
+}
+
 QString DirectoryEntry::getFormattedSize(long long size){
     if (size <= 1000)
         return QString(QString::number(size) + QString("B"));
@@ -135,5 +145,25 @@ QString DirectoryEntry::getFormattedSize(long long size){
       else
         return QString(QString::number(size/1000000000.0) + QString("GB"));
 }
+long long DirectoryEntry::getTotalSize() const{
+    if(isDirectory()){
+        long long totalSize = 0;
+        if(children.isEmpty())
+            return 0;
+        else{
+            for(QSet<DirectoryEntry *>::const_iterator i = children.begin(); i != children.end(); i++){
+                if((*i)->isDirectory())
+                    totalSize += (*i)->getEntrySize() + (*i)->getTotalSize();
+                else
+                    totalSize += (*i)->getEntrySize();
+            }
+            return totalSize;
+        }
+    }else
+        return getEntrySize();
+}
+
+
+
 
 
