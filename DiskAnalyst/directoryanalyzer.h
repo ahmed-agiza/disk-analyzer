@@ -40,6 +40,7 @@
 #define MAX_FULL_PATH_SIZE 2048
 
 
+
 class DirectoryAnalyzer : public QObject
 {
     Q_OBJECT

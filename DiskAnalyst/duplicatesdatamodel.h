@@ -3,15 +3,17 @@
 
 #include <QAbstractItemModel>
 
+#include "dupeschecker.h"
+
 typedef QPair<QString, QString> StringPair;
 typedef QList<StringPair> StringPairList;
 
 class DuplicatesDataModel : public QAbstractTableModel
 {
     Q_OBJECT
-    StringPairList duplicates;
+    DuplicateEntryList duplicates;
 public:
-    explicit DuplicatesDataModel(QObject *parent = 0, StringPairList = StringPairList());
+    explicit DuplicatesDataModel(QObject *parent = 0, DuplicateEntryList = DuplicateEntryList());
 
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;

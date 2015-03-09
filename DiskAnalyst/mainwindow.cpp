@@ -35,10 +35,11 @@
 
 MainWindow::MainWindow(QWidget *parent)
     :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(0), dupesAnalyzer(0){
-
+    QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
     qRegisterMetaType<DirectoryEntriesList>("DirectoryEntriesList");
     qRegisterMetaType<DirectoryEntry>("DirectoryEntry");
-    qRegisterMetaType<QList<QPair<QString,QString> > >("StringPairList");
+    qRegisterMetaType<DuplicateEntryList>("DuplicateEntryList");
+
     ui->setupUi(this);
     ui->twgDirViewer->setModel(model);
     setCurrentPath(QDir::homePath ());
@@ -47,7 +48,6 @@ MainWindow::MainWindow(QWidget *parent)
     centerWindow();
 
     setWindowState(Qt::WindowMaximized);
-    //setFixedSize(width(), height() + 40);
     centerWindow();
     statusBar()->setSizeGripEnabled(false);
 
@@ -181,6 +181,7 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 }
 
 void MainWindow::navigateTo(QString path){
+    qDebug() << "Navigating: " << path;
     if(path.isEmpty())
         return;
     if (path.startsWith("/"))
@@ -189,13 +190,13 @@ void MainWindow::navigateTo(QString path){
     if (path.endsWith("/"))
         path.remove(path.length() - 1, 1);
 
-    QString fullPath = currentDUA + path;
+    tempNavigationPath = path;
+
+    QString fullPath = getCurrentDUA();
     QFileInfo pathInfo(fullPath);
     if(pathInfo.isDir()){
-        QString directory = pathInfo.absoluteDir().absolutePath() + QString("/");
-        QString fileName = pathInfo.baseName();
-        setCurrentDUA(directory + fileName);
-        //setDirectoryJson(directory, fileName);
+        //QString directory = pathInfo.absoluteDir().absolutePath() + QString("/");
+        //QString fileName = pathInfo.baseName();
     }else if(pathInfo.exists()){
         struct stat sb;
         printf("Test");
@@ -260,11 +261,12 @@ void MainWindow::navigateTo(QString path){
 
 
 QString MainWindow::getCurrentDUA() const{
-    return currentDUA;
+    return currentDUA + tempNavigationPath;
 }
 
 void MainWindow::setCurrentDUA(const QString &value){
     currentDUA = value;
+    tempNavigationPath = "";
     if (!value.endsWith("/") && !(value == "/"))
         currentDUA.append("/");
 }
@@ -341,7 +343,7 @@ void MainWindow::scanComplete(){
         dupesChecker->moveToThread(&dupesHashingThread);
         connect(&dupesHashingThread, SIGNAL(finished()), dupesChecker, SLOT(deleteLater()));
         connect(this, SIGNAL(startHashing(DirectoryEntriesList, DirectoryEntry*)), dupesChecker, SLOT(startAnalysis(DirectoryEntriesList, DirectoryEntry *)));
-        connect(dupesChecker, SIGNAL(analysisComplete(QList<QPair<QString,QString> >)), this, SLOT(hashingComplete(QList<QPair<QString,QString> >)));
+        connect(dupesChecker, SIGNAL(analysisComplete(DuplicateEntryList)), this, SLOT(hashingComplete(DuplicateEntryList)));
         connect(dupesChecker, SIGNAL(onProgress(int)), this, SLOT(onDupesProgress(int)));
         connect(this, SIGNAL(stopHashing(bool)), dupesChecker, SLOT(setStopped(bool)), Qt::DirectConnection);
         emit stopHashing(false);
@@ -358,7 +360,7 @@ void MainWindow::scanComplete(){
     }
 }
 
-void MainWindow::hashingComplete(QList<QPair<QString, QString> > duplicates){
+void MainWindow::hashingComplete(DuplicateEntryList duplicates){
     qDebug() << "Hashing complete";
     if (dupesChecker->getAnalysisDone()){
         qDebug() << "Analysis done";
@@ -393,12 +395,12 @@ void MainWindow::hashingComplete(QList<QPair<QString, QString> > duplicates){
 }
 
 void MainWindow::on_actionOpen_Terminal_triggered(){
-    if(currentDUA.isEmpty())
+    if(getCurrentDUA().isEmpty())
         return;
 
-    QFileInfo pathInfo(currentDUA);
+    QFileInfo pathInfo(getCurrentDUA());
     if(!pathInfo.isDir()){
-        QMessageBox::critical(this, "Error", "Invalid directory " + currentDUA);
+        QMessageBox::critical(this, "Error", "Invalid directory " + getCurrentDUA());
         return;
     }
 
@@ -410,7 +412,7 @@ void MainWindow::on_actionOpen_Terminal_triggered(){
     }else{
         QProcess *terminalProcess = new QProcess(this);
         QString option("-e");
-        QString argument(QString("cd ") + currentDUA + " && /bin/bash");
+        QString argument(QString("cd ") + getCurrentDUA() + " && /bin/bash");
         QStringList arguments;
         arguments << option << argument;
         terminalProcess->start(terminal, arguments);
@@ -418,7 +420,7 @@ void MainWindow::on_actionOpen_Terminal_triggered(){
 }
 
 void MainWindow::on_actionExploreDirectory_triggered(){
-    openDirectory(currentDUA, this);
+    openDirectory(getCurrentDUA(), this);
 }
 
 void MainWindow::on_actionSettings_triggered(){
@@ -433,8 +435,8 @@ void MainWindow::on_actionSettings_triggered(){
 }
 
 void MainWindow::on_actionUp_triggered(){
-    if(!currentDUA.isEmpty() && currentDUA != "/"){
-        QDir currentDir(currentDUA);
+    if(!getCurrentDUA().isEmpty() && getCurrentDUA() != "/"){
+        QDir currentDir(getCurrentDUA());
         if(currentDir.cdUp()){
             QFileInfo pathInfo(currentDir.absolutePath());
             QString fileName = pathInfo.baseName();
@@ -445,8 +447,9 @@ void MainWindow::on_actionUp_triggered(){
             else
                 directory = pathInfo.absolutePath() + QString("/");
 
-            setCurrentDUA(directory + fileName);
             setDirectoryJson(directory, fileName);
+            setCurrentDUA(directory + fileName);
+
         }else
             qDebug() << "Invalid path.";
     }
@@ -478,12 +481,12 @@ void MainWindow::passGraphParamters(bool displayUnit){
 
 
 void MainWindow::on_actionDuplicateFilesChecker_triggered(){
-    if (currentDUA.isEmpty()){
+    if (getCurrentDUA().isEmpty()){
         QMessageBox::critical(this, "Error", "You need to open a directory first");
         return;
     }
-    DirectoryAnalyzer checkerAnalyzer;
-    dupCheckDUA = currentDUA;
+
+    dupCheckDUA = getCurrentDUA();
     if (dupCheckDUA.endsWith("/") && dupCheckDUA != QDir::rootPath())
         dupCheckDUA.remove(dupCheckDUA.length() - 1, 1);
     QDir currentDir(dupCheckDUA);
@@ -495,9 +498,6 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
         directory = "";
     else
         directory = pathInfo.absolutePath() + QString("/");
-
-
-
 
     stopDupesAnalyzer();
     dupesAnalyzer = new DirectoryAnalyzer;
@@ -513,18 +513,13 @@ void MainWindow::on_actionDuplicateFilesChecker_triggered(){
 
     qDebug() << "Scanning..";
     emit startScanning(directory, fileName, 0);
-    //analyzer->startAnalysis(dirStr, nodeName);
 
-
-
-
-    //checkerAnalyzer.startAnalysis(directory, fileName);
 
 
 }
 
 void MainWindow::on_actionSelectRootDirectory_triggered(){
-    QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", currentDUA);
+    QString fileName = QFileDialog::getExistingDirectory(this, "Select Root Directory..", getCurrentDUA());
     if (fileName.trimmed() != "")
         setCurrentPath(fileName);
 }
