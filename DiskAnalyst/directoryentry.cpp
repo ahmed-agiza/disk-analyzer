@@ -8,7 +8,7 @@ DirectoryEntry::DirectoryEntry():valid(false), type(UNKNOWN){
 }
 
 DirectoryEntry::DirectoryEntry(QString name, QString path, long long size, long long numberOfBlocks, int depth, DirectoryEntry *source, QSet<DirectoryEntry *> children)
-    :valid(false), type(UNKNOWN){
+    :valid(false), type(UNKNOWN), totalSizeCache(-1){
     setName(name);
     setPath(path);
     setEntrySize(size);
@@ -145,24 +145,57 @@ QString DirectoryEntry::getFormattedSize(long long size){
       else
         return QString(QString::number(size/1000000000.0) + QString("GB"));
 }
-long long DirectoryEntry::getTotalSize() const{
+long long DirectoryEntry::getTotalSize(){
+    if (totalSizeCache != -1)
+        return totalSizeCache;
     if(isDirectory()){
         long long totalSize = 0;
-        if(children.isEmpty())
+        if(children.isEmpty()){
+            totalSizeCache = 0;
             return 0;
-        else{
-            for(QSet<DirectoryEntry *>::const_iterator i = children.begin(); i != children.end(); i++){
+        }else{
+            for(QSet<DirectoryEntry *>::iterator i = children.begin(); i != children.end(); i++){
                 if((*i)->isDirectory())
                     totalSize += (*i)->getEntrySize() + (*i)->getTotalSize();
                 else
                     totalSize += (*i)->getEntrySize();
             }
+            totalSizeCache = totalSize;
             return totalSize;
         }
-    }else
+    }else{
+        totalSizeCache = getEntrySize();
         return getEntrySize();
+    }
 }
 
+bool DirectoryEntry::operator==(DirectoryEntry &other){
+    return (getTotalSize() == other.getTotalSize());
+}
+
+bool DirectoryEntry::operator!=(DirectoryEntry &other){
+    return (getTotalSize() != other.getTotalSize());
+}
+
+bool DirectoryEntry::operator<(DirectoryEntry &other){
+    return (getTotalSize() < other.getTotalSize());
+}
+
+bool DirectoryEntry::operator>(DirectoryEntry &other){
+    return (getTotalSize() > other.getTotalSize());
+}
+
+bool DirectoryEntry::operator<=(DirectoryEntry &other){
+    return (getTotalSize() <= other.getTotalSize());
+}
+
+bool DirectoryEntry::operator>=(DirectoryEntry &other){
+    return (getTotalSize() >= other.getTotalSize());
+}
+
+bool DirectoryEntry::isLessThan(DirectoryEntry *first, DirectoryEntry *second){
+    return first->getTotalSize() < second->getTotalSize();
+}
 
 
 

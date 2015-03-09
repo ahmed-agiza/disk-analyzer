@@ -50,7 +50,17 @@ public:
 
     static QString getFormattedSize(long long);
 
-    long long getTotalSize() const;
+    long long getTotalSize();
+
+
+    bool operator==(DirectoryEntry &other);
+    bool operator!=(DirectoryEntry &other);
+    bool operator<(DirectoryEntry &other);
+    bool operator>(DirectoryEntry &other);
+    bool operator<=(DirectoryEntry &other);
+    bool operator>=(DirectoryEntry &other);
+
+    static bool isLessThan(DirectoryEntry *first, DirectoryEntry *second);
 
 
 private:
@@ -63,6 +73,7 @@ private:
     QSet<DirectoryEntry *> children;
     bool valid;
     ENTRY_TYPE type;
+    long long totalSizeCache;
 
 };
 

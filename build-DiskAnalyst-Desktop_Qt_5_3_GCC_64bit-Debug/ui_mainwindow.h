@@ -15,13 +15,17 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QTreeView>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -41,7 +45,17 @@ public:
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTreeView *twgDirViewer;
+    QTabWidget *tbsMain;
+    QWidget *tabVisualizer;
+    QHBoxLayout *horizontalLayout_2;
     QWebView *wvwCharts;
+    QWidget *tabStatistics;
+    QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *btnLargestFiles;
+    QPushButton *btnExtensions;
+    QPushButton *btnSizeGroups;
+    QWebView *wvwStatistics;
     QMenuBar *menuBar;
     QMenu *menuAnalyze;
     QMenu *menuTools;
@@ -55,7 +69,13 @@ public:
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setWindowModality(Qt::NonModal);
         MainWindow->resize(1324, 843);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
+        MainWindow->setSizePolicy(sizePolicy);
         MainWindow->setMinimumSize(QSize(0, 400));
+        MainWindow->setContextMenuPolicy(Qt::NoContextMenu);
         QIcon icon;
         icon.addFile(QStringLiteral(":/icons/Icons/Awicons-Vista-Artistic-Chart-search.ico"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
@@ -112,25 +132,73 @@ public:
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         twgDirViewer = new QTreeView(centralWidget);
         twgDirViewer->setObjectName(QStringLiteral("twgDirViewer"));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(twgDirViewer->sizePolicy().hasHeightForWidth());
-        twgDirViewer->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(twgDirViewer->sizePolicy().hasHeightForWidth());
+        twgDirViewer->setSizePolicy(sizePolicy1);
         twgDirViewer->setMinimumSize(QSize(300, 0));
 
         gridLayout->addWidget(twgDirViewer, 0, 0, 1, 1);
 
-        wvwCharts = new QWebView(centralWidget);
+        tbsMain = new QTabWidget(centralWidget);
+        tbsMain->setObjectName(QStringLiteral("tbsMain"));
+        tabVisualizer = new QWidget();
+        tabVisualizer->setObjectName(QStringLiteral("tabVisualizer"));
+        horizontalLayout_2 = new QHBoxLayout(tabVisualizer);
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        wvwCharts = new QWebView(tabVisualizer);
         wvwCharts->setObjectName(QStringLiteral("wvwCharts"));
-        sizePolicy.setHeightForWidth(wvwCharts->sizePolicy().hasHeightForWidth());
-        wvwCharts->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(wvwCharts->sizePolicy().hasHeightForWidth());
+        wvwCharts->setSizePolicy(sizePolicy1);
         wvwCharts->setMinimumSize(QSize(1000, 0));
         wvwCharts->setUrl(QUrl(QStringLiteral("about:blank")));
-        wvwCharts->setZoomFactor(1);
+        wvwCharts->setZoomFactor(0.82);
         wvwCharts->setRenderHints(QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
 
-        gridLayout->addWidget(wvwCharts, 0, 1, 1, 1);
+        horizontalLayout_2->addWidget(wvwCharts);
+
+        tbsMain->addTab(tabVisualizer, QString());
+        tabStatistics = new QWidget();
+        tabStatistics->setObjectName(QStringLiteral("tabStatistics"));
+        verticalLayout = new QVBoxLayout(tabStatistics);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        btnLargestFiles = new QPushButton(tabStatistics);
+        btnLargestFiles->setObjectName(QStringLiteral("btnLargestFiles"));
+
+        horizontalLayout->addWidget(btnLargestFiles);
+
+        btnExtensions = new QPushButton(tabStatistics);
+        btnExtensions->setObjectName(QStringLiteral("btnExtensions"));
+
+        horizontalLayout->addWidget(btnExtensions);
+
+        btnSizeGroups = new QPushButton(tabStatistics);
+        btnSizeGroups->setObjectName(QStringLiteral("btnSizeGroups"));
+
+        horizontalLayout->addWidget(btnSizeGroups);
+
+
+        verticalLayout->addLayout(horizontalLayout);
+
+        wvwStatistics = new QWebView(tabStatistics);
+        wvwStatistics->setObjectName(QStringLiteral("wvwStatistics"));
+        sizePolicy1.setHeightForWidth(wvwStatistics->sizePolicy().hasHeightForWidth());
+        wvwStatistics->setSizePolicy(sizePolicy1);
+        wvwStatistics->setUrl(QUrl(QStringLiteral("about:blank")));
+
+        verticalLayout->addWidget(wvwStatistics);
+
+        tbsMain->addTab(tabStatistics, QString());
+
+        gridLayout->addWidget(tbsMain, 0, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -174,6 +242,9 @@ public:
         mainToolBar->addAction(actionSettings);
 
         retranslateUi(MainWindow);
+
+        tbsMain->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -224,6 +295,11 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionAbout->setToolTip(QApplication::translate("MainWindow", "About", 0));
 #endif // QT_NO_TOOLTIP
+        tbsMain->setTabText(tbsMain->indexOf(tabVisualizer), QApplication::translate("MainWindow", "Visualizer", 0));
+        btnLargestFiles->setText(QApplication::translate("MainWindow", "Largest Files Statistics", 0));
+        btnExtensions->setText(QApplication::translate("MainWindow", "Extenstions Statistics", 0));
+        btnSizeGroups->setText(QApplication::translate("MainWindow", "Size Group Statistics", 0));
+        tbsMain->setTabText(tbsMain->indexOf(tabStatistics), QApplication::translate("MainWindow", "Statistics", 0));
         menuAnalyze->setTitle(QApplication::translate("MainWindow", "Explore", 0));
         menuTools->setTitle(QApplication::translate("MainWindow", "Tools", 0));
         menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0));

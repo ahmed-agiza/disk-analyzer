@@ -89,6 +89,7 @@ public slots:
     void stopDupesChecking();
     void onDupesProgress(int);
     void openDirectory(QString path);
+    void statFile(QString);
 
 private:
     Ui::MainWindow *ui;

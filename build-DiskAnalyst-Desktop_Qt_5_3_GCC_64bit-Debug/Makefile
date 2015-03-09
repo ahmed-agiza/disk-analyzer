@@ -519,17 +519,24 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/duplicate-icon-md.png \
 		../DiskAnalyst/Icons/settings-icon.png \
 		../DiskAnalyst/Icons/Button-Upload-icon.png \
-		../DiskAnalyst/Charts/barchart.css \
-		../DiskAnalyst/Charts/css.css \
 		../DiskAnalyst/Charts/d3.v3.min.js \
-		../DiskAnalyst/Charts/barchart.html \
 		../DiskAnalyst/Charts/sequences.css \
-		../DiskAnalyst/Charts/sequences.js \
-		../DiskAnalyst/Charts/barchart.js \
-		../DiskAnalyst/Charts/data.json \
+		../DiskAnalyst/Charts/css.css \
+		../DiskAnalyst/Charts/progress.css \
 		../DiskAnalyst/Charts/index.html \
+		../DiskAnalyst/Charts/data.tsv \
+		../DiskAnalyst/Charts/barchart.html \
 		../DiskAnalyst/Charts/visit-sequences.csv \
-		../DiskAnalyst/Charts/jquery.min.js
+		../DiskAnalyst/Charts/progress.html \
+		../DiskAnalyst/Charts/doughnut.html \
+		../DiskAnalyst/Charts/jquery.min.js \
+		../DiskAnalyst/Charts/barchart.js \
+		../DiskAnalyst/Charts/progress.js \
+		../DiskAnalyst/Charts/doughnut.js \
+		../DiskAnalyst/Charts/barchart.css \
+		../DiskAnalyst/Charts/sequences.js \
+		../DiskAnalyst/Charts/data.json \
+		../DiskAnalyst/Charts/doughnut.css
 	/opt/Qt5.3.2/5.3/gcc_64/bin/rcc -name files ../DiskAnalyst/files.qrc -o qrc_files.cpp
 
 compiler_moc_header_make_all: moc_mainwindow.cpp moc_directoryanalyzer.cpp moc_settingsdialog.cpp moc_filestatdialog.cpp moc_dupesdialog.cpp moc_dupeschecker.cpp moc_duplicatesdatamodel.cpp moc_customprogressbar.cpp moc_aboutdialog.cpp
@@ -1768,6 +1775,9 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsignalmapper.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/QMouseEvent \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/QIcon \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QSplitter \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qsplitter.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
 		../DiskAnalyst/mainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1777,7 +1787,6 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qthread.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QProgressBar \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qprogressbar.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
 		../DiskAnalyst/directoryanalyzer.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QList \
 		../DiskAnalyst/directoryentry.h \
@@ -1844,50 +1853,7 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		../DiskAnalyst/settingsmanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../DiskAnalyst/mainwindow.cpp
 
-directoryentry.o: ../DiskAnalyst/directoryentry.cpp ../DiskAnalyst/directoryentry.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QString \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstring.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qchar.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobal.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qconfig.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfeatures.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsystemdetection.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qprocessordetection.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcompilerdetection.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypeinfo.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qtypetraits.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsysinfo.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlogging.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qflags.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbasicatomic.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qgenericatomic.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_msvc.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv7.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv6.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_armv5.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_ia64.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_mips.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_x86.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_cxx11.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_gcc.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qatomic_unix.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qglobalstatic.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qmutex.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnumeric.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qbytearray.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qrefcount.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qnamespace.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qarraydata.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qstringbuilder.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSet \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qset.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qhash.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qiterator.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qlist.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qalgorithms.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qpair.h
+directoryentry.o: ../DiskAnalyst/directoryentry.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o directoryentry.o ../DiskAnalyst/directoryentry.cpp
 
 directoryanalyzer.o: ../DiskAnalyst/directoryanalyzer.cpp ../DiskAnalyst/directoryanalyzer.h \
@@ -2870,7 +2836,48 @@ aboutdialog.o: ../DiskAnalyst/aboutdialog.cpp ../DiskAnalyst/aboutdialog.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfiledevice.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtouchdevice.h \
-		ui_aboutdialog.h
+		ui_aboutdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialogButtonBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qgridlayout.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o aboutdialog.o ../DiskAnalyst/aboutdialog.cpp
 
 qrc_files.o: qrc_files.cpp 

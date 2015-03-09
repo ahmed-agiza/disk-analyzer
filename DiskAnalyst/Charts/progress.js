@@ -31,10 +31,10 @@ var foreground = svg.append("path")
     .attr("d", arc);
 
 // Test call
-showProgress();
+//showProgress();
 
 // Test call
-hideProgress();
+//hideProgress();
 
 // Interpolation to rotate the arc (progressing effect)
 function arcTween(transition) {

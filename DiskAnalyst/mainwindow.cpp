@@ -12,11 +12,11 @@
 #include <QFileSystemModel>
 #include <QProcess>
 #include <QMessageBox>
-#include <QCryptographicHash>
 #include <QEvent>
 #include <QSignalMapper>
 #include <QMouseEvent>
 #include <QIcon>
+#include <QSplitter>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -43,6 +43,13 @@ MainWindow::MainWindow(QWidget *parent)
     qRegisterMetaType<DuplicateEntryList>("DuplicateEntryList");
 
     ui->setupUi(this);
+
+    QSplitter *splitter = new QSplitter(this);
+    splitter->addWidget(ui->twgDirViewer);
+    splitter->addWidget(ui->tbsMain);
+    setCentralWidget(splitter);
+    ui->tbsMain->setCurrentIndex(0);
+
     ui->twgDirViewer->setModel(model);
     setCurrentPath(QDir::homePath ());
     ui->twgDirViewer->hideColumn(1);
@@ -54,8 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
     statusBar()->setSizeGripEnabled(false);
 
     frame = ui->wvwCharts->page()->mainFrame();
-    ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
+   // ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
     ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/index.html"));
+    //ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/progress.html"));
 
     frame->setScrollBarValue(Qt::Vertical, frame->scrollBarMaximum(Qt::Vertical));
     frame->setScrollBarValue(Qt::Horizontal, frame->scrollBarMaximum(Qt::Horizontal));
@@ -72,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->twgDirViewer->setRootIsDecorated(true);
     QObject::connect(ui->twgDirViewer, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeMenuRequested(QPoint)), Qt::UniqueConnection);
     ui->twgDirViewer->setContextMenuPolicy(Qt::CustomContextMenu);
+
 }
 
 
@@ -246,6 +255,70 @@ void MainWindow::openDirectory(QString path){
     openDirectory(path, this);
 }
 
+void MainWindow::statFile(QString path){
+    QFileInfo pathInfo(path);
+    if (!pathInfo.exists() || !pathInfo.isReadable())
+        return;
+
+    struct stat sb;
+    printf("Test");
+
+    if (stat(pathInfo.absoluteFilePath().toLocal8Bit().data(), &sb) == -1) {
+        qDebug() << "Stat error";
+        return;
+    }
+
+    QString fileType;
+    switch (sb.st_mode & S_IFMT) {
+    case S_IFBLK:  fileType = "Block Device";       break;
+    case S_IFCHR:  fileType = "Character Device";   break;
+    case S_IFDIR:  fileType = "Directory";          break;
+    case S_IFIFO:  fileType = "FIFO/pipe";          break;
+    case S_IFLNK:  fileType = "System Link";        break;
+    case S_IFREG:  fileType = "Regular File";       break;
+    case S_IFSOCK: fileType = "Socket";             break;
+    default:       fileType = "Unknown";            break;
+    }
+
+    QString mode;
+    if(sb.st_mode &  S_IRUSR ) mode.append("r"); else mode.append("-");
+    if(sb.st_mode &  S_IWUSR ) mode.append("w"); else mode.append("-");
+    if(sb.st_mode &  S_IXUSR ) mode.append("x"); else mode.append("-");
+    if(sb.st_mode &  S_IRGRP ) mode.append("r"); else mode.append("-");
+    if(sb.st_mode &  S_IWGRP ) mode.append("w"); else mode.append("-");
+    if(sb.st_mode &  S_IXGRP ) mode.append("x"); else mode.append("-");
+    if(sb.st_mode &  S_IROTH ) mode.append("r"); else mode.append("-");
+    if(sb.st_mode &  S_IWOTH ) mode.append("w"); else mode.append("-");
+    if(sb.st_mode &  S_IXOTH ) mode.append("x"); else mode.append("-");
+
+    long inodeNumber = (long) sb.st_ino;
+    long linkCount = (long) sb.st_nlink;
+    long uid = (long) sb.st_uid;
+    long gid = (long) sb.st_gid;
+    QString uname(getpwuid(sb.st_uid)->pw_name);
+    QString gname(getgrgid(sb.st_gid)->gr_name);
+    long preferredIOSize = (long) sb.st_blksize;
+    long fileSize = (long long) sb.st_size;
+    long long blocks = (long long) sb.st_blocks;
+    QString lastStatusChange(ctime(&sb.st_ctime));
+    QString lastFileAccess(ctime(&sb.st_atime));
+    QString lastFileModification(ctime(&sb.st_mtime));
+
+    if(!statDialog)
+        statDialog = new FileStatDialog(this);
+
+    statDialog->setFileName(pathInfo.baseName())->setFileExtenstion(pathInfo.completeSuffix())->setFilePath(pathInfo.absolutePath())
+            ->setFileType(fileType)->setInodeNumber(inodeNumber)
+            ->setMode(mode)->setLinkCount(linkCount)->setPreferredIOSize(preferredIOSize)
+            ->setOwnership(uname + "(" + QString::number(uid) + "):" + gname + "(" + QString::number(gid) + ")")
+            ->setSize(fileSize)->setNumberOfBlocks(blocks)->setLastStatusChange(lastStatusChange)
+            ->setLastFileAccess(lastFileAccess)->setLastModification(lastFileModification);
+    statDialog->setWindowTitle("File Status: " + pathInfo.baseName());
+    statDialog->show();
+    statDialog->setModal(true);
+
+}
+
 void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 {
     stopAnalyzer();
@@ -262,12 +335,10 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 
     qDebug() << "Analyzing..";
     emit startAnalysis(dirStr, nodeName, 0);
-    //analyzer->startAnalysis(dirStr, nodeName);
 
 }
 
 void MainWindow::navigateTo(QString path){
-    //qDebug() << "Navigating: " << path;
     if(path.isEmpty())
         return;
     if (path.startsWith("/"))
@@ -281,65 +352,9 @@ void MainWindow::navigateTo(QString path){
     QString fullPath = getCurrentDUA();
     QFileInfo pathInfo(fullPath);
     if(pathInfo.isDir()){
-        //QString directory = pathInfo.absoluteDir().absolutePath() + QString("/");
-        //QString fileName = pathInfo.baseName();
+
     }else if(pathInfo.exists()){
-        struct stat sb;
-        printf("Test");
-
-        if (stat(pathInfo.absoluteFilePath().toLocal8Bit().data(), &sb) == -1) {
-            qDebug() << "Stat error";
-            return;
-        }
-
-        QString fileType;
-        switch (sb.st_mode & S_IFMT) {
-        case S_IFBLK:  fileType = "Block Device";       break;
-        case S_IFCHR:  fileType = "Character Device";   break;
-        case S_IFDIR:  fileType = "Directory";          break;
-        case S_IFIFO:  fileType = "FIFO/pipe";          break;
-        case S_IFLNK:  fileType = "System Link";        break;
-        case S_IFREG:  fileType = "Regular File";       break;
-        case S_IFSOCK: fileType = "Socket";             break;
-        default:       fileType = "Unknown";            break;
-        }
-
-        QString mode;
-        if(sb.st_mode &  S_IRUSR ) mode.append("r"); else mode.append("-");
-        if(sb.st_mode &  S_IWUSR ) mode.append("w"); else mode.append("-");
-        if(sb.st_mode &  S_IXUSR ) mode.append("x"); else mode.append("-");
-        if(sb.st_mode &  S_IRGRP ) mode.append("r"); else mode.append("-");
-        if(sb.st_mode &  S_IWGRP ) mode.append("w"); else mode.append("-");
-        if(sb.st_mode &  S_IXGRP ) mode.append("x"); else mode.append("-");
-        if(sb.st_mode &  S_IROTH ) mode.append("r"); else mode.append("-");
-        if(sb.st_mode &  S_IWOTH ) mode.append("w"); else mode.append("-");
-        if(sb.st_mode &  S_IXOTH ) mode.append("x"); else mode.append("-");
-
-        long inodeNumber = (long) sb.st_ino;
-        long linkCount = (long) sb.st_nlink;
-        long uid = (long) sb.st_uid;
-        long gid = (long) sb.st_gid;
-        QString uname(getpwuid(sb.st_uid)->pw_name);
-        QString gname(getgrgid(sb.st_gid)->gr_name);
-        long preferredIOSize = (long) sb.st_blksize;
-        long fileSize = (long long) sb.st_size;
-        long long blocks = (long long) sb.st_blocks;
-        QString lastStatusChange(ctime(&sb.st_ctime));
-        QString lastFileAccess(ctime(&sb.st_atime));
-        QString lastFileModification(ctime(&sb.st_mtime));
-
-        if(!statDialog)
-            statDialog = new FileStatDialog(this);
-
-        statDialog->setFileName(pathInfo.baseName())->setFileExtenstion(pathInfo.completeSuffix())->setFilePath(pathInfo.absolutePath())
-                ->setFileType(fileType)->setInodeNumber(inodeNumber)
-                ->setMode(mode)->setLinkCount(linkCount)->setPreferredIOSize(preferredIOSize)
-                ->setOwnership(uname + "(" + QString::number(uid) + "):" + gname + "(" + QString::number(gid) + ")")
-                ->setSize(fileSize)->setNumberOfBlocks(blocks)->setLastStatusChange(lastStatusChange)
-                ->setLastFileAccess(lastFileAccess)->setLastModification(lastFileModification);
-        statDialog->setWindowTitle("File Status: " + pathInfo.baseName());
-        statDialog->show();
-        statDialog->setModal(true);
+        statFile(pathInfo.canonicalFilePath());
     }else{
         qDebug() << pathInfo.absoluteFilePath() << " does not exist";
     }
@@ -384,13 +399,8 @@ void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){
         return;
     if(model->isDir(index)){
         analyzeDirectory(model->fileInfo(index).canonicalFilePath());
-        /*QString directory = model->fileInfo(index).absoluteDir().absolutePath();
-        if (directory != QDir::rootPath() && !directory.endsWith("/"))
-            directory.append("/");
-        QString fileName = model->fileInfo(index).baseName();
-        setCurrentDUA(directory + fileName);
-        setDirectoryJson(directory, fileName);*/
-    }
+    }else if (model->fileInfo(index).isReadable())
+        statFile(model->fileInfo(index).canonicalFilePath());
 }
 
 
@@ -403,6 +413,8 @@ void MainWindow::on_actionRefresh_triggered(){
     setCurrentPath(currentPath);
 }
 
+
+
 void MainWindow::analysisComplete(){
     qDebug() << "Analysis complete";
     if (analyzer->getAnalysisDone()){
@@ -413,6 +425,7 @@ void MainWindow::analysisComplete(){
         QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
         frame->evaluateJavaScript(jsCommand);
         passGraphParamters();
+        qSort(entries.begin(), entries.end(), DirectoryEntry::isLessThan);
         setWindowTitle("Disk Analyst - " + currentDUA);
     }
 }
