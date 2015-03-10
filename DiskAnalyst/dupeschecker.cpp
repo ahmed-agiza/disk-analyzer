@@ -83,7 +83,8 @@ void DupesChecker::startAnalysis(DirectoryEntriesList entries, DirectoryEntry *r
     qDebug() << duplicates.size();
     qDebug() << "Sorting";
     qSort(duplicates);
-    for(int k = 0; k < (duplicates.size()/2); k++) duplicates.swap(k, duplicates.size()-(1+k));
+   for(int k = 0; k < (duplicates.size()/2); k++)
+        duplicates.swap(k, duplicates.size()-(1+k));
     analysisDone = (!stopped);
     qDebug() << analysisDone;
     emit analysisComplete(duplicates);

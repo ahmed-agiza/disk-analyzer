@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1324</width>
+    <width>1346</width>
     <height>843</height>
    </rect>
   </property>
@@ -135,6 +135,9 @@
             <string>about:blank</string>
            </url>
           </property>
+          <property name="zoomFactor">
+           <double>0.819999992847443</double>
+          </property>
          </widget>
         </item>
        </layout>
@@ -148,7 +151,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1324</width>
+     <width>1346</width>
      <height>20</height>
     </rect>
    </property>

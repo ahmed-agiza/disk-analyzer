@@ -79,6 +79,8 @@ private slots:
 
     void on_actionAbout_triggered();
 
+    void on_btnLargestFiles_clicked();
+
 public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);
@@ -96,7 +98,8 @@ private:
     QFileSystemModel *model;
     DirectoryAnalyzer *analyzer;
     DirectoryAnalyzer *dupesAnalyzer;
-    QWebFrame *frame;
+    QWebFrame *visFrame;
+    QWebFrame *statFrame;
     SettingsDialog *settingsDialog;
     FileStatDialog *statDialog;
     CustomProgressBar *progress;
