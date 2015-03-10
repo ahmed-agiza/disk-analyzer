@@ -5,6 +5,7 @@ var width = 960,
 
 // Global Variables
 var svg;
+var readable;
 
 // Doughnut build
 var pie = d3.layout.pie()
@@ -43,6 +44,7 @@ var testData = [
 ];
 
 // Test call
+applySettings(true);
 visualize(testData);
 
 function visualize(data) {
@@ -143,7 +145,7 @@ function mouseover(d){
 
     // Display value
     d3.select("#explanation")
-        .text(convert(d.value, true))
+        .text(readable ? convert(d.value, true) : d.value)
         .style("visibility", "");
 }
 
@@ -187,4 +189,8 @@ function convert(bytes, units){
     else if (bytes < 1000*1000*1000) out = (bytes / (1000.0*1000.0)).toPrecision(3) + (units ? "MB": "");
     else out = (bytes / (1000.0*1000.0*1000.0)).toPrecision(3) + (units ? "GB": "");
     return out;
+}
+
+function applySettings(en){
+    readable = en;
 }
