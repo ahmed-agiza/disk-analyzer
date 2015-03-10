@@ -57,6 +57,9 @@ function arcTweenProgress(transition) {
 // Wrapper calling function
 function showProgress(){
     $('#chart').empty();
+    d3.select("#chart").append("div")
+        .attr("id", "loading")
+        .text("Loading..");
     initialize();
     interval = setInterval(function() {
         foreground.transition()

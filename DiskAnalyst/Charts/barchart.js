@@ -93,7 +93,14 @@ function change() {
   transition.select(".x.axis")
       .call(xAxis)
       .selectAll("g")
-      .delay(delay);
+      .delay(delay)
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", ".15em")
+      .attr("transform", function(d) {
+          return "rotate(-90)"
+      });
 }
 
 function initializeBar(){
