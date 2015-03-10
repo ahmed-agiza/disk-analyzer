@@ -67,8 +67,12 @@ DirectoryEntry *DirectoryAnalyzer::statFile(char *path, char *name, int flags, i
         entrySize = (long long) buf.st_size;
     long long numberOfBlocks = (buf.st_blocks);
 
+
+    bool executable = (entryType == REGULAR_FILE) && ((buf.st_mode & S_IXUSR) | (buf.st_mode & S_IXGRP)| (buf.st_mode & S_IXOTH));
+
     DirectoryEntry *entry = new DirectoryEntry(entryName, QString(path), entrySize, numberOfBlocks, depth);
     entry->setType(entryType);
+    entry->setExecutable(executable);
     if (source){
         entry->setSource(source);
         source->addChild(entry);

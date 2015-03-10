@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
     visFrame = ui->wvwCharts->page()->mainFrame();
     statFrame = ui->wvwStatistics->page()->mainFrame();
 
-   // ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
+    // ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
     ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/index.html"));
     ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/barchart.html"));
 
@@ -412,6 +412,18 @@ QString MainWindow::getStatsticsJson(QSet<DirectoryEntry *> &entries){
     return QString(QJsonDocument(array).toJson(QJsonDocument::Compact));
 }
 
+QString MainWindow::getStatsticsJson(QSet<QPair<QString, long long> > &entries){
+    QJsonArray array;
+    for(QSet<QPair<QString, long long> >::iterator i = entries.begin(); i != entries.end(); i++){
+        QJsonObject entryJson;
+        entryJson.insert("name", (*i).first);
+        entryJson.insert("value", (*i).second);
+        array.push_front(entryJson);
+    }
+
+    return QString(QJsonDocument(array).toJson(QJsonDocument::Compact));
+}
+
 void MainWindow::on_actionAnalyzeDirectory_triggered(){
     QModelIndex index = ui->twgDirViewer->currentIndex();
     if (index.isValid())
@@ -442,12 +454,13 @@ void MainWindow::analysisComplete(AnalysisTarget target){
         QList<DirectoryEntry *> entries = analyzer->getEntries();
         qDebug() << "Analyzed..";
         if (target == SizeVisualization){
-             qDebug() << "Listing by size";
+            qDebug() << "Listing by size";
             DirectoryEntry *rootEntry = analyzer->getRoot();
             QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
             QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
             visFrame->evaluateJavaScript(jsCommand);
             passGraphParamters();
+            ui->tbsMain->setCurrentIndex(0);
         }else if (target == BlockVisualization){
             qDebug() << "Listing by blocks";
             DirectoryEntry *rootEntry = analyzer->getRoot();
@@ -455,11 +468,12 @@ void MainWindow::analysisComplete(AnalysisTarget target){
             QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
             visFrame->evaluateJavaScript(jsCommand);
             passGraphParamters(false);
+            ui->tbsMain->setCurrentIndex(0);
         }else if (target == FileSorting){
-            for(int i = 0; i < entries.size(); i++){
+            for(int i = 0; i < entries.size(); i++)
                 if (entries[i]->isDirectory())
                     entries.removeAt(i--);
-            }
+
             qSort(entries.begin(), entries.end(), DirectoryEntry::isLessThan);
             QSet<DirectoryEntry *> largestEntries;
 
@@ -468,7 +482,50 @@ void MainWindow::analysisComplete(AnalysisTarget target){
 
             QString entriesJson = getStatsticsJson(largestEntries);
             statFrame->evaluateJavaScript(QString("visualize(") + entriesJson + "); null");
+            ui->tbsMain->setCurrentIndex(1);
+        }else if (target == ExtenstionSorting){
+            for(int i = 0; i < entries.size(); i++)
+                if (entries[i]->isDirectory())
+                    entries.removeAt(i--);
 
+            QMap<QString, long long>  largestEntriesMap;
+
+            for(int i = 0; i < entries.size(); i++){
+                QFileInfo fileInfo(entries[i]->getFullPath());
+                if (fileInfo.isExecutable() || entries[i]->isExecutable()){
+                    if (!largestEntriesMap.contains("Executables"))
+                        largestEntriesMap["Executables"] = entries[i]->getEntrySize();
+                    else
+                        largestEntriesMap["Executables"] += entries[i]->getEntrySize();
+                }else{
+                    if (fileInfo.suffix().trimmed() == ""){
+                        if (!largestEntriesMap.contains("Unknown"))
+                            largestEntriesMap["Unknown"] = entries[i]->getEntrySize();
+                        else
+                            largestEntriesMap["Unknown"] += entries[i]->getEntrySize();
+                    }else{
+                        if (!largestEntriesMap.contains(fileInfo.suffix()))
+                            largestEntriesMap[fileInfo.suffix()] = entries[i]->getEntrySize();
+                        else
+                            largestEntriesMap[fileInfo.suffix()] += entries[i]->getEntrySize();
+                    }
+                }
+            }
+
+            QList<QPair<QString, long long> > largestEntriesList;
+            for(QMap<QString, long long>::iterator i = largestEntriesMap.begin(); i != largestEntriesMap.end(); i++){
+                largestEntriesList.append(QPair<QString, long long>(i.key(), largestEntriesMap[i.key()]));
+            }
+            qSort(largestEntriesList.begin(), largestEntriesList.end(), DirectoryEntry::pairIsLessThan);
+            QSet<QPair<QString, long long> > largestEntries;
+            for(int i = largestEntriesList.size() - 1; ((i >= 0) && (i > largestEntriesList.size() - 12)); i--){
+                largestEntries.insert(largestEntriesList[i]);
+            }
+
+            QString entriesJson = getStatsticsJson(largestEntries);
+
+            statFrame->evaluateJavaScript(QString("visualize(") + entriesJson + "); null");
+            ui->tbsMain->setCurrentIndex(1);
         }
         if (target != DupeChecking)
             setWindowTitle(QString("Disk Analyst - ") + currentDUA);
@@ -636,6 +693,32 @@ void MainWindow::listLargestFiles(QString path){
     }
 }
 
+void MainWindow::listLargestExtension(QString path){
+
+    QFileInfo fileInfo(path);
+    if (fileInfo.isDir()){
+        QString directory =fileInfo.absoluteDir().absolutePath();
+        if (directory != QDir::rootPath() && !directory.endsWith("/"))
+            directory.append("/");
+        QString fileName = fileInfo.baseName();
+        stopAnalyzer();
+        analyzer = new DirectoryAnalyzer;
+        analyzer->moveToThread(&analysisThread);
+        connect(&analysisThread, SIGNAL(finished()), analyzer, SLOT(deleteLater()));
+        connect(this, SIGNAL(startAnalysis(QString,QString,int, AnalysisTarget)), analyzer, SLOT(startAnalysis(QString, QString, int, AnalysisTarget)));
+        connect(analyzer, SIGNAL(analysisComplete(AnalysisTarget)), this, SLOT(analysisComplete(AnalysisTarget)));
+        connect(this, SIGNAL(stopAnalysis(bool)), analyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
+        emit stopAnalysis(false);
+        analysisThread.start();
+        qDebug() << "Thread running? " << analysisThread.isRunning();
+
+
+        qDebug() << "Analyzing..";
+        statFrame->evaluateJavaScript("showProgress(); null");
+        emit startAnalysis(directory, fileName, 0, ExtenstionSorting);
+    }
+}
+
 void MainWindow::on_actionOpen_Terminal_triggered(){
     if (getCurrentDUA().trimmed().isEmpty()){
         QModelIndex index = ui->twgDirViewer->currentIndex();
@@ -718,7 +801,7 @@ void MainWindow::passGraphParamters(bool displayUnit){
     QString navigateGraph = QString::number(SettingsManager::getNavigateChart());
 
     visFrame->evaluateJavaScript(QString("applySettings(") + fadeEnabled + colorSet
-                              + readable + displayUnitParam + navigateGraph + QString("); null"));
+                                 + readable + displayUnitParam + navigateGraph + QString("); null"));
 
 }
 
@@ -779,7 +862,7 @@ void MainWindow::on_btnLargestFiles_clicked(){
     emit startAnalysis(dirStr, nodeName, 0, FileSorting);
 */
 
-   /* QJsonArray entriesArray;
+    /* QJsonArray entriesArray;
     QJsonObject entriesObject;
     entriesObject.insert("name", "Entry1");
     entriesObject.insert("value", 120);
@@ -798,20 +881,18 @@ void MainWindow::on_btnLargestFiles_clicked(){
 
 void MainWindow::on_btnExtensions_clicked(){
 
-    /*stopAnalyzer();
-    analyzer = new DirectoryAnalyzer;
-    analyzer->moveToThread(&analysisThread);
-    connect(&analysisThread, SIGNAL(finished()), analyzer, SLOT(deleteLater()));
-    connect(this, SIGNAL(startAnalysis(QString,QString,int, AnalysisTarget)), analyzer, SLOT(startAnalysis(QString, QString, int, AnalysisTarget)));
-    connect(analyzer, SIGNAL(analysisComplete(AnalysisTarget)), this, SLOT(analysisComplete(AnalysisTarget)));
-    connect(this, SIGNAL(stopAnalysis(bool)), analyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
-    emit stopAnalysis(false);
-    analysisThread.start();
-    qDebug() << "Thread running? " << analysisThread.isRunning();
+    QString path;
+    if(getCurrentDUA().trimmed().isEmpty()){
+        QModelIndex index = ui->twgDirViewer->currentIndex();
+        if (!index.isValid()){
+            qDebug() << "Invalid";
+            return;
+        }
+        path = getCurrentDUA();
+    }else
+        path = getCurrentDUA();
 
-
-    qDebug() << "Analyzing..";
-    emit startAnalysis(dirStr, nodeName, 0, ExtenstionSorting);*/
+    listLargestExtension(path);
 
 
 }

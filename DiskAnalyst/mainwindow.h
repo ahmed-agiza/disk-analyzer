@@ -43,6 +43,7 @@ public:
     static void openDirectory(QString path, QWidget *parent);
 
     static QString getStatsticsJson(QSet<DirectoryEntry *> &entries);
+    static QString getStatsticsJson(QSet<QPair<QString, long long> > &entries);
 
 signals:
     void startAnalysis(QString, QString, int, AnalysisTarget);
@@ -69,6 +70,7 @@ private slots:
     void hashingComplete(DuplicateEntryList);
     void treeMenuRequested(QPoint);
     void listLargestFiles(QString);
+    void listLargestExtension(QString);
 
 
     void on_actionAnalyzeDirectory_triggered();

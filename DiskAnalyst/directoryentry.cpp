@@ -196,13 +196,15 @@ bool DirectoryEntry::operator>=(DirectoryEntry &other){
 bool DirectoryEntry::isLessThan(DirectoryEntry *first, DirectoryEntry *second){
     return first->getTotalSize() < second->getTotalSize();
 }
-bool DirectoryEntry::isExecutable() const
-{
+
+bool DirectoryEntry::pairIsLessThan(QPair<QString, long long> &first, QPair<QString, long long> &second){
+    return (first.second < second.second);
+}
+bool DirectoryEntry::isExecutable() const{
     return executable;
 }
 
-void DirectoryEntry::setExecutable(bool value)
-{
+void DirectoryEntry::setExecutable(bool value){
     executable = value;
 }
 
