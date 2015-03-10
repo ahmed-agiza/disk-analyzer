@@ -20,16 +20,8 @@ var units;
 
 // Global variables
 var path;
+var vis;
 var totalSize = 0;
-
-// Setting start point in the center
-var vis = d3.select("#chart").append("svg:svg")
-    .attr("id", "mainsvg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("svg:g")
-    .attr("id", "container")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // The layout is a partitioned one to achieve the sunburst structure
 var partition = d3.layout.partition()
@@ -57,6 +49,8 @@ var arc = d3.svg.arc()
 
 // The core visualization function
 function visualize(root){
+    hideProgress();
+    initializeSunburst();
     applySettings();
     clearChart();
     initializeFilePathDisplay();
@@ -98,6 +92,17 @@ function visualize(root){
 
     // Get total size of the tree = value of root node from partition
     totalSize = path.node().__data__.value;
+}
+
+function initializeSunburst(){
+    // Setting start point in the center
+    vis = d3.select("#chart").append("svg:svg")
+        .attr("id", "mainsvg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("svg:g")
+        .attr("id", "container")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 }
 
 function initializeFilePathDisplay() {

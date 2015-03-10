@@ -1,27 +1,31 @@
 // Test Data
 var testData = [
-  {name: "A", value: 500},
-  {name: "B", value: 1000},
-  {name: "C", value: 200},
-  {name: "D", value: 2500},
-  {name: "E", value: 1500},
-  {name: "F", value: 5000},
-  {name: "G", value: 5000},
-  {name: "H", value: 100},
-  {name: "I", value: 1000},
-  {name: "J", value: 1200},
-  {name: "K", value: 1300},
-  {name: "L", value: 500},
-  {name: "M", value: 1000},
-  {name: "N", value: 200},
-  {name: "O", value: 2500},
-  {name: "P", value: 1500},
-  {name: "Q", value: 5000},
-  {name: "R", value: 100},
-  {name: "S", value: 1000},
-  {name: "T", value: 1200},
-  {name: "U", value: 1300}
+  {name: "AAA", value: 500},
+  {name: "BAA", value: 1000},
+  {name: "CAA", value: 200},
+  {name: "DAA", value: 2500},
+  {name: "EAA", value: 1500},
+  {name: "FAA", value: 5000},
+  {name: "GAA", value: 5000},
+  {name: "HAA", value: 100},
+  {name: "IAA", value: 1000},
+  {name: "JAA", value: 1200},
+  {name: "KAA", value: 1300},
+  {name: "LAA", value: 500},
+  {name: "MAA", value: 1000},
+  {name: "NAA", value: 200},
+  {name: "OAA", value: 2500},
+  {name: "PAA", value: 1500},
+  {name: "QAA", value: 5000},
+  {name: "RAA", value: 100},
+  {name: "SAA", value: 1000},
+  {name: "TAA", value: 1200},
+  {name: "UAA", value: 1300}
 ];
+
+// Global variables
+var svg;
+var barData;
 
 // The margins of the bar chart
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -31,7 +35,6 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 // Scale generators
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1, 1);
-
 var y = d3.scale.linear()
     .range([height, 0]);
 
@@ -44,33 +47,6 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
 
-// Skeleton for the chart
-var svg = d3.select("#chart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-// Defining the domain of the graph
-x.domain(testData.map(function(d){return d.name;}));
-y.domain([0, d3.max(testData, function(d){return d.value;})]);
-
-// Plotting axis
-svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
-
-svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Value");
-
 // Sort timeout
 var sortTimeout = setTimeout(function() {
     d3.select("input").property("checked", true).each(change);
@@ -80,9 +56,13 @@ var sortTimeout = setTimeout(function() {
 visualize(testData);
 
 function visualize(data){
+    barData = data;
+    hideProgress();
+    initializeBar();
+
     // Plotting the data
     svg.selectAll(".bar")
-        .data(data)
+        .data(barData)
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", function(d) {return x(d.name);})
@@ -97,7 +77,7 @@ function change() {
   clearTimeout(sortTimeout);
 
   // Copy-on-write since tweens are evaluated after a delay.
-  var x0 = x.domain(testData.sort(this.checked
+  var x0 = x.domain(barData.sort(this.checked
       ? function(a, b) {return b.value - a.value;}
       : function(a, b) {return d3.ascending(a.name, b.name);})
       .map(function(d) {return d.name;}))
@@ -114,6 +94,42 @@ function change() {
       .call(xAxis)
       .selectAll("g")
       .delay(delay);
+}
+
+function initializeBar(){
+    // Skeleton for the chart
+    svg = d3.select("#chart").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Defining the domain of the graph
+    x.domain(barData.map(function(d){return d.name;}));
+    y.domain([0, d3.max(barData, function(d){return d.value;})]);
+
+    // Plotting axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", function(d) {
+            return "rotate(-90)"
+        });
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Value");
 }
 
 // Data fetching from file

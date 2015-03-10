@@ -33,12 +33,13 @@ var outerArc = d3.svg.arc()
 // Location of the doughnut
 svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+// Return name
 var key = function(d){ return d.data.name; };
 
-var color = d3.scale.ordinal()
-    .domain(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+// Color set
+var doughnutColor = d3.scale.category10();
 
+// Test data
 var testData = [
   {name: "A", value: 500},
   {name: "B", value: 1000},
@@ -55,17 +56,13 @@ var testData = [
 change(testData);
 
 function change(data) {
-    console.log(data);
-
 	/* ------- PIE SLICES -------*/
 	var slice = svg.select(".slices").selectAll("path.slice")
 		.data(pie(data), key);
-
 	slice.enter()
 		.insert("path")
-        .style("fill", function(d) { return color(d.data.name); })
+        .style("fill", function(d) { return doughnutColor(d.data.name); })
 		.attr("class", "slice");
-
 	slice		
 		.transition().duration(1000)
 		.attrTween("d", function(d) {
@@ -76,26 +73,18 @@ function change(data) {
 				return arc(interpolate(t));
 			};
 		})
-
 	slice.exit()
 		.remove();
 
 	/* ------- TEXT LABELS -------*/
-
 	var text = svg.select(".labels").selectAll("text")
 		.data(pie(data), key);
-
 	text.enter()
 		.append("text")
 		.attr("dy", ".35em")
 		.text(function(d) {
             return d.data.name;
 		});
-	
-	function midAngle(d){
-		return d.startAngle + (d.endAngle - d.startAngle)/2;
-	}
-
 	text.transition().duration(1000)
 		.attrTween("transform", function(d) {
 			this._current = this._current || d;
@@ -117,18 +106,14 @@ function change(data) {
 				return midAngle(d2) < Math.PI ? "start":"end";
 			};
 		});
-
 	text.exit()
 		.remove();
 
 	/* ------- SLICE TO TEXT POLYLINES -------*/
-
 	var polyline = svg.select(".lines").selectAll("polyline")
 		.data(pie(data), key);
-	
 	polyline.enter()
 		.append("polyline");
-
 	polyline.transition().duration(1000)
 		.attrTween("points", function(d){
 			this._current = this._current || d;
@@ -141,7 +126,10 @@ function change(data) {
 				return [arc.centroid(d2), outerArc.centroid(d2), pos];
 			};			
 		});
-	
 	polyline.exit()
 		.remove();
-};
+}
+
+function midAngle(d){
+    return d.startAngle + (d.endAngle - d.startAngle)/2;
+}
