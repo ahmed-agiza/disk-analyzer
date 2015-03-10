@@ -39,7 +39,7 @@
 #define MAX_GROUP_SIZE 64
 #define MAX_FULL_PATH_SIZE 2048
 
-enum AnalysisTarget{Unkown = 0, Visualization = 1, DupeChecking = 2, FileSorting = 3, ExtenstionSorting = 4, GroupSorting = 5};
+enum AnalysisTarget{Unkown = 0, SizeVisualization = 1, BlockVisualization = 2, DupeChecking = 3, FileSorting = 4, ExtenstionSorting = 5, GroupSorting = 6};
 
 
 
@@ -55,6 +55,7 @@ class DirectoryAnalyzer : public QObject
     void recursePath(char *dir, char *name, int flags, int depth = -1, DirectoryEntry *source = 0);
 
     static void getChildrenArray(DirectoryEntry *, QJsonArray &array);
+    static void getChildrenArrayByBlocks(DirectoryEntry *, QJsonArray &array);
 public:
     explicit DirectoryAnalyzer(QObject *parent = 0);
     QList<DirectoryEntry *> getEntries();
@@ -62,6 +63,9 @@ public:
 
     static QJsonObject getEntriesJson(DirectoryEntry *rootEnry);
     static QString getEntriesJsonString(DirectoryEntry *rootEnry);
+
+    static QJsonObject getEntriesJsonByBlock(DirectoryEntry *rootEnry);
+    static QString getEntriesJsonStringByBlock(DirectoryEntry *rootEnry);
 
     DirectoryEntry *getRoot() const;
 

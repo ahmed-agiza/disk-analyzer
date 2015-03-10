@@ -244,7 +244,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tbsMain->setCurrentIndex(0);
+        tbsMain->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);

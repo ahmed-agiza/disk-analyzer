@@ -152,6 +152,29 @@ void DirectoryAnalyzer::getChildrenArray(DirectoryEntry *entry, QJsonArray &arra
     }
 }
 
+void DirectoryAnalyzer::getChildrenArrayByBlocks(DirectoryEntry *entry, QJsonArray &array){
+    if (entry->getChildren().isEmpty())
+        return;
+    QSet<DirectoryEntry *> children = entry->getChildren();
+    for(QSet<DirectoryEntry *>::iterator i = children.begin(); i != children.end(); i++){
+        QJsonObject entryJson;
+        entryJson.insert("name", (*i)->getName());
+        entryJson.insert("size", (*i)->getNumberOfBlocks());
+        QJsonArray childrenJsonBuf;
+        if ((*i)->isDirectory()){
+            QJsonObject dummyEntry;
+            dummyEntry.insert("name", "dummy");
+            dummyEntry.insert("size", (*i)->getNumberOfBlocks());
+            dummyEntry.insert("dummy", "dummy");
+            childrenJsonBuf.push_front(dummyEntry);
+        }
+        getChildrenArrayByBlocks((*i), childrenJsonBuf);
+        if(!childrenJsonBuf.isEmpty())
+            entryJson.insert("children", childrenJsonBuf);
+        array.push_back(entryJson);
+    }
+}
+
 DirectoryAnalyzer::DirectoryAnalyzer(QObject *parent) :
     QObject(parent), stopped(false), analysisDone(false){
 }
@@ -200,6 +223,38 @@ QJsonObject DirectoryAnalyzer::getEntriesJson(DirectoryEntry *rootEnry){
 
 QString DirectoryAnalyzer::getEntriesJsonString(DirectoryEntry *rootEnry){
     return QString(QJsonDocument(getEntriesJson(rootEnry)).toJson(QJsonDocument::Compact));
+}
+
+QJsonObject DirectoryAnalyzer::getEntriesJsonByBlock(DirectoryEntry *rootEntry){
+    QSet<DirectoryEntry *> children = rootEntry->getChildren();
+    QJsonObject rootEntryJson;
+    rootEntryJson.insert("name", rootEntry->getName());
+    rootEntryJson.insert("size", rootEntry->getNumberOfBlocks());
+    QJsonArray rootEntryChildrenJson;
+    for(QSet<DirectoryEntry *>::iterator i = children.begin(); i != children.end(); i++){
+        QJsonObject entryJson;
+        entryJson.insert("name", (*i)->getName());
+        entryJson.insert("size", (*i)->getNumberOfBlocks());
+        QJsonArray childrenBuf;
+        if ((*i)->isDirectory()){
+            QJsonObject dummyEntry;
+            dummyEntry.insert("name", "dummy");
+            dummyEntry.insert("size", (*i)->getNumberOfBlocks());
+            dummyEntry.insert("dummy", "dummy");
+            childrenBuf.push_front(dummyEntry);
+        }
+        getChildrenArrayByBlocks(*i, childrenBuf);
+        if (!childrenBuf.isEmpty())
+            entryJson.insert("children", childrenBuf);
+        rootEntryChildrenJson.push_front(entryJson);
+    }
+    if (!rootEntryChildrenJson.isEmpty())
+        rootEntryJson.insert("children", rootEntryChildrenJson);
+    return rootEntryJson;
+}
+
+QString DirectoryAnalyzer::getEntriesJsonStringByBlock(DirectoryEntry *rootEnry){
+    return QString(QJsonDocument(getEntriesJsonByBlock(rootEnry)).toJson(QJsonDocument::Compact));
 }
 
 DirectoryEntry *DirectoryAnalyzer::getRoot() const{

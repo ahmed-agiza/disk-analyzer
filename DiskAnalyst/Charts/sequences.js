@@ -145,6 +145,7 @@ function mouseover(d){
             return (sequenceArray.indexOf(node) >= 0);
         })
         .style("opacity", 1);
+    applyMessage();
 }
 
 // Gets the ancestors of the current node, where path is from highest to lowest
@@ -296,6 +297,21 @@ function convert(bytes, units){
     return out;
 }
 
+function setSizeMessage(){
+    $('#message').text(' of memory occupied by this entry ');
+}
+
+function setBlocksMessage(){
+    $('#message').text(' block(s) are occupied by this entry ');
+}
+
+function applyMessage(un){
+    if (un)
+        setSizeMessage();
+    else
+        setBlocksMessage();
+}
+
 // function to customize opacity, color, readable format, and units
 function applySettings(op, clr, rd, un, gn){
     if (typeof op == "undefined") opacity = 0.3;
@@ -322,8 +338,13 @@ function applySettings(op, clr, rd, un, gn){
     if (typeof rd == "undefined") readable = true;
     else readable = rd;
 
-    if (typeof un == "undefined") units = true;
-    else units = un;
+    if (typeof un == "undefined") {
+        setSizeMessage();
+        units = true;
+    }else{
+        applyMessage(un)
+        units = un;
+    }
 
     if (typeof gn == "undefined") graphNavigation = true;
     else graphNavigation = gn;
