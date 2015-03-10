@@ -3,16 +3,8 @@ var width = 960,
     height = 450,
     radius = Math.min(width, height) / 2;
 
-// Doughnut skeleton
-var svg = d3.select("#chart")
-	.append("svg")
-	.append("g")
-svg.append("g")
-	.attr("class", "slices");
-svg.append("g")
-	.attr("class", "labels");
-svg.append("g")
-	.attr("class", "lines");
+// Global Variables
+var svg;
 
 // Doughnut build
 var pie = d3.layout.pie()
@@ -30,11 +22,8 @@ var outerArc = d3.svg.arc()
 	.innerRadius(radius * 0.9)
 	.outerRadius(radius * 0.9);
 
-// Location of the doughnut
-svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
 // Return name
-var key = function(d){ return d.data.name; };
+var key = function(d){return d.data.name;};
 
 // Color set
 var doughnutColor = d3.scale.category10();
@@ -53,21 +42,27 @@ var testData = [
   {name: "K", value: 1300},
 ];
 
-change(testData);
+// Test call
+visualize(testData);
 
-function change(data) {
+function visualize(data) {
+    hideProgress();
+    initializeDoughnut();
+    d3.select("#container").on("mouseleave", mouseleave);
+
 	/* ------- PIE SLICES -------*/
 	var slice = svg.select(".slices").selectAll("path.slice")
-		.data(pie(data), key);
+        .data(pie(data), key);
 	slice.enter()
 		.insert("path")
         .style("fill", function(d) { return doughnutColor(d.data.name); })
-		.attr("class", "slice");
+        .attr("class", "slice")
+        .on("mouseover", mouseover);
 	slice		
 		.transition().duration(1000)
 		.attrTween("d", function(d) {
 			this._current = this._current || d;
-			var interpolate = d3.interpolate(this._current, d);
+            var interpolate = d3.interpolate({ data: {name: "dummy", value: 0}, value: 0, startAngle: 0, endAngle: 0, padAngle: 0 }, d);
 			this._current = interpolate(0);
 			return function(t) {
 				return arc(interpolate(t));
@@ -77,7 +72,7 @@ function change(data) {
 		.remove();
 
 	/* ------- TEXT LABELS -------*/
-	var text = svg.select(".labels").selectAll("text")
+    var text = svg.select(".labels").selectAll("text")
 		.data(pie(data), key);
 	text.enter()
 		.append("text")
@@ -88,7 +83,7 @@ function change(data) {
 	text.transition().duration(1000)
 		.attrTween("transform", function(d) {
 			this._current = this._current || d;
-			var interpolate = d3.interpolate(this._current, d);
+            var interpolate = d3.interpolate({ data: {name: "dummy", value: 0}, value: 0, startAngle: 0, endAngle: 0, padAngle: 0 }, d);
 			this._current = interpolate(0);
 			return function(t) {
 				var d2 = interpolate(t);
@@ -99,7 +94,7 @@ function change(data) {
 		})
 		.styleTween("text-anchor", function(d){
 			this._current = this._current || d;
-			var interpolate = d3.interpolate(this._current, d);
+            var interpolate = d3.interpolate({ data: {name: "dummy", value: 0}, value: 0, startAngle: 0, endAngle: 0, padAngle: 0 }, d);
 			this._current = interpolate(0);
 			return function(t) {
 				var d2 = interpolate(t);
@@ -117,9 +112,9 @@ function change(data) {
 	polyline.transition().duration(1000)
 		.attrTween("points", function(d){
 			this._current = this._current || d;
-			var interpolate = d3.interpolate(this._current, d);
-			this._current = interpolate(0);
-			return function(t) {
+            var interpolate = d3.interpolate({ data: {name: "dummy", value: 0}, value: 0, startAngle: 0, endAngle: 0, padAngle: 0 }, d);
+            this._current = interpolate(0);
+            return function(t) {
 				var d2 = interpolate(t);
 				var pos = outerArc.centroid(d2);
 				pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
@@ -132,4 +127,64 @@ function change(data) {
 
 function midAngle(d){
     return d.startAngle + (d.endAngle - d.startAngle)/2;
+}
+
+function mouseover(d){
+    // Fade all parts
+    d3.selectAll("path")
+        .style("opacity", 0.3);
+
+    // Show the hovered arc
+    d3.selectAll("path")
+        .filter(function(node) {
+            return (node === d);
+        })
+        .style("opacity", 1);
+
+    // Display value
+    d3.select("#explanation")
+        .text(convert(d.value, true))
+        .style("visibility", "");
+}
+
+function mouseleave(){
+    // Show the whole chart
+    d3.selectAll("path")
+        .transition()
+        .duration(1000)
+        .style("opacity", 1)
+        .each("end", function() {
+            d3.select(this).on("mouseover", mouseover);
+        });
+
+    d3.select("#explanation")
+        .style("visibility", "hidden");
+}
+
+// Initialize Doughnut
+function initializeDoughnut(){
+    // Doughnut skeleton
+    svg = d3.select("#chart")
+        .append("svg")
+        .append("g")
+        .attr("id", "container")
+    svg.append("g")
+        .attr("class", "slices");
+    svg.append("g")
+        .attr("class", "labels");
+    svg.append("g")
+        .attr("class", "lines");
+
+    // Location of the doughnut
+    svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+}
+
+// Readable memory display
+function convert(bytes, units){
+    var out;
+    if(bytes < 1000) out = bytes.toPrecision(3) + (units ? "B": "");
+    else if (bytes < 1000*1000) out = (bytes / 1000.0).toPrecision(3) + (units ? "KB": "");
+    else if (bytes < 1000*1000*1000) out = (bytes / (1000.0*1000.0)).toPrecision(3) + (units ? "MB": "");
+    else out = (bytes / (1000.0*1000.0*1000.0)).toPrecision(3) + (units ? "GB": "");
+    return out;
 }

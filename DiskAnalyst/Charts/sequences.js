@@ -290,9 +290,9 @@ function getPath(node) {
 // Readable memory display
 function convert(bytes, units){
     var out;
-    if(bytes <= 1000) out = bytes.toPrecision(3) + (units ? "B": "");
-    else if (bytes <= 1000*1000) out = (bytes / 1000.0).toPrecision(3) + (units ? "KB": "");
-    else if (bytes <= 1000*1000*1000) out = (bytes / (1000.0*1000.0)).toPrecision(3) + (units ? "MB": "");
+    if(bytes < 1000) out = bytes.toPrecision(3) + (units ? "B": "");
+    else if (bytes < 1000*1000) out = (bytes / 1000.0).toPrecision(3) + (units ? "KB": "");
+    else if (bytes < 1000*1000*1000) out = (bytes / (1000.0*1000.0)).toPrecision(3) + (units ? "MB": "");
     else out = (bytes / (1000.0*1000.0*1000.0)).toPrecision(3) + (units ? "GB": "");
     return out;
 }
@@ -353,9 +353,9 @@ function applySettings(op, clr, rd, un, gn){
 
 // Calling the json function with the disk statistics (Calls json data from file)
 // Invoking from a JSON file
-/*d3.json("./data.json", function(error, root) {
+d3.json("./data.json", function(error, root) {
     visualize(root);
-});*/
+});
 
 // The arc for drawing the svg (OLD ARC)
 /*var arc = d3.svg.arc()
