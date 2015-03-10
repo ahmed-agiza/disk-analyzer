@@ -131,6 +131,7 @@ private:
     QThread dupesHashingThread;
     QString tempNavigationPath;
     QString currentStatJson;
+    AnalysisTarget lastStatTarget;
     bool statLoaded;
 };
 

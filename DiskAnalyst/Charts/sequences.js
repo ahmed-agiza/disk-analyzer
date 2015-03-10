@@ -17,6 +17,7 @@ var color;
 var opacity;
 var readable;
 var units;
+var depth;
 
 // Global variables
 var path;
@@ -71,7 +72,7 @@ function visualize(root){
         .data(nodes)
         .enter().append("svg:path")
         .filter(function(d){
-            return (!d.hasOwnProperty("dummy"));
+            return (!d.hasOwnProperty("dummy")); //&& (d.depth <= 3 || depth == 0);
         })
         .attr("display", function(d) {
             if (!d.depth){
@@ -313,7 +314,7 @@ function applyMessage(un){
 }
 
 // function to customize opacity, color, readable format, and units
-function applySettings(op, clr, rd, un, gn){
+function applySettings(op, clr, rd, un, gn, d){
     if (typeof op == "undefined") opacity = 0.3;
     else opacity = op;
 
@@ -348,6 +349,9 @@ function applySettings(op, clr, rd, un, gn){
 
     if (typeof gn == "undefined") graphNavigation = true;
     else graphNavigation = gn;
+
+    if (typeof d == "undefined") depth = 0;
+    else depth = d;
 
 }
 

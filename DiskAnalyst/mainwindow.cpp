@@ -66,7 +66,8 @@ MainWindow::MainWindow(QWidget *parent)
     visFrame = ui->wvwCharts->page()->mainFrame();
     statFrame = ui->wvwStatistics->page()->mainFrame();
 
-    // ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
+    //ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
+    //ui->wvwStatistics->setContextMenuPolicy(Qt::NoContextMenu);
     ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/index.html"));
     ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/barchart.html"));
 
@@ -91,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
     dupesDialog = 0;
     progress = 0;
     aboutDialog = 0;
+    lastStatTarget = Unkown;
 
     ui->twgDirViewer->setRootIsDecorated(true);
     QObject::connect(ui->twgDirViewer, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeMenuRequested(QPoint)), Qt::UniqueConnection);
@@ -455,6 +457,7 @@ void MainWindow::on_actionRefresh_triggered(){
 }
 
 void MainWindow::analysisComplete(AnalysisTarget target){
+    lastStatTarget = target;
     qDebug() << "Analysis complete: " << target;
     if (analyzer->getAnalysisDone()){
         QList<DirectoryEntry *> entries = analyzer->getEntries();
@@ -488,9 +491,10 @@ void MainWindow::analysisComplete(AnalysisTarget target){
 
             QString entriesJson = getStatsticsJson(largestEntries);
             currentStatJson = entriesJson;
+            applyStatSettings(true);
             statFrame->evaluateJavaScript(QString("visualize(") + entriesJson + "); null");
             ui->tbsMain->setCurrentIndex(1);
-            applyStatSettings(true);
+
         }else if (target == ExtenstionSorting){
             for(int i = 0; i < entries.size(); i++)
                 if (entries[i]->isDirectory())
@@ -537,9 +541,10 @@ void MainWindow::analysisComplete(AnalysisTarget target){
 
             QString entriesJson = getStatsticsJson(largestEntries);
             currentStatJson = entriesJson;
+            applyStatSettings(true);
             statFrame->evaluateJavaScript(QString("visualize(") + entriesJson + "); null");
             ui->tbsMain->setCurrentIndex(1);
-            applyStatSettings(true);
+
         }else if (target ==  GroupSorting){
             for(int i = 0; i < entries.size(); i++)
                 if (entries[i]->isDirectory())
@@ -583,10 +588,10 @@ void MainWindow::analysisComplete(AnalysisTarget target){
             }
 
             QString entriesJson = getStatsticsJson(largestEntriesList.toSet());
-
+            currentStatJson = entriesJson;
+            applyStatSettings(false);
             statFrame->evaluateJavaScript(QString("visualize(") + entriesJson + "); null");
             ui->tbsMain->setCurrentIndex(1);
-            applyStatSettings(false);
         }
         if (target != DupeChecking)
             setWindowTitle(QString("Disk Analyst") + (getCurrentDUA().trimmed().isEmpty()? QString("") : (QString(" - ") + currentDUA)));
@@ -981,7 +986,12 @@ void MainWindow::on_btnBarChart_clicked(bool checked){
         ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/barchart.html"));
         if (!currentStatJson.trimmed().isEmpty()){
             loop.exec();
+            if (lastStatTarget == FileSorting || lastStatTarget == ExtenstionSorting)
+                applyStatSettings(true);
+            else
+                applyStatSettings(false);
             statFrame->evaluateJavaScript(QString("visualize(") + currentStatJson + "); null");
+
         }
     }
 }
@@ -994,6 +1004,10 @@ void MainWindow::on_btnDoughChart_clicked(bool checked){
         ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/doughnut.html"));
         if (!currentStatJson.trimmed().isEmpty()){
             loop.exec();
+            if (lastStatTarget == FileSorting || lastStatTarget == ExtenstionSorting)
+                applyStatSettings(true);
+            else
+                applyStatSettings(false);
             statFrame->evaluateJavaScript(QString("visualize(") + currentStatJson + "); null");
         }
     }
