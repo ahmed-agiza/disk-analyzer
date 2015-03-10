@@ -43,7 +43,7 @@ public:
     static void openDirectory(QString path, QWidget *parent);
 
     static QString getStatsticsJson(QSet<DirectoryEntry *> &entries);
-    static QString getStatsticsJson(QSet<QPair<QString, long long> > &entries);
+    static QString getStatsticsJson(QSet<QPair<QString, long long> > entries);
 
 signals:
     void startAnalysis(QString, QString, int, AnalysisTarget);
@@ -71,7 +71,9 @@ private slots:
     void treeMenuRequested(QPoint);
     void listLargestFiles(QString);
     void listLargestExtension(QString);
+    void listLargestGroups(QString);
 
+    void refreshChartsButtons();
 
     void on_actionAnalyzeDirectory_triggered();
     void on_twgDirViewer_doubleClicked(const QModelIndex &index);
@@ -87,6 +89,11 @@ private slots:
     void on_btnLargestFiles_clicked();
     void on_btnExtensions_clicked();
     void on_btnSizeGroups_clicked();
+
+
+    void on_btnBarChart_clicked(bool checked);
+
+    void on_btnDoughChart_clicked(bool checked);
 
 public slots:
     void exposeObjectsToJS();

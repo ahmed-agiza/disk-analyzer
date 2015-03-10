@@ -56,6 +56,9 @@ public:
     QPushButton *btnExtensions;
     QPushButton *btnSizeGroups;
     QWebView *wvwStatistics;
+    QHBoxLayout *horizontalLayout_3;
+    QPushButton *btnBarChart;
+    QPushButton *btnDoughChart;
     QMenuBar *menuBar;
     QMenu *menuAnalyze;
     QMenu *menuTools;
@@ -197,6 +200,26 @@ public:
 
         verticalLayout->addWidget(wvwStatistics);
 
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(0);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        horizontalLayout_3->setContentsMargins(-1, 10, -1, -1);
+        btnBarChart = new QPushButton(tabStatistics);
+        btnBarChart->setObjectName(QStringLiteral("btnBarChart"));
+        btnBarChart->setCheckable(true);
+        btnBarChart->setChecked(true);
+
+        horizontalLayout_3->addWidget(btnBarChart);
+
+        btnDoughChart = new QPushButton(tabStatistics);
+        btnDoughChart->setObjectName(QStringLiteral("btnDoughChart"));
+        btnDoughChart->setCheckable(true);
+
+        horizontalLayout_3->addWidget(btnDoughChart);
+
+
+        verticalLayout->addLayout(horizontalLayout_3);
+
         tbsMain->addTab(tabStatistics, QString());
 
         gridLayout->addWidget(tbsMain, 0, 1, 1, 1);
@@ -300,6 +323,8 @@ public:
         btnLargestFiles->setText(QApplication::translate("MainWindow", "Largest Files Statistics", 0));
         btnExtensions->setText(QApplication::translate("MainWindow", "Extenstions Statistics", 0));
         btnSizeGroups->setText(QApplication::translate("MainWindow", "Size Group Statistics", 0));
+        btnBarChart->setText(QApplication::translate("MainWindow", "Bar chart", 0));
+        btnDoughChart->setText(QApplication::translate("MainWindow", "Doughnut chart", 0));
         tbsMain->setTabText(tbsMain->indexOf(tabStatistics), QApplication::translate("MainWindow", "Statistics", 0));
         menuAnalyze->setTitle(QApplication::translate("MainWindow", "Explore", 0));
         menuTools->setTitle(QApplication::translate("MainWindow", "Tools", 0));

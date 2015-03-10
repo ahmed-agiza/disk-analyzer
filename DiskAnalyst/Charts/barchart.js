@@ -1,5 +1,5 @@
 // Test Data
-var testData = [
+/*var testData = [
   {name: "AAA", value: 500},
   {name: "BAA", value: 1000},
   {name: "CAA", value: 200},
@@ -21,7 +21,7 @@ var testData = [
   {name: "SAA", value: 1000},
   {name: "TAA", value: 1200},
   {name: "UAA", value: 1300}
-];
+];*/
 
 // Global variables
 var svg;
@@ -48,12 +48,14 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 // Sort timeout
-var sortTimeout = setTimeout(function() {
-    d3.select("input").property("checked", true).each(change);
-}, 2000);
+var sortTimeout = function(){
+        setTimeout(function() {
+        d3.select("input").property("checked", true).each(change);
+    }, 2000);
+}
 
 // TEST CALL
-visualize(testData);
+//visualize(testData);
 
 function visualize(data){
     barData = data;
