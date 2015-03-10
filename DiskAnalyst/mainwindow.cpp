@@ -345,7 +345,10 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 
 
     qDebug() << "Analyzing..";
-    emit startAnalysis(dirStr, nodeName, 0, Visualization);
+    if (SettingsManager::getListEntriesByBlocks())
+        emit startAnalysis(dirStr, nodeName, 0, BlockVisualization);
+    else
+        emit startAnalysis(dirStr, nodeName, 0, SizeVisualization);
 
 }
 
@@ -426,12 +429,20 @@ void MainWindow::analysisComplete(AnalysisTarget target){
     if (analyzer->getAnalysisDone()){
         QList<DirectoryEntry *> entries = analyzer->getEntries();
         qDebug() << "Analyzed..";
-        if (target == Visualization){
+        if (target == SizeVisualization){
+             qDebug() << "Listing by size";
             DirectoryEntry *rootEntry = analyzer->getRoot();
             QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
             QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
             visFrame->evaluateJavaScript(jsCommand);
             passGraphParamters();
+        }else if (target == BlockVisualization){
+            qDebug() << "Listing by blocks";
+            DirectoryEntry *rootEntry = analyzer->getRoot();
+            QString entriesJson = DirectoryAnalyzer::getEntriesJsonStringByBlock(rootEntry);
+            QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
+            visFrame->evaluateJavaScript(jsCommand);
+            passGraphParamters(false);
         }else{
             qSort(entries.begin(), entries.end(), DirectoryEntry::isLessThan);
             qDebug() << "Largest entry" << entries[0]->getFormattedSize(entries[0]->getTotalSize());
@@ -610,7 +621,9 @@ void MainWindow::on_actionSettings_triggered(){
     settingsDialog->setModal(true);
     settingsDialog->exec();
     if(settingsDialog->result() == QDialog::Accepted){
-        passGraphParamters();
+        if(!getCurrentDUA().isEmpty()){
+            analyzeDirectory(getCurrentDUA());
+        }
     }
 }
 
@@ -643,13 +656,16 @@ void MainWindow::passGraphParamters(bool displayUnit){
     else
         fadeEnabled = "1.0, ";
     QString colorSet = QString::number(SettingsManager::getColorSet()) + ", ";
-    QString readable = QString::number(SettingsManager::getHumanReadable()) + ", ";
+    QString readable;
 
     QString displayUnitParam;
-    if (displayUnit)
+    if (displayUnit){
+        readable = QString::number(SettingsManager::getHumanReadable()) + ", ";
         displayUnitParam = "1, ";
-    else
+    }else{
+        readable = "0, ";
         displayUnitParam = "0, ";
+    }
 
     QString navigateGraph = QString::number(SettingsManager::getNavigateChart());
 
