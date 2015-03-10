@@ -81,6 +81,10 @@ private slots:
 
     void on_btnLargestFiles_clicked();
 
+    void on_btnExtensions_clicked();
+
+    void on_btnSizeGroups_clicked();
+
 public slots:
     void exposeObjectsToJS();
     void setCurrentPath(QString);
