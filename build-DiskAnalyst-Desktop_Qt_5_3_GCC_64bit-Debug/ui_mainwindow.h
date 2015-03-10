@@ -68,7 +68,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setWindowModality(Qt::NonModal);
-        MainWindow->resize(1324, 843);
+        MainWindow->resize(1346, 843);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -193,6 +193,7 @@ public:
         sizePolicy1.setHeightForWidth(wvwStatistics->sizePolicy().hasHeightForWidth());
         wvwStatistics->setSizePolicy(sizePolicy1);
         wvwStatistics->setUrl(QUrl(QStringLiteral("about:blank")));
+        wvwStatistics->setZoomFactor(0.82);
 
         verticalLayout->addWidget(wvwStatistics);
 
@@ -203,7 +204,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1324, 20));
+        menuBar->setGeometry(QRect(0, 0, 1346, 20));
         menuAnalyze = new QMenu(menuBar);
         menuAnalyze->setObjectName(QStringLiteral("menuAnalyze"));
         menuTools = new QMenu(menuBar);

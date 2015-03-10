@@ -39,7 +39,7 @@
 #define MAX_GROUP_SIZE 64
 #define MAX_FULL_PATH_SIZE 2048
 
-enum AnalysisTarget{Unkown = 0, Visualization = 1, DupeChecking = 2, FileSorting = 3, ExtenstionSoring = 4, GroupSorying = 5};
+enum AnalysisTarget{Unkown = 0, Visualization = 1, DupeChecking = 2, FileSorting = 3, ExtenstionSorting = 4, GroupSorting = 5};
 
 
 

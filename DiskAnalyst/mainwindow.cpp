@@ -37,6 +37,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(0), dupesAnalyzer(0){
+
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 
     qRegisterMetaType<DirectoryEntriesList>("DirectoryEntriesList");
@@ -62,17 +63,24 @@ MainWindow::MainWindow(QWidget *parent)
     centerWindow();
     statusBar()->setSizeGripEnabled(false);
 
-    frame = ui->wvwCharts->page()->mainFrame();
+    visFrame = ui->wvwCharts->page()->mainFrame();
+    statFrame = ui->wvwStatistics->page()->mainFrame();
+
    // ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
     ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/index.html"));
-    //ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/progress.html"));
+    ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/barchart.html"));
 
-    frame->setScrollBarValue(Qt::Vertical, frame->scrollBarMaximum(Qt::Vertical));
-    frame->setScrollBarValue(Qt::Horizontal, frame->scrollBarMaximum(Qt::Horizontal));
-    frame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
-    frame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+    //visFrame->setScrollBarValue(Qt::Vertical, visFrame->scrollBarMaximum(Qt::Vertical));
+    //visFrame->setScrollBarValue(Qt::Horizontal, visFrame->scrollBarMaximum(Qt::Horizontal));
+    visFrame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    //visFrame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
-    connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
+    statFrame->setScrollBarValue(Qt::Vertical, visFrame->scrollBarMaximum(Qt::Vertical));
+    //statFrame->setScrollBarValue(Qt::Horizontal, visFrame->scrollBarMaximum(Qt::Horizontal));
+    statFrame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    //statFrame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+
+    connect(visFrame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
     settingsDialog = 0;
     statDialog = 0;
     dupesDialog = 0;
@@ -174,7 +182,7 @@ void MainWindow::launchDupeChecker(QString path){
 }
 
 void MainWindow::exposeObjectsToJS(){
-    frame->addToJavaScriptWindowObject(QString("mainWindow"), this, QWebFrame::ScriptOwnership);
+    visFrame->addToJavaScriptWindowObject(QString("mainWindow"), this, QWebFrame::ScriptOwnership);
 }
 
 void MainWindow::setCurrentPath(QString newPath){
@@ -217,6 +225,7 @@ void MainWindow::centerWindow(){
 
     move ( x, y );
 }
+
 void MainWindow::stopAnalyzer(){
     if (analysisThread.isRunning()){
         qDebug() << "Terminating";
@@ -362,7 +371,6 @@ void MainWindow::navigateTo(QString path){
     }
 }
 
-
 QString MainWindow::getCurrentDUA() const{
     return currentDUA + tempNavigationPath;
 }
@@ -389,7 +397,6 @@ void MainWindow::openDirectory(QString path, QWidget *parent){
     fileManagerProcess->start("xdg-open", arguments);
 }
 
-
 void MainWindow::on_actionAnalyzeDirectory_triggered(){
     QModelIndex index = ui->twgDirViewer->currentIndex();
     if (index.isValid())
@@ -405,7 +412,6 @@ void MainWindow::on_twgDirViewer_doubleClicked(const QModelIndex &index){
         statFile(model->fileInfo(index).canonicalFilePath());
 }
 
-
 void MainWindow::on_twgDirViewer_expanded(const QModelIndex &){
     ui->twgDirViewer->resizeColumnToContents(0);
 }
@@ -415,20 +421,23 @@ void MainWindow::on_actionRefresh_triggered(){
     setCurrentPath(currentPath);
 }
 
-
-
 void MainWindow::analysisComplete(AnalysisTarget target){
     qDebug() << "Analysis complete: " << target;
     if (analyzer->getAnalysisDone()){
         QList<DirectoryEntry *> entries = analyzer->getEntries();
         qDebug() << "Analyzed..";
-        DirectoryEntry *rootEntry = analyzer->getRoot();
-        QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
-        QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
-        frame->evaluateJavaScript(jsCommand);
-        passGraphParamters();
-        qSort(entries.begin(), entries.end(), DirectoryEntry::isLessThan);
-        setWindowTitle("Disk Analyst - " + currentDUA);
+        if (target == Visualization){
+            DirectoryEntry *rootEntry = analyzer->getRoot();
+            QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
+            QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
+            visFrame->evaluateJavaScript(jsCommand);
+            passGraphParamters();
+        }else{
+            qSort(entries.begin(), entries.end(), DirectoryEntry::isLessThan);
+            qDebug() << "Largest entry" << entries[0]->getFormattedSize(entries[0]->getTotalSize());
+        }
+        if (target != DupeChecking)
+            setWindowTitle(QString("Disk Analyst - ") + currentDUA + (tempNavigationPath.trimmed().isEmpty()? "" : "[" + tempNavigationPath.trimmed() + "]"));
     }
 }
 
@@ -644,7 +653,7 @@ void MainWindow::passGraphParamters(bool displayUnit){
 
     QString navigateGraph = QString::number(SettingsManager::getNavigateChart());
 
-    frame->evaluateJavaScript(QString("applySettings(") + fadeEnabled + colorSet
+    visFrame->evaluateJavaScript(QString("applySettings(") + fadeEnabled + colorSet
                               + readable + displayUnitParam + navigateGraph + QString("); null"));
 
 }
@@ -676,4 +685,76 @@ void MainWindow::on_actionAbout_triggered(){
         aboutDialog->setModal(true);
     }
     aboutDialog->show();
+}
+
+void MainWindow::on_btnLargestFiles_clicked(){
+
+    /*stopAnalyzer();
+    analyzer = new DirectoryAnalyzer;
+    analyzer->moveToThread(&analysisThread);
+    connect(&analysisThread, SIGNAL(finished()), analyzer, SLOT(deleteLater()));
+    connect(this, SIGNAL(startAnalysis(QString,QString,int, AnalysisTarget)), analyzer, SLOT(startAnalysis(QString, QString, int, AnalysisTarget)));
+    connect(analyzer, SIGNAL(analysisComplete(AnalysisTarget)), this, SLOT(analysisComplete(AnalysisTarget)));
+    connect(this, SIGNAL(stopAnalysis(bool)), analyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
+    emit stopAnalysis(false);
+    analysisThread.start();
+    qDebug() << "Thread running? " << analysisThread.isRunning();
+
+
+    qDebug() << "Analyzing..";
+    emit startAnalysis(dirStr, nodeName, 0, FileSorting);
+*/
+
+    QJsonArray entriesArray;
+    QJsonObject entriesObject;
+    entriesObject.insert("name", "Entry1");
+    entriesObject.insert("value", 120);
+    entriesArray.push_back(entriesObject);
+    entriesObject.insert("name", "Entry2");
+    entriesObject.insert("value", 200);
+    entriesArray.push_back(entriesObject);
+    entriesObject.insert("name", "Entry3");
+    entriesObject.insert("value", 100);
+    entriesArray.push_back(entriesObject);
+    entriesObject.insert("name", "Entry5");
+    entriesObject.insert("value", 300);
+    entriesArray.push_back(entriesObject);
+    statFrame->evaluateJavaScript("visualize(" + QString(QJsonDocument(entriesArray).toJson(QJsonDocument::Compact)) + "); null");
+}
+
+void MainWindow::on_btnExtensions_clicked(){
+    /*stopAnalyzer();
+    analyzer = new DirectoryAnalyzer;
+    analyzer->moveToThread(&analysisThread);
+    connect(&analysisThread, SIGNAL(finished()), analyzer, SLOT(deleteLater()));
+    connect(this, SIGNAL(startAnalysis(QString,QString,int, AnalysisTarget)), analyzer, SLOT(startAnalysis(QString, QString, int, AnalysisTarget)));
+    connect(analyzer, SIGNAL(analysisComplete(AnalysisTarget)), this, SLOT(analysisComplete(AnalysisTarget)));
+    connect(this, SIGNAL(stopAnalysis(bool)), analyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
+    emit stopAnalysis(false);
+    analysisThread.start();
+    qDebug() << "Thread running? " << analysisThread.isRunning();
+
+
+    qDebug() << "Analyzing..";
+    emit startAnalysis(dirStr, nodeName, 0, ExtenstionSorting);
+*/
+
+}
+
+void MainWindow::on_btnSizeGroups_clicked(){
+    /*stopAnalyzer();
+    analyzer = new DirectoryAnalyzer;
+    analyzer->moveToThread(&analysisThread);
+    connect(&analysisThread, SIGNAL(finished()), analyzer, SLOT(deleteLater()));
+    connect(this, SIGNAL(startAnalysis(QString,QString,int, AnalysisTarget)), analyzer, SLOT(startAnalysis(QString, QString, int, AnalysisTarget)));
+    connect(analyzer, SIGNAL(analysisComplete(AnalysisTarget)), this, SLOT(analysisComplete(AnalysisTarget)));
+    connect(this, SIGNAL(stopAnalysis(bool)), analyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
+    emit stopAnalysis(false);
+    analysisThread.start();
+    qDebug() << "Thread running? " << analysisThread.isRunning();
+
+
+    qDebug() << "Analyzing..";
+    emit startAnalysis(dirStr, nodeName, 0, GroupSorting);
+    */
 }
