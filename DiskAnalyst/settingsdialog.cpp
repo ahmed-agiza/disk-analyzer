@@ -40,16 +40,11 @@ void SettingsDialog::loadValues(){
     }
     ui->chkFading->setChecked(SettingsManager::getFadeEnabled());
     ui->chkNavigate->setChecked(SettingsManager::getNavigateChart());
-    ui->sbxGraphDepth->setValue(SettingsManager::getGrapthDepth());
     ui->cmbColorSet->setCurrentIndex(SettingsManager::getColorSet() - 1);
 }
 
 bool SettingsDialog::saveValues(){
-    int graphDepth = ui->sbxGraphDepth->value();
-    if (graphDepth < 0 || graphDepth > 5){
-        QMessageBox::critical(this, "Error", QString("Invalid graph depth ") + QString::number(ui->sbxGraphDepth->value()));
-        return false;
-    }
+
     QString startupDir = ui->lblStartupDirectory->text();
     if (!startupDir.endsWith("/"))
         startupDir.append("/");
@@ -69,7 +64,6 @@ bool SettingsDialog::saveValues(){
         SettingsManager::setListEntriesByBlocks(true);
     }
     SettingsManager::setFadeEnabled(ui->chkFading->isChecked());
-    SettingsManager::setGrapthDepth(graphDepth);
     SettingsManager::setNavigateChart(ui->chkNavigate->isChecked());
     SettingsManager::setStartupDir(startupDir);
     SettingsManager::setColorSet(ui->cmbColorSet->currentIndex() + 1);
@@ -127,6 +121,5 @@ void SettingsDialog::loadDefaultValues(){
     }
     ui->chkFading->setChecked(SettingsManager::defaultFadeEnabled());
     ui->chkNavigate->setChecked(SettingsManager::defaultNavigateChart());
-    ui->sbxGraphDepth->setValue(SettingsManager::defaultGraphDepth());
     ui->cmbColorSet->setCurrentIndex(SettingsManager::defaultColorSet() - 1);
 }

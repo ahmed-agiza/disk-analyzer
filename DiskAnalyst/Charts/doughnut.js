@@ -149,7 +149,7 @@ function mouseover(d){
 
     // Display value
     d3.select("#explanation")
-        .text(readable ? convert(d.value, true) : d.value)
+        .text(readable ? convert(d.value, true) : d.value + " files")
         .style("visibility", "");
 }
 

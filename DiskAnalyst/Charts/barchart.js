@@ -145,7 +145,7 @@ function initializeBar(){
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text(readable ? ("Value / " + units) : "Value");
+        .text(readable ? ("Value / " + units) : "Files");
 }
 
 // Selecting appropriate scale
