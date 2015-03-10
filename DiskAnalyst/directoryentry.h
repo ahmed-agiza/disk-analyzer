@@ -61,6 +61,7 @@ public:
     bool operator>=(DirectoryEntry &other);
 
     static bool isLessThan(DirectoryEntry *first, DirectoryEntry *second);
+    static bool pairIsLessThan(QPair<QString, long long> &first, QPair<QString, long long> &second);
 
 
     bool isExecutable() const;

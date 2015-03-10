@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[45];
-    char stringdata[855];
+    QByteArrayData data[52];
+    char stringdata[988];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,32 +48,39 @@ QT_MOC_LITERAL(15, 210, 12),
 QT_MOC_LITERAL(16, 223, 15),
 QT_MOC_LITERAL(17, 239, 18),
 QT_MOC_LITERAL(18, 258, 17),
-QT_MOC_LITERAL(19, 276, 35),
-QT_MOC_LITERAL(20, 312, 29),
-QT_MOC_LITERAL(21, 342, 5),
-QT_MOC_LITERAL(22, 348, 24),
-QT_MOC_LITERAL(23, 373, 26),
-QT_MOC_LITERAL(24, 400, 32),
-QT_MOC_LITERAL(25, 433, 35),
-QT_MOC_LITERAL(26, 469, 27),
-QT_MOC_LITERAL(27, 497, 21),
-QT_MOC_LITERAL(28, 519, 40),
-QT_MOC_LITERAL(29, 560, 38),
-QT_MOC_LITERAL(30, 599, 24),
-QT_MOC_LITERAL(31, 624, 26),
-QT_MOC_LITERAL(32, 651, 24),
-QT_MOC_LITERAL(33, 676, 24),
-QT_MOC_LITERAL(34, 701, 17),
-QT_MOC_LITERAL(35, 719, 14),
-QT_MOC_LITERAL(36, 734, 16),
-QT_MOC_LITERAL(37, 751, 10),
-QT_MOC_LITERAL(38, 762, 12),
-QT_MOC_LITERAL(39, 775, 17),
-QT_MOC_LITERAL(40, 793, 17),
-QT_MOC_LITERAL(41, 811, 15),
-QT_MOC_LITERAL(42, 827, 13),
-QT_MOC_LITERAL(43, 841, 4),
-QT_MOC_LITERAL(44, 846, 8)
+QT_MOC_LITERAL(19, 276, 16),
+QT_MOC_LITERAL(20, 293, 20),
+QT_MOC_LITERAL(21, 314, 17),
+QT_MOC_LITERAL(22, 332, 20),
+QT_MOC_LITERAL(23, 353, 35),
+QT_MOC_LITERAL(24, 389, 29),
+QT_MOC_LITERAL(25, 419, 5),
+QT_MOC_LITERAL(26, 425, 24),
+QT_MOC_LITERAL(27, 450, 26),
+QT_MOC_LITERAL(28, 477, 32),
+QT_MOC_LITERAL(29, 510, 35),
+QT_MOC_LITERAL(30, 546, 27),
+QT_MOC_LITERAL(31, 574, 21),
+QT_MOC_LITERAL(32, 596, 40),
+QT_MOC_LITERAL(33, 637, 38),
+QT_MOC_LITERAL(34, 676, 24),
+QT_MOC_LITERAL(35, 701, 26),
+QT_MOC_LITERAL(36, 728, 24),
+QT_MOC_LITERAL(37, 753, 24),
+QT_MOC_LITERAL(38, 778, 22),
+QT_MOC_LITERAL(39, 801, 7),
+QT_MOC_LITERAL(40, 809, 24),
+QT_MOC_LITERAL(41, 834, 17),
+QT_MOC_LITERAL(42, 852, 14),
+QT_MOC_LITERAL(43, 867, 16),
+QT_MOC_LITERAL(44, 884, 10),
+QT_MOC_LITERAL(45, 895, 12),
+QT_MOC_LITERAL(46, 908, 17),
+QT_MOC_LITERAL(47, 926, 17),
+QT_MOC_LITERAL(48, 944, 15),
+QT_MOC_LITERAL(49, 960, 13),
+QT_MOC_LITERAL(50, 974, 4),
+QT_MOC_LITERAL(51, 979, 8)
     },
     "MainWindow\0startAnalysis\0\0AnalysisTarget\0"
     "stopAnalysis\0startScanning\0stopScanning\0"
@@ -83,6 +90,8 @@ QT_MOC_LITERAL(44, 846, 8)
     "launchDupeChecker\0analysisComplete\0"
     "scanComplete\0hashingComplete\0"
     "DuplicateEntryList\0treeMenuRequested\0"
+    "listLargestFiles\0listLargestExtension\0"
+    "listLargestGroups\0refreshChartsButtons\0"
     "on_actionAnalyzeDirectory_triggered\0"
     "on_twgDirViewer_doubleClicked\0index\0"
     "on_twgDirViewer_expanded\0"
@@ -96,7 +105,9 @@ QT_MOC_LITERAL(44, 846, 8)
     "on_actionAbout_triggered\0"
     "on_btnLargestFiles_clicked\0"
     "on_btnExtensions_clicked\0"
-    "on_btnSizeGroups_clicked\0exposeObjectsToJS\0"
+    "on_btnSizeGroups_clicked\0"
+    "on_btnBarChart_clicked\0checked\0"
+    "on_btnDoughChart_clicked\0exposeObjectsToJS\0"
     "setCurrentPath\0setDirectoryJson\0"
     "navigateTo\0stopAnalyzer\0stopDupesAnalyzer\0"
     "stopDupesChecking\0onDupesProgress\0"
@@ -110,7 +121,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      37,   14, // methods
+      43,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -118,45 +129,51 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    4,  199,    2, 0x06 /* Public */,
-       4,    1,  208,    2, 0x06 /* Public */,
-       5,    4,  211,    2, 0x06 /* Public */,
-       6,    1,  220,    2, 0x06 /* Public */,
-       7,    2,  223,    2, 0x06 /* Public */,
-      10,    1,  228,    2, 0x06 /* Public */,
+       1,    4,  229,    2, 0x06 /* Public */,
+       4,    1,  238,    2, 0x06 /* Public */,
+       5,    4,  241,    2, 0x06 /* Public */,
+       6,    1,  250,    2, 0x06 /* Public */,
+       7,    2,  253,    2, 0x06 /* Public */,
+      10,    1,  258,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    1,  231,    2, 0x08 /* Private */,
-      12,    1,  234,    2, 0x08 /* Private */,
-      13,    1,  237,    2, 0x08 /* Private */,
-      14,    1,  240,    2, 0x08 /* Private */,
-      15,    0,  243,    2, 0x08 /* Private */,
-      16,    1,  244,    2, 0x08 /* Private */,
-      18,    1,  247,    2, 0x08 /* Private */,
-      19,    0,  250,    2, 0x08 /* Private */,
-      20,    1,  251,    2, 0x08 /* Private */,
-      22,    1,  254,    2, 0x08 /* Private */,
-      23,    0,  257,    2, 0x08 /* Private */,
-      24,    0,  258,    2, 0x08 /* Private */,
-      25,    0,  259,    2, 0x08 /* Private */,
-      26,    0,  260,    2, 0x08 /* Private */,
-      27,    0,  261,    2, 0x08 /* Private */,
-      28,    0,  262,    2, 0x08 /* Private */,
-      29,    0,  263,    2, 0x08 /* Private */,
-      30,    0,  264,    2, 0x08 /* Private */,
-      31,    0,  265,    2, 0x08 /* Private */,
-      32,    0,  266,    2, 0x08 /* Private */,
-      33,    0,  267,    2, 0x08 /* Private */,
-      34,    0,  268,    2, 0x0a /* Public */,
-      35,    1,  269,    2, 0x0a /* Public */,
-      36,    2,  272,    2, 0x0a /* Public */,
-      37,    1,  277,    2, 0x0a /* Public */,
-      38,    0,  280,    2, 0x0a /* Public */,
-      39,    0,  281,    2, 0x0a /* Public */,
-      40,    0,  282,    2, 0x0a /* Public */,
-      41,    1,  283,    2, 0x0a /* Public */,
-      42,    1,  286,    2, 0x0a /* Public */,
-      44,    1,  289,    2, 0x0a /* Public */,
+      11,    1,  261,    2, 0x08 /* Private */,
+      12,    1,  264,    2, 0x08 /* Private */,
+      13,    1,  267,    2, 0x08 /* Private */,
+      14,    1,  270,    2, 0x08 /* Private */,
+      15,    0,  273,    2, 0x08 /* Private */,
+      16,    1,  274,    2, 0x08 /* Private */,
+      18,    1,  277,    2, 0x08 /* Private */,
+      19,    1,  280,    2, 0x08 /* Private */,
+      20,    1,  283,    2, 0x08 /* Private */,
+      21,    1,  286,    2, 0x08 /* Private */,
+      22,    0,  289,    2, 0x08 /* Private */,
+      23,    0,  290,    2, 0x08 /* Private */,
+      24,    1,  291,    2, 0x08 /* Private */,
+      26,    1,  294,    2, 0x08 /* Private */,
+      27,    0,  297,    2, 0x08 /* Private */,
+      28,    0,  298,    2, 0x08 /* Private */,
+      29,    0,  299,    2, 0x08 /* Private */,
+      30,    0,  300,    2, 0x08 /* Private */,
+      31,    0,  301,    2, 0x08 /* Private */,
+      32,    0,  302,    2, 0x08 /* Private */,
+      33,    0,  303,    2, 0x08 /* Private */,
+      34,    0,  304,    2, 0x08 /* Private */,
+      35,    0,  305,    2, 0x08 /* Private */,
+      36,    0,  306,    2, 0x08 /* Private */,
+      37,    0,  307,    2, 0x08 /* Private */,
+      38,    1,  308,    2, 0x08 /* Private */,
+      40,    1,  311,    2, 0x08 /* Private */,
+      41,    0,  314,    2, 0x0a /* Public */,
+      42,    1,  315,    2, 0x0a /* Public */,
+      43,    2,  318,    2, 0x0a /* Public */,
+      44,    1,  323,    2, 0x0a /* Public */,
+      45,    0,  326,    2, 0x0a /* Public */,
+      46,    0,  327,    2, 0x0a /* Public */,
+      47,    0,  328,    2, 0x0a /* Public */,
+      48,    1,  329,    2, 0x0a /* Public */,
+      49,    1,  332,    2, 0x0a /* Public */,
+      51,    1,  335,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int, 0x80000000 | 3,    2,    2,    2,    2,
@@ -174,20 +191,26 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 17,    2,
     QMetaType::Void, QMetaType::QPoint,    2,
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::QModelIndex,   21,
-    QMetaType::Void, QMetaType::QModelIndex,   21,
-    QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QModelIndex,   25,
+    QMetaType::Void, QMetaType::QModelIndex,   25,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool,   39,
+    QMetaType::Void, QMetaType::Bool,   39,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString, QMetaType::QString,    2,    2,
@@ -196,7 +219,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, QMetaType::QString,   43,
+    QMetaType::Void, QMetaType::QString,   50,
     QMetaType::Void, QMetaType::QString,    2,
 
        0        // eod
@@ -220,30 +243,36 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 10: _t->scanComplete(); break;
         case 11: _t->hashingComplete((*reinterpret_cast< DuplicateEntryList(*)>(_a[1]))); break;
         case 12: _t->treeMenuRequested((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 13: _t->on_actionAnalyzeDirectory_triggered(); break;
-        case 14: _t->on_twgDirViewer_doubleClicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
-        case 15: _t->on_twgDirViewer_expanded((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
-        case 16: _t->on_actionRefresh_triggered(); break;
-        case 17: _t->on_actionOpen_Terminal_triggered(); break;
-        case 18: _t->on_actionExploreDirectory_triggered(); break;
-        case 19: _t->on_actionSettings_triggered(); break;
-        case 20: _t->on_actionUp_triggered(); break;
-        case 21: _t->on_actionDuplicateFilesChecker_triggered(); break;
-        case 22: _t->on_actionSelectRootDirectory_triggered(); break;
-        case 23: _t->on_actionAbout_triggered(); break;
-        case 24: _t->on_btnLargestFiles_clicked(); break;
-        case 25: _t->on_btnExtensions_clicked(); break;
-        case 26: _t->on_btnSizeGroups_clicked(); break;
-        case 27: _t->exposeObjectsToJS(); break;
-        case 28: _t->setCurrentPath((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 29: _t->setDirectoryJson((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
-        case 30: _t->navigateTo((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 31: _t->stopAnalyzer(); break;
-        case 32: _t->stopDupesAnalyzer(); break;
-        case 33: _t->stopDupesChecking(); break;
-        case 34: _t->onDupesProgress((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 35: _t->openDirectory((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 36: _t->statFile((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 13: _t->listLargestFiles((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 14: _t->listLargestExtension((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 15: _t->listLargestGroups((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 16: _t->refreshChartsButtons(); break;
+        case 17: _t->on_actionAnalyzeDirectory_triggered(); break;
+        case 18: _t->on_twgDirViewer_doubleClicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
+        case 19: _t->on_twgDirViewer_expanded((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
+        case 20: _t->on_actionRefresh_triggered(); break;
+        case 21: _t->on_actionOpen_Terminal_triggered(); break;
+        case 22: _t->on_actionExploreDirectory_triggered(); break;
+        case 23: _t->on_actionSettings_triggered(); break;
+        case 24: _t->on_actionUp_triggered(); break;
+        case 25: _t->on_actionDuplicateFilesChecker_triggered(); break;
+        case 26: _t->on_actionSelectRootDirectory_triggered(); break;
+        case 27: _t->on_actionAbout_triggered(); break;
+        case 28: _t->on_btnLargestFiles_clicked(); break;
+        case 29: _t->on_btnExtensions_clicked(); break;
+        case 30: _t->on_btnSizeGroups_clicked(); break;
+        case 31: _t->on_btnBarChart_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 32: _t->on_btnDoughChart_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 33: _t->exposeObjectsToJS(); break;
+        case 34: _t->setCurrentPath((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 35: _t->setDirectoryJson((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 36: _t->navigateTo((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 37: _t->stopAnalyzer(); break;
+        case 38: _t->stopDupesAnalyzer(); break;
+        case 39: _t->stopDupesChecking(); break;
+        case 40: _t->onDupesProgress((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 41: _t->openDirectory((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 42: _t->statFile((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -313,13 +342,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 37)
+        if (_id < 43)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 37;
+        _id -= 43;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 37)
+        if (_id < 43)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 37;
+        _id -= 43;
     }
     return _id;
 }
