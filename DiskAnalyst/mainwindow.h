@@ -55,6 +55,8 @@ signals:
     void startHashing(DirectoryEntriesList, DirectoryEntry *);
     void stopHashing(bool);
 
+    void visualizeStat(QString);
+
 
 protected:
     bool eventFilter(QObject *, QEvent *);
@@ -72,8 +74,10 @@ private slots:
     void listLargestFiles(QString);
     void listLargestExtension(QString);
     void listLargestGroups(QString);
+    void onStatLoadStart();
+    void onStatLoadFinished(bool ok);
 
-    void refreshChartsButtons();
+    void onVisualizeStat(QString);
 
     void on_actionAnalyzeDirectory_triggered();
     void on_twgDirViewer_doubleClicked(const QModelIndex &index);
@@ -89,11 +93,10 @@ private slots:
     void on_btnLargestFiles_clicked();
     void on_btnExtensions_clicked();
     void on_btnSizeGroups_clicked();
-
-
     void on_btnBarChart_clicked(bool checked);
-
     void on_btnDoughChart_clicked(bool checked);
+
+    void applyStatSettings(bool);
 
 public slots:
     void exposeObjectsToJS();
@@ -127,6 +130,8 @@ private:
     QThread dupesCheckerThread;
     QThread dupesHashingThread;
     QString tempNavigationPath;
+    QString currentStatJson;
+    bool statLoaded;
 };
 
 

@@ -29,7 +29,7 @@ var key = function(d){return d.data.name;};
 var doughnutColor = d3.scale.category10();
 
 // Test data
-var testData = [
+/*var testData = [
   {name: "A", value: 500},
   {name: "B", value: 1000},
   {name: "C", value: 200},
@@ -43,7 +43,7 @@ var testData = [
 ];
 
 // Test call
-visualize(testData);
+visualize(testData);*/
 
 function visualize(data) {
     hideProgress();

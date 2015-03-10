@@ -36,7 +36,7 @@
 #include "settingsmanager.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(0), dupesAnalyzer(0){
+    :QMainWindow(parent), ui(new Ui::MainWindow), statLoaded(false), model(new QFileSystemModel(this)), analyzer(0), dupesAnalyzer(0){
 
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 
@@ -81,6 +81,11 @@ MainWindow::MainWindow(QWidget *parent)
     //statFrame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
     connect(visFrame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
+
+    connect(ui->wvwStatistics, SIGNAL(loadStarted()), this, SLOT(onStatLoadStart()), Qt::DirectConnection);
+    connect(ui->wvwStatistics, SIGNAL(loadFinished(bool)), this, SLOT(onStatLoadFinished(bool)), Qt::DirectConnection);
+    connect(this, SIGNAL(visualizeStat(QString)), this, SLOT(onVisualizeStat(QString)), Qt::QueuedConnection);
+
     settingsDialog = 0;
     statDialog = 0;
     dupesDialog = 0;
@@ -227,6 +232,7 @@ void MainWindow::centerWindow(){
 }
 
 void MainWindow::stopAnalyzer(){
+    currentStatJson = "";
     if (analysisThread.isRunning()){
         qDebug() << "Terminating";
         emit stopAnalysis(true);
@@ -481,9 +487,10 @@ void MainWindow::analysisComplete(AnalysisTarget target){
                 largestEntries.insert(entries[i]);
 
             QString entriesJson = getStatsticsJson(largestEntries);
-            qDebug() << entriesJson;
+            currentStatJson = entriesJson;
             statFrame->evaluateJavaScript(QString("visualize(") + entriesJson + "); null");
             ui->tbsMain->setCurrentIndex(1);
+            applyStatSettings(true);
         }else if (target == ExtenstionSorting){
             for(int i = 0; i < entries.size(); i++)
                 if (entries[i]->isDirectory())
@@ -529,9 +536,10 @@ void MainWindow::analysisComplete(AnalysisTarget target){
             }
 
             QString entriesJson = getStatsticsJson(largestEntries);
-
+            currentStatJson = entriesJson;
             statFrame->evaluateJavaScript(QString("visualize(") + entriesJson + "); null");
             ui->tbsMain->setCurrentIndex(1);
+            applyStatSettings(true);
         }else if (target ==  GroupSorting){
             for(int i = 0; i < entries.size(); i++)
                 if (entries[i]->isDirectory())
@@ -578,6 +586,7 @@ void MainWindow::analysisComplete(AnalysisTarget target){
 
             statFrame->evaluateJavaScript(QString("visualize(") + entriesJson + "); null");
             ui->tbsMain->setCurrentIndex(1);
+            applyStatSettings(false);
         }
         if (target != DupeChecking)
             setWindowTitle(QString("Disk Analyst") + (getCurrentDUA().trimmed().isEmpty()? QString("") : (QString(" - ") + currentDUA)));
@@ -796,7 +805,17 @@ void MainWindow::listLargestGroups(QString path){
     }
 }
 
-void MainWindow::refreshChartsButtons(){
+void MainWindow::onStatLoadStart(){
+    statLoaded = false;
+}
+
+void MainWindow::onStatLoadFinished(bool ok){
+    statLoaded = ok;
+}
+
+void MainWindow::onVisualizeStat(QString entries){
+    qDebug() << statLoaded;
+    statFrame->evaluateJavaScript(QString("visualize(") + entries + "); null");
 
 }
 
@@ -956,8 +975,32 @@ void MainWindow::on_btnSizeGroups_clicked(){
 
 void MainWindow::on_btnBarChart_clicked(bool checked){
     ui->btnDoughChart->setChecked(!checked);
+    if(checked){
+        QEventLoop loop;
+        connect(ui->wvwStatistics, SIGNAL(loadFinished(bool)), &loop, SLOT(quit()));
+        ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/barchart.html"));
+        if (!currentStatJson.trimmed().isEmpty()){
+            loop.exec();
+            statFrame->evaluateJavaScript(QString("visualize(") + currentStatJson + "); null");
+        }
+    }
 }
 
 void MainWindow::on_btnDoughChart_clicked(bool checked){
     ui->btnBarChart->setChecked(!checked);
+    if(checked){
+        QEventLoop loop;
+        connect(ui->wvwStatistics, SIGNAL(loadFinished(bool)), &loop, SLOT(quit()));
+        ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/doughnut.html"));
+        if (!currentStatJson.trimmed().isEmpty()){
+            loop.exec();
+            statFrame->evaluateJavaScript(QString("visualize(") + currentStatJson + "); null");
+        }
+    }
 }
+
+void MainWindow::applyStatSettings(bool readable){
+    statFrame->evaluateJavaScript(QString("applySettings(") + QString::number(readable) + QString("); null"));
+}
+
+

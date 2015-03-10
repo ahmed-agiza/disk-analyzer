@@ -51,7 +51,7 @@ var yAxis = d3.svg.axis()
 var sortTimeout = function(){
         setTimeout(function() {
         d3.select("input").property("checked", true).each(change);
-    }, 2000);
+    }, 500);
 }
 
 // TEST CALL
@@ -73,6 +73,7 @@ function visualize(data){
         .attr("height", function(d) {return height - y(d.value);});
 
     d3.select("input").on("change", change);
+    sortTimeout();
 }
 
 function change() {
