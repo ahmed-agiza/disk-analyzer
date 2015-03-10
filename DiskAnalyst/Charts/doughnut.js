@@ -44,8 +44,8 @@ var testData = [
 ];
 
 // Test call
-applySettings(true);
-visualize(testData);
+// applySettings(true);
+// visualize(testData);
 
 function visualize(data) {
     hideProgress();

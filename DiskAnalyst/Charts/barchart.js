@@ -30,7 +30,7 @@ var units;
 var readable;
 
 // The margins of the bar chart
-var margin = {top: 20, right: 20, bottom: 110, left: 50},
+var margin = {top: 20, right: 20, bottom: 110, left: 60},
     width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -57,8 +57,8 @@ var sortTimeout = function() {
 }
 
 // TEST CALL
-applySettings(true);
-visualize(testData);
+// applySettings(true);
+// visualize(testData);
 
 function visualize(data){
     barData = data;
