@@ -23,7 +23,7 @@ public:
         return settings.value(GRAPH_DEPTH_KEY, defaultGraphDepth()).toInt();
     }
     static int defaultGraphDepth(){
-        return 4;
+        return 0;
     }
 
     static void setStartupDir(QString value){

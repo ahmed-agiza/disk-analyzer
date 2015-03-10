@@ -1769,7 +1769,6 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdiriterator.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QProcess \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qprocess.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QCryptographicHash \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QEvent \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSignalMapper \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsignalmapper.h \
@@ -1843,12 +1842,16 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmenu.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMenuBar \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmenubar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QStatusBar \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstatusbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTabWidget \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QToolBar \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtoolbar.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTreeView \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtreeview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QWidget \
 		../DiskAnalyst/settingsmanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../DiskAnalyst/mainwindow.cpp

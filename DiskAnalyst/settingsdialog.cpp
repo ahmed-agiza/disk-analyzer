@@ -46,7 +46,7 @@ void SettingsDialog::loadValues(){
 
 bool SettingsDialog::saveValues(){
     int graphDepth = ui->sbxGraphDepth->value();
-    if (graphDepth < 1 || graphDepth > 5){
+    if (graphDepth < 0 || graphDepth > 5){
         QMessageBox::critical(this, "Error", QString("Invalid graph depth ") + QString::number(ui->sbxGraphDepth->value()));
         return false;
     }

@@ -50,7 +50,7 @@ public:
     {
         if (SettingsDialog->objectName().isEmpty())
             SettingsDialog->setObjectName(QStringLiteral("SettingsDialog"));
-        SettingsDialog->resize(539, 234);
+        SettingsDialog->resize(539, 263);
         formLayout = new QFormLayout(SettingsDialog);
         formLayout->setObjectName(QStringLiteral("formLayout"));
         formLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
@@ -118,9 +118,9 @@ public:
 
         sbxGraphDepth = new QSpinBox(SettingsDialog);
         sbxGraphDepth->setObjectName(QStringLiteral("sbxGraphDepth"));
-        sbxGraphDepth->setMinimum(1);
+        sbxGraphDepth->setMinimum(0);
         sbxGraphDepth->setMaximum(5);
-        sbxGraphDepth->setValue(4);
+        sbxGraphDepth->setValue(0);
 
         formLayout->setWidget(2, QFormLayout::FieldRole, sbxGraphDepth);
 
@@ -145,7 +145,7 @@ public:
     void retranslateUi(QDialog *SettingsDialog)
     {
         SettingsDialog->setWindowTitle(QApplication::translate("SettingsDialog", "Dialog", 0));
-        lblGraphDepth->setText(QApplication::translate("SettingsDialog", "Maximum graph depth:", 0));
+        lblGraphDepth->setText(QApplication::translate("SettingsDialog", "Maximum graph depth (0 = unlimited):", 0));
         rbtSize->setText(QApplication::translate("SettingsDialog", "Size", 0));
         rbtBlocks->setText(QApplication::translate("SettingsDialog", "Allocated blocks", 0));
         chkReadable->setText(QApplication::translate("SettingsDialog", "Display sizes in readble format", 0));

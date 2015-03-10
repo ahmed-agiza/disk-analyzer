@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>539</width>
-    <height>234</height>
+    <height>263</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="lblGraphDepth">
      <property name="text">
-      <string>Maximum graph depth:</string>
+      <string>Maximum graph depth (0 = unlimited):</string>
      </property>
     </widget>
    </item>
@@ -112,13 +112,13 @@
    <item row="2" column="1">
     <widget class="QSpinBox" name="sbxGraphDepth">
      <property name="minimum">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="maximum">
       <number>5</number>
      </property>
      <property name="value">
-      <number>4</number>
+      <number>0</number>
      </property>
     </widget>
    </item>
