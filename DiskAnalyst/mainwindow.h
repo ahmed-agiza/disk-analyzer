@@ -42,6 +42,8 @@ public:
 
     static void openDirectory(QString path, QWidget *parent);
 
+    static QString getStatsticsJson(QSet<DirectoryEntry *> &entries);
+
 signals:
     void startAnalysis(QString, QString, int, AnalysisTarget);
     void stopAnalysis(bool);
@@ -66,6 +68,9 @@ private slots:
     void scanComplete();
     void hashingComplete(DuplicateEntryList);
     void treeMenuRequested(QPoint);
+    void listLargestFiles(QString);
+
+
     void on_actionAnalyzeDirectory_triggered();
     void on_twgDirViewer_doubleClicked(const QModelIndex &index);
     void on_twgDirViewer_expanded(const QModelIndex &index);
@@ -76,13 +81,9 @@ private slots:
     void on_actionUp_triggered();
     void on_actionDuplicateFilesChecker_triggered();
     void on_actionSelectRootDirectory_triggered();
-
     void on_actionAbout_triggered();
-
     void on_btnLargestFiles_clicked();
-
     void on_btnExtensions_clicked();
-
     void on_btnSizeGroups_clicked();
 
 public slots:

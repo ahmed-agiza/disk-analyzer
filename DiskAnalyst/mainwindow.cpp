@@ -330,8 +330,7 @@ void MainWindow::statFile(QString path){
 
 }
 
-void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
-{
+void MainWindow::setDirectoryJson(QString dirStr, QString nodeName){
     stopAnalyzer();
     analyzer = new DirectoryAnalyzer;
     analyzer->moveToThread(&analysisThread);
@@ -345,6 +344,7 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName)
 
 
     qDebug() << "Analyzing..";
+    visFrame->evaluateJavaScript("showProgress(); null");
     if (SettingsManager::getListEntriesByBlocks())
         emit startAnalysis(dirStr, nodeName, 0, BlockVisualization);
     else
@@ -366,7 +366,7 @@ void MainWindow::navigateTo(QString path){
     QString fullPath = getCurrentDUA();
     QFileInfo pathInfo(fullPath);
     if(pathInfo.isDir()){
-
+        //setWindowTitle(QString("Disk Analyst - ") + currentDUA + (tempNavigationPath.trimmed().isEmpty()? QString("x") : QString(QString("[") + tempNavigationPath.trimmed() + "]")));
     }else if(pathInfo.exists()){
         statFile(pathInfo.canonicalFilePath());
     }else{
@@ -398,6 +398,18 @@ void MainWindow::openDirectory(QString path, QWidget *parent){
     QStringList arguments;
     arguments << path;
     fileManagerProcess->start("xdg-open", arguments);
+}
+
+QString MainWindow::getStatsticsJson(QSet<DirectoryEntry *> &entries){
+    QJsonArray array;
+    for(QSet<DirectoryEntry *>::iterator i = entries.begin(); i != entries.end(); i++){
+        QJsonObject entryJson;
+        entryJson.insert("name", (*i)->getName());
+        entryJson.insert("value", (*i)->getTotalSize());
+        array.push_front(entryJson);
+    }
+
+    return QString(QJsonDocument(array).toJson(QJsonDocument::Compact));
 }
 
 void MainWindow::on_actionAnalyzeDirectory_triggered(){
@@ -443,12 +455,23 @@ void MainWindow::analysisComplete(AnalysisTarget target){
             QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
             visFrame->evaluateJavaScript(jsCommand);
             passGraphParamters(false);
-        }else{
+        }else if (target == FileSorting){
+            for(int i = 0; i < entries.size(); i++){
+                if (entries[i]->isDirectory())
+                    entries.removeAt(i--);
+            }
             qSort(entries.begin(), entries.end(), DirectoryEntry::isLessThan);
-            qDebug() << "Largest entry" << entries[0]->getFormattedSize(entries[0]->getTotalSize());
+            QSet<DirectoryEntry *> largestEntries;
+
+            for(int i = entries.size() - 1; (i > entries.size() - 11) && (i >= 0); i--)
+                largestEntries.insert(entries[i]);
+
+            QString entriesJson = getStatsticsJson(largestEntries);
+            statFrame->evaluateJavaScript(QString("visualize(") + entriesJson + "); null");
+
         }
         if (target != DupeChecking)
-            setWindowTitle(QString("Disk Analyst - ") + currentDUA + (tempNavigationPath.trimmed().isEmpty()? "" : "[" + tempNavigationPath.trimmed() + "]"));
+            setWindowTitle(QString("Disk Analyst - ") + currentDUA);
     }
 }
 
@@ -588,6 +611,31 @@ void MainWindow::treeMenuRequested(QPoint loc){
 
 }
 
+void MainWindow::listLargestFiles(QString path){
+    QFileInfo fileInfo(path);
+    if (fileInfo.isDir()){
+        QString directory =fileInfo.absoluteDir().absolutePath();
+        if (directory != QDir::rootPath() && !directory.endsWith("/"))
+            directory.append("/");
+        QString fileName = fileInfo.baseName();
+        stopAnalyzer();
+        analyzer = new DirectoryAnalyzer;
+        analyzer->moveToThread(&analysisThread);
+        connect(&analysisThread, SIGNAL(finished()), analyzer, SLOT(deleteLater()));
+        connect(this, SIGNAL(startAnalysis(QString,QString,int, AnalysisTarget)), analyzer, SLOT(startAnalysis(QString, QString, int, AnalysisTarget)));
+        connect(analyzer, SIGNAL(analysisComplete(AnalysisTarget)), this, SLOT(analysisComplete(AnalysisTarget)));
+        connect(this, SIGNAL(stopAnalysis(bool)), analyzer, SLOT(setStopped(bool)), Qt::DirectConnection);
+        emit stopAnalysis(false);
+        analysisThread.start();
+        qDebug() << "Thread running? " << analysisThread.isRunning();
+
+
+        qDebug() << "Analyzing..";
+        statFrame->evaluateJavaScript("showProgress(); null");
+        emit startAnalysis(directory, fileName, 0, FileSorting);
+    }
+}
+
 void MainWindow::on_actionOpen_Terminal_triggered(){
     if (getCurrentDUA().trimmed().isEmpty()){
         QModelIndex index = ui->twgDirViewer->currentIndex();
@@ -704,7 +752,17 @@ void MainWindow::on_actionAbout_triggered(){
 }
 
 void MainWindow::on_btnLargestFiles_clicked(){
-
+    QString path;
+    if(getCurrentDUA().trimmed().isEmpty()){
+        QModelIndex index = ui->twgDirViewer->currentIndex();
+        if (!index.isValid()){
+            qDebug() << "Invalid";
+            return;
+        }
+        path = getCurrentDUA();
+    }else
+        path = getCurrentDUA();
+    listLargestFiles(path);
     /*stopAnalyzer();
     analyzer = new DirectoryAnalyzer;
     analyzer->moveToThread(&analysisThread);
@@ -721,7 +779,7 @@ void MainWindow::on_btnLargestFiles_clicked(){
     emit startAnalysis(dirStr, nodeName, 0, FileSorting);
 */
 
-    QJsonArray entriesArray;
+   /* QJsonArray entriesArray;
     QJsonObject entriesObject;
     entriesObject.insert("name", "Entry1");
     entriesObject.insert("value", 120);
@@ -735,10 +793,11 @@ void MainWindow::on_btnLargestFiles_clicked(){
     entriesObject.insert("name", "Entry5");
     entriesObject.insert("value", 300);
     entriesArray.push_back(entriesObject);
-    statFrame->evaluateJavaScript("visualize(" + QString(QJsonDocument(entriesArray).toJson(QJsonDocument::Compact)) + "); null");
+    statFrame->evaluateJavaScript("visualize(" + QString(QJsonDocument(entriesArray).toJson(QJsonDocument::Compact)) + "); null");*/
 }
 
 void MainWindow::on_btnExtensions_clicked(){
+
     /*stopAnalyzer();
     analyzer = new DirectoryAnalyzer;
     analyzer->moveToThread(&analysisThread);
@@ -752,8 +811,8 @@ void MainWindow::on_btnExtensions_clicked(){
 
 
     qDebug() << "Analyzing..";
-    emit startAnalysis(dirStr, nodeName, 0, ExtenstionSorting);
-*/
+    emit startAnalysis(dirStr, nodeName, 0, ExtenstionSorting);*/
+
 
 }
 

@@ -15,7 +15,7 @@ var progressArc = d3.svg.arc()
     .outerRadius(240);
 
 // Test call
-showProgress();
+//showProgress();
 
 // Test call
 //hideProgress();
