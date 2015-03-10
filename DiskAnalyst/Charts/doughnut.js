@@ -192,5 +192,6 @@ function convert(bytes, units){
 }
 
 function applySettings(en){
-    readable = en;
+    if (typeof en == "undefined") readable = true;
+    else readable = en;
 }

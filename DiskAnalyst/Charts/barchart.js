@@ -175,7 +175,8 @@ function convert(bytes, un){
 }
 
 function applySettings(en){
-    readable = en;
+    if (typeof en == "undefined") readable = true;
+    else readable = en;
 }
 
 // Data fetching from file
