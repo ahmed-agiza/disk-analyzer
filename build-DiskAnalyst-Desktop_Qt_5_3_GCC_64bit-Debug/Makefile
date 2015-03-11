@@ -1779,6 +1779,9 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QSplitter \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qsplitter.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QToolButton \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtoolbutton.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../DiskAnalyst/mainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1797,7 +1800,6 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSettings \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsettings.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAbstractButton \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QDir \
 		../DiskAnalyst/filestatdialog.h \
 		../DiskAnalyst/dupesdialog.h \
