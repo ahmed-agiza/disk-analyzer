@@ -29,6 +29,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     void passGraphParamters(bool displayUnit = true);
+    QString getSettingsJS(bool displayUnit = true);
 
 
 public:
@@ -78,6 +79,10 @@ private slots:
     void onStatLoadFinished(bool ok);
 
     void onVisualizeStat(QString);
+
+    void exportHTML();
+    void exportJson();
+    void exportXML();
 
     void on_actionAnalyzeDirectory_triggered();
     void on_twgDirViewer_doubleClicked(const QModelIndex &index);
@@ -131,8 +136,18 @@ private:
     QThread dupesHashingThread;
     QString tempNavigationPath;
     QString currentStatJson;
+    QString currentAnalysisJson;
     AnalysisTarget lastStatTarget;
     bool statLoaded;
+    bool lastListByBlocks;
+    QMenu *exportMenu;
+    QAction *exportHTMLAction;
+    QAction *exportJsonAction;
+    QAction *exportXMLAction;
+
+    void initializeExportMenu();
+    void registerMetaObjects();
+    void initializeWebViews();
 };
 
 

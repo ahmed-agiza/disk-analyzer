@@ -144,9 +144,9 @@ void DirectoryAnalyzer::getChildrenArray(DirectoryEntry *entry, QJsonArray &arra
         QJsonArray childrenJsonBuf;
         if ((*i)->isDirectory()){
             QJsonObject dummyEntry;
-            dummyEntry.insert("name", "dummy");
+            dummyEntry.insert("name", (*i)->getName() + " <Folder I-Node>");
             dummyEntry.insert("size", (*i)->getEntrySize());
-            dummyEntry.insert("dummy", "dummy");
+            dummyEntry.insert("dummy", "true");
             childrenJsonBuf.push_front(dummyEntry);
         }
         getChildrenArray((*i), childrenJsonBuf);
@@ -210,9 +210,9 @@ QJsonObject DirectoryAnalyzer::getEntriesJson(DirectoryEntry *rootEnry){
         QJsonArray childrenBuf;
         if ((*i)->isDirectory()){
             QJsonObject dummyEntry;
-            dummyEntry.insert("name", "dummy");
+            dummyEntry.insert("name", (*i)->getName() + " <Folder I-Node>");
             dummyEntry.insert("size", (*i)->getEntrySize());
-            dummyEntry.insert("dummy", "dummy");
+            dummyEntry.insert("dummy", "true");
             childrenBuf.push_front(dummyEntry);
         }
         getChildrenArray(*i, childrenBuf);
@@ -242,9 +242,9 @@ QJsonObject DirectoryAnalyzer::getEntriesJsonByBlock(DirectoryEntry *rootEntry){
         QJsonArray childrenBuf;
         if ((*i)->isDirectory()){
             QJsonObject dummyEntry;
-            dummyEntry.insert("name", "dummy");
+            dummyEntry.insert("name", (*i)->getName() + " <Folder I-Node>");
             dummyEntry.insert("size", (*i)->getNumberOfBlocks());
-            dummyEntry.insert("dummy", "dummy");
+            dummyEntry.insert("dummy", "true");
             childrenBuf.push_front(dummyEntry);
         }
         getChildrenArrayByBlocks(*i, childrenBuf);

@@ -508,6 +508,7 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/Developer-icon.png \
 		../DiskAnalyst/Icons/Apps-Terminal-Pc-104-icon.png \
 		../DiskAnalyst/Icons/Folder-Open-icon.png \
+		../DiskAnalyst/Icons/Arrow-download-icon.png \
 		../DiskAnalyst/Icons/about.png \
 		../DiskAnalyst/Icons/file-explore-icon.png \
 		../DiskAnalyst/Icons/Folder-Add-icon.png \
@@ -521,12 +522,13 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/Button-Upload-icon.png \
 		../DiskAnalyst/Charts/d3.v3.min.js \
 		../DiskAnalyst/Charts/sequences.css \
+		../DiskAnalyst/Charts/sunburst.expanded.html \
 		../DiskAnalyst/Charts/css.css \
 		../DiskAnalyst/Charts/progress.css \
-		../DiskAnalyst/Charts/index.html \
 		../DiskAnalyst/Charts/data.tsv \
 		../DiskAnalyst/Charts/barchart.html \
 		../DiskAnalyst/Charts/visit-sequences.csv \
+		../DiskAnalyst/Charts/sunburst.html \
 		../DiskAnalyst/Charts/progress.html \
 		../DiskAnalyst/Charts/doughnut.html \
 		../DiskAnalyst/Charts/jquery.min.js \
@@ -2102,8 +2104,6 @@ settingsdialog.o: ../DiskAnalyst/settingsdialog.cpp ../DiskAnalyst/settingsdialo
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QRadioButton \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qradiobutton.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QSpinBox \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qspinbox.h \
 		../DiskAnalyst/settingsmanager.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QFileDialog \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qfiledialog.h \

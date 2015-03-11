@@ -52,7 +52,6 @@ var arc = d3.svg.arc()
 function visualize(root){
     hideProgress();
     initializeSunburst();
-    applySettings();
     clearChart();
     initializeFilePathDisplay();
 
@@ -146,7 +145,7 @@ function mouseover(d){
             return (sequenceArray.indexOf(node) >= 0);
         })
         .style("opacity", 1);
-    applyMessage();
+    applyMessage(units);
 }
 
 // Gets the ancestors of the current node, where path is from highest to lowest
@@ -307,7 +306,7 @@ function setBlocksMessage(){
 }
 
 function applyMessage(un){
-    if (un)
+    if (typeof(un) === "undefined" || un)
         setSizeMessage();
     else
         setBlocksMessage();
@@ -354,16 +353,3 @@ function applySettings(op, clr, rd, un, gn, d){
     else depth = d;
 
 }
-
-// Calling the json function with the disk statistics (Calls json data from file)
-// Invoking from a JSON file
-/*d3.json("./data.json", function(error, root) {
-    visualize(root);
-});*/
-
-// The arc for drawing the svg (OLD ARC)
-/*var arc = d3.svg.arc()
-    .startAngle(function(d) {return d.x;})
-    .endAngle(function(d) {return (d.x + d.dx);})
-    .innerRadius(function(d) {return Math.sqrt(d.y);})
-    .outerRadius(function(d) {return Math.sqrt(d.y + d.dy);});*/

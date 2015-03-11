@@ -22,9 +22,10 @@
         <file>Icons/Folder-Add-icon.png</file>
         <file>Icons/help.png</file>
         <file>Icons/about.png</file>
+        <file>Icons/Arrow-download-icon.png</file>
     </qresource>
     <qresource prefix="/charts">
-        <file>Charts/index.html</file>
+        <file>Charts/sunburst.html</file>
         <file>Charts/visit-sequences.csv</file>
         <file>Charts/css.css</file>
         <file>Charts/d3.v3.min.js</file>
@@ -42,5 +43,6 @@
         <file>Charts/progress.css</file>
         <file>Charts/progress.html</file>
         <file>Charts/progress.js</file>
+        <file>Charts/sunburst.expanded.html</file>
     </qresource>
 </RCC>

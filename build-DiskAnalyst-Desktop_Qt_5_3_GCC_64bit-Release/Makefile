@@ -523,10 +523,10 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Charts/sequences.css \
 		../DiskAnalyst/Charts/css.css \
 		../DiskAnalyst/Charts/progress.css \
-		../DiskAnalyst/Charts/index.html \
 		../DiskAnalyst/Charts/data.tsv \
 		../DiskAnalyst/Charts/barchart.html \
 		../DiskAnalyst/Charts/visit-sequences.csv \
+		../DiskAnalyst/Charts/sunburst.html \
 		../DiskAnalyst/Charts/progress.html \
 		../DiskAnalyst/Charts/doughnut.html \
 		../DiskAnalyst/Charts/jquery.min.js \
@@ -1805,6 +1805,54 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		../DiskAnalyst/customprogressbar.h \
 		../DiskAnalyst/aboutdialog.h \
 		ui_mainwindow.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/QWebView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpainter.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtextoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qpen.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QGridLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMenu \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmenu.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMenuBar \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmenubar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QStatusBar \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstatusbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTabWidget \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QToolBar \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtoolbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTreeView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtreeview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QWidget \
 		../DiskAnalyst/settingsmanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../DiskAnalyst/mainwindow.cpp
 
@@ -2003,6 +2051,57 @@ settingsdialog.o: ../DiskAnalyst/settingsdialog.cpp ../DiskAnalyst/settingsdialo
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdir.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfileinfo.h \
 		ui_settingsdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QCheckBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qcheckbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QComboBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qcombobox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialogButtonBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QFormLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qformlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qgridlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QHBoxLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QRadioButton \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qradiobutton.h \
 		../DiskAnalyst/settingsmanager.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QFileDialog \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qfiledialog.h \
@@ -2112,7 +2211,50 @@ filestatdialog.o: ../DiskAnalyst/filestatdialog.cpp ../DiskAnalyst/filestatdialo
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfiledevice.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtouchdevice.h \
-		ui_filestatdialog.h
+		ui_filestatdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialogButtonBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QFormLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qformlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qgridlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlabel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filestatdialog.o ../DiskAnalyst/filestatdialog.cpp
 
 dupesdialog.o: ../DiskAnalyst/dupesdialog.cpp ../DiskAnalyst/dupesdialog.h \
@@ -2226,11 +2368,51 @@ dupesdialog.o: ../DiskAnalyst/dupesdialog.cpp ../DiskAnalyst/dupesdialog.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QString \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSet \
 		ui_dupesdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialogButtonBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTableView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtableview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qgridlayout.h \
 		../DiskAnalyst/mainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qicon.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QFileSystemModel \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qfilesystemmodel.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qdir.h \
@@ -2255,7 +2437,6 @@ dupesdialog.o: ../DiskAnalyst/dupesdialog.cpp ../DiskAnalyst/dupesdialog.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWebKit/qwebkitglobal.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QProgressBar \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qprogressbar.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
 		../DiskAnalyst/directoryanalyzer.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QList \
 		../DiskAnalyst/settingsdialog.h \
@@ -2270,20 +2451,6 @@ dupesdialog.o: ../DiskAnalyst/dupesdialog.cpp ../DiskAnalyst/dupesdialog.h \
 		../DiskAnalyst/aboutdialog.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QTableWidgetItem \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtablewidget.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtableview.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMessageBox \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmessagebox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dupesdialog.o ../DiskAnalyst/dupesdialog.cpp
@@ -2670,7 +2837,48 @@ aboutdialog.o: ../DiskAnalyst/aboutdialog.cpp ../DiskAnalyst/aboutdialog.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qfiledevice.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qtouchdevice.h \
-		ui_aboutdialog.h
+		ui_aboutdialog.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QDialogButtonBox \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qgridlayout.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o aboutdialog.o ../DiskAnalyst/aboutdialog.cpp
 
 qrc_files.o: qrc_files.cpp 

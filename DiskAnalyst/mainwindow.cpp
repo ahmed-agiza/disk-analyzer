@@ -17,6 +17,7 @@
 #include <QMouseEvent>
 #include <QIcon>
 #include <QSplitter>
+#include <QToolButton>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -35,15 +36,10 @@
 #include "ui_mainwindow.h"
 #include "settingsmanager.h"
 
+
 MainWindow::MainWindow(QWidget *parent)
-    :QMainWindow(parent), ui(new Ui::MainWindow), statLoaded(false), model(new QFileSystemModel(this)), analyzer(0), dupesAnalyzer(0){
-
-    QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-
-    qRegisterMetaType<DirectoryEntriesList>("DirectoryEntriesList");
-    qRegisterMetaType<DirectoryEntry>("DirectoryEntry");
-    qRegisterMetaType<DuplicateEntryList>("DuplicateEntryList");
-    qRegisterMetaType<AnalysisTarget>("AnalysisTarget");
+    :QMainWindow(parent), ui(new Ui::MainWindow), model(new QFileSystemModel(this)), analyzer(0), dupesAnalyzer(0), statLoaded(false), lastListByBlocks(false){
+    registerMetaObjects();
 
     ui->setupUi(this);
 
@@ -63,12 +59,79 @@ MainWindow::MainWindow(QWidget *parent)
     centerWindow();
     statusBar()->setSizeGripEnabled(false);
 
+
+    initializeWebViews();
+
+    settingsDialog = 0;
+    statDialog = 0;
+    dupesDialog = 0;
+    progress = 0;
+    aboutDialog = 0;
+    lastStatTarget = Unkown;
+
+    ui->twgDirViewer->setRootIsDecorated(true);
+    QObject::connect(ui->twgDirViewer, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeMenuRequested(QPoint)), Qt::UniqueConnection);
+    ui->twgDirViewer->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    initializeExportMenu();
+}
+
+
+MainWindow::~MainWindow(){
+    analysisThread.quit();
+    analysisThread.wait();
+    dupesCheckerThread.quit();
+    dupesCheckerThread.wait();
+    dupesHashingThread.quit();
+    dupesHashingThread.wait();
+    delete ui;
+}
+
+bool MainWindow::eventFilter(QObject *o, QEvent *e){
+    return QMainWindow::eventFilter(o, e);
+}
+
+void MainWindow::initializeExportMenu()
+{
+    exportMenu = new QMenu("Export As..", this);
+    exportMenu->setToolTip("Export Current Graph As..");
+    exportMenu->setIcon(QIcon(":/icons/Icons/Arrow-download-icon.png"));
+    exportHTMLAction = new QAction("Export As HTML", this);
+    exportXMLAction = new QAction("Export As XML", this);
+    exportJsonAction = new QAction("Export As JSON", this);
+    connect(exportHTMLAction, SIGNAL(triggered()), this, SLOT(exportHTML()));
+    connect(exportXMLAction, SIGNAL(triggered()), this, SLOT(exportXML()));
+    connect(exportJsonAction, SIGNAL(triggered()), this, SLOT(exportJson()));
+    exportMenu->addAction(exportHTMLAction);
+    exportMenu->addAction(exportJsonAction);
+    exportMenu->addAction(exportXMLAction);
+    QToolButton* exportToolButton = new QToolButton(this);
+    exportToolButton->setText("Export As..");
+    exportToolButton->setToolTip("Export Current Graph As..");
+    exportToolButton->setIcon(QIcon(":/icons/Icons/Arrow-download-icon.png"));
+    exportToolButton->setMenu(exportMenu);
+    exportToolButton->setPopupMode(QToolButton::InstantPopup);
+    ui->mainToolBar->insertWidget(ui->actionSettings, exportToolButton);
+}
+
+void MainWindow::registerMetaObjects()
+{
+    qRegisterMetaType<DirectoryEntriesList>("DirectoryEntriesList");
+    qRegisterMetaType<DirectoryEntry>("DirectoryEntry");
+    qRegisterMetaType<DuplicateEntryList>("DuplicateEntryList");
+    qRegisterMetaType<AnalysisTarget>("AnalysisTarget");
+}
+
+void MainWindow::initializeWebViews()
+{
+    QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+
     visFrame = ui->wvwCharts->page()->mainFrame();
     statFrame = ui->wvwStatistics->page()->mainFrame();
 
     //ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
     //ui->wvwStatistics->setContextMenuPolicy(Qt::NoContextMenu);
-    ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/index.html"));
+    ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/sunburst.html"));
     ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/barchart.html"));
 
     //visFrame->setScrollBarValue(Qt::Vertical, visFrame->scrollBarMaximum(Qt::Vertical));
@@ -86,33 +149,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->wvwStatistics, SIGNAL(loadStarted()), this, SLOT(onStatLoadStart()), Qt::DirectConnection);
     connect(ui->wvwStatistics, SIGNAL(loadFinished(bool)), this, SLOT(onStatLoadFinished(bool)), Qt::DirectConnection);
     connect(this, SIGNAL(visualizeStat(QString)), this, SLOT(onVisualizeStat(QString)), Qt::QueuedConnection);
-
-    settingsDialog = 0;
-    statDialog = 0;
-    dupesDialog = 0;
-    progress = 0;
-    aboutDialog = 0;
-    lastStatTarget = Unkown;
-
-    ui->twgDirViewer->setRootIsDecorated(true);
-    QObject::connect(ui->twgDirViewer, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeMenuRequested(QPoint)), Qt::UniqueConnection);
-    ui->twgDirViewer->setContextMenuPolicy(Qt::CustomContextMenu);
-
-}
-
-
-MainWindow::~MainWindow(){
-    analysisThread.quit();
-    analysisThread.wait();
-    dupesCheckerThread.quit();
-    dupesCheckerThread.wait();
-    dupesHashingThread.quit();
-    dupesHashingThread.wait();
-    delete ui;
-}
-
-bool MainWindow::eventFilter(QObject *o, QEvent *e){
-    return QMainWindow::eventFilter(o, e);
 }
 
 void MainWindow::analyzeDirectory(QString path){
@@ -235,6 +271,7 @@ void MainWindow::centerWindow(){
 
 void MainWindow::stopAnalyzer(){
     currentStatJson = "";
+    currentAnalysisJson = "";
     if (analysisThread.isRunning()){
         qDebug() << "Terminating";
         emit stopAnalysis(true);
@@ -466,17 +503,21 @@ void MainWindow::analysisComplete(AnalysisTarget target){
             qDebug() << "Listing by size";
             DirectoryEntry *rootEntry = analyzer->getRoot();
             QString entriesJson = DirectoryAnalyzer::getEntriesJsonString(rootEntry);
+            currentAnalysisJson = entriesJson;
+            lastListByBlocks = false;
             QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
-            visFrame->evaluateJavaScript(jsCommand);
             passGraphParamters();
+            visFrame->evaluateJavaScript(jsCommand);
             ui->tbsMain->setCurrentIndex(0);
         }else if (target == BlockVisualization){
             qDebug() << "Listing by blocks";
             DirectoryEntry *rootEntry = analyzer->getRoot();
             QString entriesJson = DirectoryAnalyzer::getEntriesJsonStringByBlock(rootEntry);
+            currentAnalysisJson = entriesJson;
+            lastListByBlocks = true;
             QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
-            visFrame->evaluateJavaScript(jsCommand);
             passGraphParamters(false);
+            visFrame->evaluateJavaScript(jsCommand);
             ui->tbsMain->setCurrentIndex(0);
         }else if (target == FileSorting){
             for(int i = 0; i < entries.size(); i++)
@@ -521,10 +562,10 @@ void MainWindow::analysisComplete(AnalysisTarget target){
                         else
                             largestEntriesMap["Unknown"] += entries[i]->getEntrySize();
                     }else{
-                        if (!largestEntriesMap.contains(fileInfo.suffix()))
-                            largestEntriesMap[fileInfo.suffix()] = entries[i]->getEntrySize();
+                        if (!largestEntriesMap.contains(fileInfo.suffix().toLower()))
+                            largestEntriesMap[fileInfo.suffix().toLower()] = entries[i]->getEntrySize();
                         else
-                            largestEntriesMap[fileInfo.suffix()] += entries[i]->getEntrySize();
+                            largestEntriesMap[fileInfo.suffix().toLower()] += entries[i]->getEntrySize();
                     }
                 }
             }
@@ -628,10 +669,6 @@ void MainWindow::scanComplete(){
 
         qDebug() << "Scanning..";
         emit startHashing(dupesAnalyzer->getEntries(), dupesAnalyzer->getRoot());
-
-
-
-
     }
 }
 
@@ -824,6 +861,63 @@ void MainWindow::onVisualizeStat(QString entries){
 
 }
 
+void MainWindow::exportHTML(){
+    if (currentAnalysisJson.trimmed().isEmpty()){
+        QMessageBox::critical(this, "Error", "You have to generate a graph before exporting");
+        return;
+    }
+    QString savePath = QFileDialog::getSaveFileName(this, "Export to..", QDir::homePath(), "HTML Page (*.html)");
+    if(savePath.trimmed().isEmpty())
+        return;
+    if (!savePath.endsWith(".html"))
+        savePath.append(".html");
+    QFile templateFile(":/charts/Charts/sunburst.expanded.html");
+    QFile saveFile(savePath);
+    if (!templateFile.open(QFile::ReadOnly | QFile::Text)){
+        QMessageBox::critical(this, "Error", "Unknown error");
+        return;
+    }
+    QString templateData = QString(templateFile.readAll()).replace("1234567as890129809382fbyjtnd4092803456789", currentAnalysisJson);
+    if (!saveFile.open(QFile::WriteOnly | QFile::Truncate | QFile::Text)){
+        QMessageBox::critical(this, "Error", "Cannot open the file for saving");
+        templateFile.close();
+        return;
+    }
+   templateData = templateData.replace("24829028adfv309528509823905afdsav820935820", getSettingsJS(!lastListByBlocks));
+    QTextStream writeStream(&saveFile);
+    writeStream << templateData;
+    saveFile.close();
+
+
+}
+
+void MainWindow::exportJson(){
+    if (currentAnalysisJson.trimmed().isEmpty()){
+        QMessageBox::critical(this, "Error", "You have to generate a graph before exporting");
+        return;
+    }
+
+    QString savePath = QFileDialog::getSaveFileName(this, "Export to..", QDir::homePath(), "JSON Document (*.json)");
+    if(savePath.trimmed().isEmpty())
+        return;
+    if (!savePath.endsWith(".json"))
+        savePath.append(".json");
+
+    QFile saveFile(savePath);
+    if(!saveFile.open(QFile::WriteOnly | QFile::Truncate | QFile::Text)){
+        QMessageBox::critical(this, "Error", "Cannot open the file for saving");
+        return;
+    }
+
+    QTextStream writeStream(&saveFile);
+    writeStream << QJsonDocument::fromJson(currentAnalysisJson.toUtf8()).toJson();
+    saveFile.close();
+}
+
+void MainWindow::exportXML(){
+    qDebug() << "Export XML";
+}
+
 void MainWindow::on_actionOpen_Terminal_triggered(){
     if (getCurrentDUA().trimmed().isEmpty()){
         QModelIndex index = ui->twgDirViewer->currentIndex();
@@ -885,6 +979,11 @@ void MainWindow::on_actionUp_triggered(){
 }
 
 void MainWindow::passGraphParamters(bool displayUnit){
+    QString settingsJs = getSettingsJS(displayUnit) + " null";
+    visFrame->evaluateJavaScript(settingsJs);
+}
+
+QString MainWindow::getSettingsJS(bool displayUnit){
     QString fadeEnabled;
     if (SettingsManager::getFadeEnabled())
         fadeEnabled = "0.3, ";
@@ -904,9 +1003,8 @@ void MainWindow::passGraphParamters(bool displayUnit){
 
     QString navigateGraph = QString::number(SettingsManager::getNavigateChart());
 
-    visFrame->evaluateJavaScript(QString("applySettings(") + fadeEnabled + colorSet
-                                 + readable + displayUnitParam + navigateGraph + QString("); null"));
-
+    return QString("applySettings(") + fadeEnabled + colorSet
+                                     + readable + displayUnitParam + navigateGraph + QString(");");
 }
 
 void MainWindow::on_actionDuplicateFilesChecker_triggered(){
