@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[59];
-    char stringdata[1075];
+    QByteArrayData data[62];
+    char stringdata[1134];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -77,17 +77,20 @@ QT_MOC_LITERAL(44, 847, 22),
 QT_MOC_LITERAL(45, 870, 7),
 QT_MOC_LITERAL(46, 878, 24),
 QT_MOC_LITERAL(47, 903, 17),
-QT_MOC_LITERAL(48, 921, 17),
-QT_MOC_LITERAL(49, 939, 14),
-QT_MOC_LITERAL(50, 954, 16),
-QT_MOC_LITERAL(51, 971, 10),
-QT_MOC_LITERAL(52, 982, 12),
-QT_MOC_LITERAL(53, 995, 17),
-QT_MOC_LITERAL(54, 1013, 17),
-QT_MOC_LITERAL(55, 1031, 15),
-QT_MOC_LITERAL(56, 1047, 13),
-QT_MOC_LITERAL(57, 1061, 4),
-QT_MOC_LITERAL(58, 1066, 8)
+QT_MOC_LITERAL(48, 921, 22),
+QT_MOC_LITERAL(49, 944, 8),
+QT_MOC_LITERAL(50, 953, 26),
+QT_MOC_LITERAL(51, 980, 17),
+QT_MOC_LITERAL(52, 998, 14),
+QT_MOC_LITERAL(53, 1013, 16),
+QT_MOC_LITERAL(54, 1030, 10),
+QT_MOC_LITERAL(55, 1041, 12),
+QT_MOC_LITERAL(56, 1054, 17),
+QT_MOC_LITERAL(57, 1072, 17),
+QT_MOC_LITERAL(58, 1090, 15),
+QT_MOC_LITERAL(59, 1106, 13),
+QT_MOC_LITERAL(60, 1120, 4),
+QT_MOC_LITERAL(61, 1125, 8)
     },
     "MainWindow\0startAnalysis\0\0AnalysisTarget\0"
     "stopAnalysis\0startScanning\0stopScanning\0"
@@ -117,11 +120,12 @@ QT_MOC_LITERAL(58, 1066, 8)
     "on_btnSizeGroups_clicked\0"
     "on_btnBarChart_clicked\0checked\0"
     "on_btnDoughChart_clicked\0applyStatSettings\0"
-    "exposeObjectsToJS\0setCurrentPath\0"
-    "setDirectoryJson\0navigateTo\0stopAnalyzer\0"
-    "stopDupesAnalyzer\0stopDupesChecking\0"
-    "onDupesProgress\0openDirectory\0path\0"
-    "statFile"
+    "on_sldZoom_sliderMoved\0position\0"
+    "on_sldStatZoom_sliderMoved\0exposeObjectsToJS\0"
+    "setCurrentPath\0setDirectoryJson\0"
+    "navigateTo\0stopAnalyzer\0stopDupesAnalyzer\0"
+    "stopDupesChecking\0onDupesProgress\0"
+    "openDirectory\0path\0statFile"
 };
 #undef QT_MOC_LITERAL
 
@@ -131,7 +135,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      49,   14, // methods
+      51,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -139,57 +143,59 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    4,  259,    2, 0x06 /* Public */,
-       4,    1,  268,    2, 0x06 /* Public */,
-       5,    4,  271,    2, 0x06 /* Public */,
-       6,    1,  280,    2, 0x06 /* Public */,
-       7,    2,  283,    2, 0x06 /* Public */,
-      10,    1,  288,    2, 0x06 /* Public */,
-      11,    1,  291,    2, 0x06 /* Public */,
+       1,    4,  269,    2, 0x06 /* Public */,
+       4,    1,  278,    2, 0x06 /* Public */,
+       5,    4,  281,    2, 0x06 /* Public */,
+       6,    1,  290,    2, 0x06 /* Public */,
+       7,    2,  293,    2, 0x06 /* Public */,
+      10,    1,  298,    2, 0x06 /* Public */,
+      11,    1,  301,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      12,    1,  294,    2, 0x08 /* Private */,
-      13,    1,  297,    2, 0x08 /* Private */,
-      14,    1,  300,    2, 0x08 /* Private */,
-      15,    1,  303,    2, 0x08 /* Private */,
-      16,    0,  306,    2, 0x08 /* Private */,
-      17,    1,  307,    2, 0x08 /* Private */,
-      19,    1,  310,    2, 0x08 /* Private */,
-      20,    1,  313,    2, 0x08 /* Private */,
-      21,    1,  316,    2, 0x08 /* Private */,
-      22,    1,  319,    2, 0x08 /* Private */,
-      23,    0,  322,    2, 0x08 /* Private */,
-      24,    1,  323,    2, 0x08 /* Private */,
-      26,    1,  326,    2, 0x08 /* Private */,
-      27,    0,  329,    2, 0x08 /* Private */,
-      28,    0,  330,    2, 0x08 /* Private */,
-      29,    0,  331,    2, 0x08 /* Private */,
-      30,    1,  332,    2, 0x08 /* Private */,
-      32,    1,  335,    2, 0x08 /* Private */,
-      33,    0,  338,    2, 0x08 /* Private */,
-      34,    0,  339,    2, 0x08 /* Private */,
-      35,    0,  340,    2, 0x08 /* Private */,
-      36,    0,  341,    2, 0x08 /* Private */,
-      37,    0,  342,    2, 0x08 /* Private */,
-      38,    0,  343,    2, 0x08 /* Private */,
-      39,    0,  344,    2, 0x08 /* Private */,
-      40,    0,  345,    2, 0x08 /* Private */,
-      41,    0,  346,    2, 0x08 /* Private */,
-      42,    0,  347,    2, 0x08 /* Private */,
-      43,    0,  348,    2, 0x08 /* Private */,
-      44,    1,  349,    2, 0x08 /* Private */,
-      46,    1,  352,    2, 0x08 /* Private */,
-      47,    1,  355,    2, 0x08 /* Private */,
-      48,    0,  358,    2, 0x0a /* Public */,
-      49,    1,  359,    2, 0x0a /* Public */,
-      50,    2,  362,    2, 0x0a /* Public */,
-      51,    1,  367,    2, 0x0a /* Public */,
-      52,    0,  370,    2, 0x0a /* Public */,
-      53,    0,  371,    2, 0x0a /* Public */,
-      54,    0,  372,    2, 0x0a /* Public */,
-      55,    1,  373,    2, 0x0a /* Public */,
-      56,    1,  376,    2, 0x0a /* Public */,
-      58,    1,  379,    2, 0x0a /* Public */,
+      12,    1,  304,    2, 0x08 /* Private */,
+      13,    1,  307,    2, 0x08 /* Private */,
+      14,    1,  310,    2, 0x08 /* Private */,
+      15,    1,  313,    2, 0x08 /* Private */,
+      16,    0,  316,    2, 0x08 /* Private */,
+      17,    1,  317,    2, 0x08 /* Private */,
+      19,    1,  320,    2, 0x08 /* Private */,
+      20,    1,  323,    2, 0x08 /* Private */,
+      21,    1,  326,    2, 0x08 /* Private */,
+      22,    1,  329,    2, 0x08 /* Private */,
+      23,    0,  332,    2, 0x08 /* Private */,
+      24,    1,  333,    2, 0x08 /* Private */,
+      26,    1,  336,    2, 0x08 /* Private */,
+      27,    0,  339,    2, 0x08 /* Private */,
+      28,    0,  340,    2, 0x08 /* Private */,
+      29,    0,  341,    2, 0x08 /* Private */,
+      30,    1,  342,    2, 0x08 /* Private */,
+      32,    1,  345,    2, 0x08 /* Private */,
+      33,    0,  348,    2, 0x08 /* Private */,
+      34,    0,  349,    2, 0x08 /* Private */,
+      35,    0,  350,    2, 0x08 /* Private */,
+      36,    0,  351,    2, 0x08 /* Private */,
+      37,    0,  352,    2, 0x08 /* Private */,
+      38,    0,  353,    2, 0x08 /* Private */,
+      39,    0,  354,    2, 0x08 /* Private */,
+      40,    0,  355,    2, 0x08 /* Private */,
+      41,    0,  356,    2, 0x08 /* Private */,
+      42,    0,  357,    2, 0x08 /* Private */,
+      43,    0,  358,    2, 0x08 /* Private */,
+      44,    1,  359,    2, 0x08 /* Private */,
+      46,    1,  362,    2, 0x08 /* Private */,
+      47,    1,  365,    2, 0x08 /* Private */,
+      48,    1,  368,    2, 0x08 /* Private */,
+      50,    1,  371,    2, 0x08 /* Private */,
+      51,    0,  374,    2, 0x0a /* Public */,
+      52,    1,  375,    2, 0x0a /* Public */,
+      53,    2,  378,    2, 0x0a /* Public */,
+      54,    1,  383,    2, 0x0a /* Public */,
+      55,    0,  386,    2, 0x0a /* Public */,
+      56,    0,  387,    2, 0x0a /* Public */,
+      57,    0,  388,    2, 0x0a /* Public */,
+      58,    1,  389,    2, 0x0a /* Public */,
+      59,    1,  392,    2, 0x0a /* Public */,
+      61,    1,  395,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int, 0x80000000 | 3,    2,    2,    2,    2,
@@ -233,6 +239,8 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::Bool,   45,
     QMetaType::Void, QMetaType::Bool,   45,
     QMetaType::Void, QMetaType::Bool,    2,
+    QMetaType::Void, QMetaType::Int,   49,
+    QMetaType::Void, QMetaType::Int,   49,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString, QMetaType::QString,    2,    2,
@@ -241,7 +249,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, QMetaType::QString,   57,
+    QMetaType::Void, QMetaType::QString,   60,
     QMetaType::Void, QMetaType::QString,    2,
 
        0        // eod
@@ -291,16 +299,18 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 36: _t->on_btnBarChart_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 37: _t->on_btnDoughChart_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 38: _t->applyStatSettings((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 39: _t->exposeObjectsToJS(); break;
-        case 40: _t->setCurrentPath((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 41: _t->setDirectoryJson((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
-        case 42: _t->navigateTo((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 43: _t->stopAnalyzer(); break;
-        case 44: _t->stopDupesAnalyzer(); break;
-        case 45: _t->stopDupesChecking(); break;
-        case 46: _t->onDupesProgress((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 47: _t->openDirectory((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 48: _t->statFile((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 39: _t->on_sldZoom_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 40: _t->on_sldStatZoom_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 41: _t->exposeObjectsToJS(); break;
+        case 42: _t->setCurrentPath((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 43: _t->setDirectoryJson((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 44: _t->navigateTo((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 45: _t->stopAnalyzer(); break;
+        case 46: _t->stopDupesAnalyzer(); break;
+        case 47: _t->stopDupesChecking(); break;
+        case 48: _t->onDupesProgress((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 49: _t->openDirectory((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 50: _t->statFile((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -376,13 +386,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 49)
+        if (_id < 51)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 49;
+        _id -= 51;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 49)
+        if (_id < 51)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 49;
+        _id -= 51;
     }
     return _id;
 }

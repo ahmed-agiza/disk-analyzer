@@ -99,8 +99,11 @@ private slots:
     void on_btnSizeGroups_clicked();
     void on_btnBarChart_clicked(bool checked);
     void on_btnDoughChart_clicked(bool checked);
-
     void applyStatSettings(bool);
+
+    void on_sldZoom_sliderMoved(int position);
+
+    void on_sldStatZoom_sliderMoved(int position);
 
 public slots:
     void exposeObjectsToJS();

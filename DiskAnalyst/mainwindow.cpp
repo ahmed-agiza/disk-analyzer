@@ -128,15 +128,15 @@ void MainWindow::initializeWebViews()
     visFrame = ui->wvwCharts->page()->mainFrame();
     statFrame = ui->wvwStatistics->page()->mainFrame();
 
-    //ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
     ui->wvwStatistics->setContextMenuPolicy(Qt::NoContextMenu);
     ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/sunburst.html"));
     ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/barchart.html"));
 
-    visFrame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    //visFrame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     //visFrame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
-    statFrame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    //statFrame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     //statFrame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
     connect(visFrame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeObjectsToJS()));
@@ -1132,3 +1132,13 @@ void MainWindow::applyStatSettings(bool readable){
 }
 
 
+
+void MainWindow::on_sldZoom_sliderMoved(int position){
+    ui->wvwCharts->setZoomFactor(position / 100.0);
+    ui->lblZoomValue->setText(QString::number(position, 'f', 0) + "%");
+}
+
+void MainWindow::on_sldStatZoom_sliderMoved(int position){
+    ui->wvwStatistics->setZoomFactor(position / 100.0);
+    ui->lblStatZoomValue->setText(QString::number(position, 'f', 0) + "%");
+}
