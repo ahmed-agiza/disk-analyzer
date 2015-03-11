@@ -30,7 +30,7 @@ var units;
 var readable;
 
 // The margins of the bar chart
-var margin = {top: 20, right: 20, bottom: 110, left: 60},
+var margin = {top: 20, right: 20, bottom: 110, left: 110},
     width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -171,7 +171,7 @@ function convert(bytes, un){
     switch(un){
     case "B": return bytes;
     case "KB": return (bytes / 1000.0).toPrecision(3);
-    case "MB": return (bytes / 1000.0*1000.0).toPrecision(3);
+    case "MB": return (bytes / (1000.0*1000.0)).toPrecision(3);
     }
 }
 
