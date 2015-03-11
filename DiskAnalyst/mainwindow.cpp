@@ -97,14 +97,11 @@ void MainWindow::initializeExportMenu()
     exportMenu->setToolTip("Export Current Graph As..");
     exportMenu->setIcon(QIcon(":/icons/Icons/Arrow-download-icon.png"));
     exportHTMLAction = new QAction("Export As HTML", this);
-    exportXMLAction = new QAction("Export As XML", this);
     exportJsonAction = new QAction("Export As JSON", this);
     connect(exportHTMLAction, SIGNAL(triggered()), this, SLOT(exportHTML()));
-    connect(exportXMLAction, SIGNAL(triggered()), this, SLOT(exportXML()));
     connect(exportJsonAction, SIGNAL(triggered()), this, SLOT(exportJson()));
     exportMenu->addAction(exportHTMLAction);
     exportMenu->addAction(exportJsonAction);
-    exportMenu->addAction(exportXMLAction);
     QToolButton* exportToolButton = new QToolButton(this);
     exportToolButton->setText("Export As..");
     exportToolButton->setToolTip("Export Current Graph As..");
@@ -914,9 +911,7 @@ void MainWindow::exportJson(){
     saveFile.close();
 }
 
-void MainWindow::exportXML(){
-    qDebug() << "Export XML";
-}
+
 
 void MainWindow::on_actionOpen_Terminal_triggered(){
     if (getCurrentDUA().trimmed().isEmpty()){

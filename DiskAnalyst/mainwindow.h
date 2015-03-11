@@ -82,7 +82,6 @@ private slots:
 
     void exportHTML();
     void exportJson();
-    void exportXML();
 
     void on_actionAnalyzeDirectory_triggered();
     void on_twgDirViewer_doubleClicked(const QModelIndex &index);
@@ -143,7 +142,6 @@ private:
     QMenu *exportMenu;
     QAction *exportHTMLAction;
     QAction *exportJsonAction;
-    QAction *exportXMLAction;
 
     void initializeExportMenu();
     void registerMetaObjects();
