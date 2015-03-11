@@ -106,21 +106,21 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="lblStartupDirectory">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="9" column="1">
     <widget class="QPushButton" name="btnStartupDirectory">
      <property name="text">
       <string>Change Startup Directory</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="2">
+   <item row="11" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="bbxOkCancel">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -129,6 +129,16 @@
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
      </property>
      <property name="centerButtons">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QCheckBox" name="chkEnableRelative">
+     <property name="text">
+      <string>Enable Graph Relative Scaling</string>
+     </property>
+     <property name="checked">
       <bool>true</bool>
      </property>
     </widget>

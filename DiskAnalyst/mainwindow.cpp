@@ -59,7 +59,6 @@ MainWindow::MainWindow(QWidget *parent)
     centerWindow();
     statusBar()->setSizeGripEnabled(false);
 
-
     initializeWebViews();
 
     settingsDialog = 0;
@@ -74,6 +73,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->twgDirViewer->setContextMenuPolicy(Qt::CustomContextMenu);
 
     initializeExportMenu();
+
+    ui->tbsMain->setTabIcon(0, QIcon(":/icons/Icons/statistics-icon.png"));
+    ui->tbsMain->setTabIcon(1, QIcon(":/icons/Icons/chart-icon.png"));
 }
 
 
@@ -127,17 +129,13 @@ void MainWindow::initializeWebViews()
     statFrame = ui->wvwStatistics->page()->mainFrame();
 
     //ui->wvwCharts->setContextMenuPolicy(Qt::NoContextMenu);
-    //ui->wvwStatistics->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->wvwStatistics->setContextMenuPolicy(Qt::NoContextMenu);
     ui->wvwCharts->setUrl(QUrl("qrc:/charts/Charts/sunburst.html"));
     ui->wvwStatistics->setUrl(QUrl("qrc:/charts/Charts/barchart.html"));
 
-    //visFrame->setScrollBarValue(Qt::Vertical, visFrame->scrollBarMaximum(Qt::Vertical));
-    //visFrame->setScrollBarValue(Qt::Horizontal, visFrame->scrollBarMaximum(Qt::Horizontal));
     visFrame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     //visFrame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
-    statFrame->setScrollBarValue(Qt::Vertical, visFrame->scrollBarMaximum(Qt::Vertical));
-    //statFrame->setScrollBarValue(Qt::Horizontal, visFrame->scrollBarMaximum(Qt::Horizontal));
     statFrame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     //statFrame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
@@ -146,6 +144,20 @@ void MainWindow::initializeWebViews()
     connect(ui->wvwStatistics, SIGNAL(loadStarted()), this, SLOT(onStatLoadStart()), Qt::DirectConnection);
     connect(ui->wvwStatistics, SIGNAL(loadFinished(bool)), this, SLOT(onStatLoadFinished(bool)), Qt::DirectConnection);
     connect(this, SIGNAL(visualizeStat(QString)), this, SLOT(onVisualizeStat(QString)), Qt::QueuedConnection);
+
+    QPalette visPalette = ui->wvwCharts->palette();
+    visPalette.setColor(QPalette::Window, QColor(Qt::white));
+    visPalette.setColor(QPalette::Background, QColor(Qt::white));
+    visPalette.setColor(QPalette::Base, QColor(Qt::white));
+    ui->wvwCharts->setPalette(visPalette);
+    ui->wvwCharts->page()->setPalette(visPalette);
+
+    QPalette statPalette = ui->wvwStatistics->palette();
+    statPalette.setColor(QPalette::Window, QColor(Qt::white));
+    statPalette.setColor(QPalette::Background, QColor(Qt::white));
+    statPalette.setColor(QPalette::Base, QColor(Qt::white));
+    ui->wvwStatistics->setPalette(statPalette);
+    ui->wvwStatistics->page()->setPalette(statPalette);
 }
 
 void MainWindow::analyzeDirectory(QString path){
@@ -387,6 +399,7 @@ void MainWindow::setDirectoryJson(QString dirStr, QString nodeName){
 
     qDebug() << "Analyzing..";
     visFrame->evaluateJavaScript("showProgress(); null");
+    visFrame->evaluateJavaScript("scaleChart(1.0); null");
     if (SettingsManager::getListEntriesByBlocks())
         emit startAnalysis(dirStr, nodeName, 0, BlockVisualization);
     else
@@ -495,6 +508,9 @@ void MainWindow::analysisComplete(AnalysisTarget target){
     qDebug() << "Analysis complete: " << target;
     if (analyzer->getAnalysisDone()){
         QList<DirectoryEntry *> entries = analyzer->getEntries();
+        long long maxDepth = analyzer->getMaxDepth();
+        qDebug() << maxDepth;
+
         qDebug() << "Analyzed..";
         if (target == SizeVisualization){
             qDebug() << "Listing by size";
@@ -505,6 +521,11 @@ void MainWindow::analysisComplete(AnalysisTarget target){
             QString jsCommand = QString("visualize(") + entriesJson + QString("); null");
             passGraphParamters();
             visFrame->evaluateJavaScript(jsCommand);
+            if (SettingsManager::getRelativeScalingEnbaled()){
+                QString jsScale = QString("scaleChart(") + QString::number(((maxDepth)/ 30.0) + 0.78) + ")";
+                //qDebug() << jsScale;
+                visFrame->evaluateJavaScript(jsScale);
+            }
             ui->tbsMain->setCurrentIndex(0);
         }else if (target == BlockVisualization){
             qDebug() << "Listing by blocks";

@@ -23,6 +23,8 @@
         <file>Icons/help.png</file>
         <file>Icons/about.png</file>
         <file>Icons/Arrow-download-icon.png</file>
+        <file>Icons/statistics-icon.png</file>
+        <file>Icons/chart-icon.png</file>
     </qresource>
     <qresource prefix="/charts">
         <file>Charts/sunburst.html</file>

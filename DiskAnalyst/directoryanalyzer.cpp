@@ -22,6 +22,9 @@ DirectoryEntry *DirectoryAnalyzer::statFile(char *path, char *name, int flags, i
 
     (void)flags;
 
+    if(depth > maxDepth)
+        maxDepth = depth;
+
 #ifdef DEBUG_SEPERATOR
     qDebug() << "Stating: " << path << " : " << name;
 #endif
@@ -133,6 +136,7 @@ void DirectoryAnalyzer::recursePath(char *dir, char *name, int flags, int depth,
 
 }
 
+
 void DirectoryAnalyzer::getChildrenArray(DirectoryEntry *entry, QJsonArray &array){
     if (entry->getChildren().isEmpty())
         return;
@@ -180,7 +184,7 @@ void DirectoryAnalyzer::getChildrenArrayByBlocks(DirectoryEntry *entry, QJsonArr
 }
 
 DirectoryAnalyzer::DirectoryAnalyzer(QObject *parent) :
-    QObject(parent), stopped(false), analysisDone(false){
+    QObject(parent), stopped(false), analysisDone(false), maxDepth(-1){
 }
 
 QList<DirectoryEntry *> DirectoryAnalyzer::getEntries(){
@@ -197,11 +201,11 @@ QList<DirectoryEntry *> DirectoryAnalyzer::getRootEntries(){
 
 }
 
-QJsonObject DirectoryAnalyzer::getEntriesJson(DirectoryEntry *rootEnry){
-    QSet<DirectoryEntry *> children = rootEnry->getChildren();
+QJsonObject DirectoryAnalyzer::getEntriesJson(DirectoryEntry *rootEntry){
+    QSet<DirectoryEntry *> children = rootEntry->getChildren();
     QJsonObject rootEntryJson;
-    rootEntryJson.insert("name", rootEnry->getName());
-    rootEntryJson.insert("size", rootEnry->getEntrySize());
+    rootEntryJson.insert("name", rootEntry->getName());
+    rootEntryJson.insert("size", rootEntry->getEntrySize());
     QJsonArray rootEntryChildrenJson;
     for(QSet<DirectoryEntry *>::iterator i = children.begin(); i != children.end(); i++){
         QJsonObject entryJson;
@@ -222,6 +226,7 @@ QJsonObject DirectoryAnalyzer::getEntriesJson(DirectoryEntry *rootEnry){
     }
     if (!rootEntryChildrenJson.isEmpty())
         rootEntryJson.insert("children", rootEntryChildrenJson);
+
     return rootEntryJson;
 }
 
@@ -263,6 +268,10 @@ QString DirectoryAnalyzer::getEntriesJsonStringByBlock(DirectoryEntry *rootEnry)
 
 DirectoryEntry *DirectoryAnalyzer::getRoot() const{
     return root;
+}
+
+long long DirectoryAnalyzer::getMaxDepth() const{
+    return maxDepth;
 }
 
 DirectoryAnalyzer::~DirectoryAnalyzer(){

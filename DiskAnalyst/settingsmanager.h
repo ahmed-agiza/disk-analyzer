@@ -10,6 +10,7 @@ const QString FADING_KEY("fading");
 const QString HUMAN_READABLE_KEY("human_readable");
 const QString STARTUP_DIRECTORY_KEY("startup_directory");
 const QString COLOR_SET_KEY("color_set");
+const QString RELATIVE_SCALE_KEY("relative_scale");
 
 class SettingsManager{
 public:
@@ -96,6 +97,18 @@ public:
     }
     static int defaultColorSet(){
         return 1;
+    }
+
+    static void setRelativeScalingEnbaled(bool value){
+       QSettings settings;
+       settings.setValue(RELATIVE_SCALE_KEY, value);
+    }
+    static bool getRelativeScalingEnbaled(){
+        QSettings settings;
+        return settings.value(RELATIVE_SCALE_KEY, defaultRelativeScalingEnbaled()).toBool();
+    }
+    static bool defaultRelativeScalingEnbaled(){
+        return true;
     }
 
 };

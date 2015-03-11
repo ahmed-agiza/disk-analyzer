@@ -24,6 +24,9 @@
     <script type="text/javascript" src="sequences.js"></script>
     <script type="text/javascript">
       d3.select(self.frameElement).style("height", "700px");
+      function scaleChart(scale){
+        $('#chart').css({ transform: 'scale(' + scale + ')' });
+      }
     </script>
   </body>
 </html>

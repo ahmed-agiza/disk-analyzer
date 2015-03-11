@@ -507,9 +507,11 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/analysis-icon.png \
 		../DiskAnalyst/Icons/Developer-icon.png \
 		../DiskAnalyst/Icons/Apps-Terminal-Pc-104-icon.png \
+		../DiskAnalyst/Icons/statistics-icon.png \
 		../DiskAnalyst/Icons/Folder-Open-icon.png \
 		../DiskAnalyst/Icons/Arrow-download-icon.png \
 		../DiskAnalyst/Icons/about.png \
+		../DiskAnalyst/Icons/chart-icon.png \
 		../DiskAnalyst/Icons/file-explore-icon.png \
 		../DiskAnalyst/Icons/Folder-Add-icon.png \
 		../DiskAnalyst/Icons/Apps-konsole-icon.png \

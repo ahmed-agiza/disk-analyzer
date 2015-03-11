@@ -41,6 +41,7 @@ void SettingsDialog::loadValues(){
     ui->chkFading->setChecked(SettingsManager::getFadeEnabled());
     ui->chkNavigate->setChecked(SettingsManager::getNavigateChart());
     ui->cmbColorSet->setCurrentIndex(SettingsManager::getColorSet() - 1);
+    ui->chkEnableRelative->setChecked(SettingsManager::getRelativeScalingEnbaled());
 }
 
 bool SettingsDialog::saveValues(){
@@ -67,6 +68,7 @@ bool SettingsDialog::saveValues(){
     SettingsManager::setNavigateChart(ui->chkNavigate->isChecked());
     SettingsManager::setStartupDir(startupDir);
     SettingsManager::setColorSet(ui->cmbColorSet->currentIndex() + 1);
+    SettingsManager::setRelativeScalingEnbaled(ui->chkEnableRelative->isChecked());
     return true;
 }
 
@@ -122,4 +124,5 @@ void SettingsDialog::loadDefaultValues(){
     ui->chkFading->setChecked(SettingsManager::defaultFadeEnabled());
     ui->chkNavigate->setChecked(SettingsManager::defaultNavigateChart());
     ui->cmbColorSet->setCurrentIndex(SettingsManager::defaultColorSet() - 1);
+    ui->chkEnableRelative->setChecked(SettingsManager::defaultRelativeScalingEnbaled());
 }

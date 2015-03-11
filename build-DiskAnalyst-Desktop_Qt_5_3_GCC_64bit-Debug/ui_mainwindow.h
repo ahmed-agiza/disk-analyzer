@@ -154,12 +154,15 @@ public:
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         wvwCharts = new QWebView(tabVisualizer);
         wvwCharts->setObjectName(QStringLiteral("wvwCharts"));
-        sizePolicy1.setHeightForWidth(wvwCharts->sizePolicy().hasHeightForWidth());
-        wvwCharts->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy2(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(wvwCharts->sizePolicy().hasHeightForWidth());
+        wvwCharts->setSizePolicy(sizePolicy2);
         wvwCharts->setMinimumSize(QSize(1000, 0));
         wvwCharts->setUrl(QUrl(QStringLiteral("about:blank")));
         wvwCharts->setZoomFactor(1);
-        wvwCharts->setRenderHints(QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
+        wvwCharts->setRenderHints(QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::Qt4CompatiblePainting|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
 
         horizontalLayout_2->addWidget(wvwCharts);
 
@@ -193,10 +196,11 @@ public:
 
         wvwStatistics = new QWebView(tabStatistics);
         wvwStatistics->setObjectName(QStringLiteral("wvwStatistics"));
-        sizePolicy1.setHeightForWidth(wvwStatistics->sizePolicy().hasHeightForWidth());
-        wvwStatistics->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(wvwStatistics->sizePolicy().hasHeightForWidth());
+        wvwStatistics->setSizePolicy(sizePolicy2);
         wvwStatistics->setUrl(QUrl(QStringLiteral("about:blank")));
         wvwStatistics->setZoomFactor(0.82);
+        wvwStatistics->setRenderHints(QPainter::Qt4CompatiblePainting|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
 
         verticalLayout->addWidget(wvwStatistics);
 
@@ -269,7 +273,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tbsMain->setCurrentIndex(1);
+        tbsMain->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);

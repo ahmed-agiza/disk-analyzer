@@ -42,6 +42,7 @@ public:
     QLabel *lblStartupDirectory;
     QPushButton *btnStartupDirectory;
     QDialogButtonBox *bbxOkCancel;
+    QCheckBox *chkEnableRelative;
 
     void setupUi(QDialog *SettingsDialog)
     {
@@ -103,12 +104,12 @@ public:
         lblStartupDirectory = new QLabel(SettingsDialog);
         lblStartupDirectory->setObjectName(QStringLiteral("lblStartupDirectory"));
 
-        formLayout->setWidget(8, QFormLayout::LabelRole, lblStartupDirectory);
+        formLayout->setWidget(9, QFormLayout::LabelRole, lblStartupDirectory);
 
         btnStartupDirectory = new QPushButton(SettingsDialog);
         btnStartupDirectory->setObjectName(QStringLiteral("btnStartupDirectory"));
 
-        formLayout->setWidget(8, QFormLayout::FieldRole, btnStartupDirectory);
+        formLayout->setWidget(9, QFormLayout::FieldRole, btnStartupDirectory);
 
         bbxOkCancel = new QDialogButtonBox(SettingsDialog);
         bbxOkCancel->setObjectName(QStringLiteral("bbxOkCancel"));
@@ -116,7 +117,13 @@ public:
         bbxOkCancel->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults);
         bbxOkCancel->setCenterButtons(true);
 
-        formLayout->setWidget(10, QFormLayout::SpanningRole, bbxOkCancel);
+        formLayout->setWidget(11, QFormLayout::SpanningRole, bbxOkCancel);
+
+        chkEnableRelative = new QCheckBox(SettingsDialog);
+        chkEnableRelative->setObjectName(QStringLiteral("chkEnableRelative"));
+        chkEnableRelative->setChecked(true);
+
+        formLayout->setWidget(8, QFormLayout::LabelRole, chkEnableRelative);
 
 
         retranslateUi(SettingsDialog);
@@ -145,6 +152,7 @@ public:
         chkFading->setText(QApplication::translate("SettingsDialog", "Fading Animation", 0));
         lblStartupDirectory->setText(QString());
         btnStartupDirectory->setText(QApplication::translate("SettingsDialog", "Change Startup Directory", 0));
+        chkEnableRelative->setText(QApplication::translate("SettingsDialog", "Enable Graph Relative Scaling", 0));
     } // retranslateUi
 
 };

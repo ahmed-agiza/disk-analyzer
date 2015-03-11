@@ -50,6 +50,7 @@ class DirectoryAnalyzer : public QObject
     DirectoryEntry *root;
     bool stopped;
     bool analysisDone;
+    long long maxDepth;
 
     DirectoryEntry *statFile(char *path, char *name, int flags = 0, int depth = -1, DirectoryEntry *source = 0);
     void recursePath(char *dir, char *name, int flags, int depth = -1, DirectoryEntry *source = 0);
@@ -68,6 +69,8 @@ public:
     static QString getEntriesJsonStringByBlock(DirectoryEntry *rootEnry);
 
     DirectoryEntry *getRoot() const;
+
+    long long getMaxDepth() const;
 
     ~DirectoryAnalyzer();
     bool getAnalysisDone() const;
