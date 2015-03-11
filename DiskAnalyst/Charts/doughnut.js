@@ -23,16 +23,13 @@ var outerArc = d3.svg.arc()
 	.innerRadius(radius * 0.9)
 	.outerRadius(radius * 0.9);
 
-// Return name
-var key = function(d){return d.data.name;};
-
 // Color set
 var doughnutColor = d3.scale.category10();
 
 // Test data
 /*var testData = [
   {name: "A", value: 500},
-  {name: "B", value: 1000},
+  {name: "A", value: 1000},
   {name: "C", value: 200},
   {name: "D", value: 2500},
   {name: "E", value: 1500},
@@ -41,14 +38,14 @@ var doughnutColor = d3.scale.category10();
   {name: "I", value: 1000},
   {name: "J", value: 1200},
   {name: "K", value: 1300},
-];
+];*/
 
 // Test call
 
-visualize(testData);*/
+//visualize(testData);
 
-// applySettings(true);
-// visualize(testData);
+ //applySettings(true);
+ //visualize(testData);
 
 
 function visualize(data) {
@@ -58,7 +55,7 @@ function visualize(data) {
 
 	/* ------- PIE SLICES -------*/
 	var slice = svg.select(".slices").selectAll("path.slice")
-        .data(pie(data), key);
+        .data(pie(data));
 	slice.enter()
 		.insert("path")
         .style("fill", function(d) { return doughnutColor(d.data.name); })
@@ -79,7 +76,7 @@ function visualize(data) {
 
 	/* ------- TEXT LABELS -------*/
     var text = svg.select(".labels").selectAll("text")
-		.data(pie(data), key);
+        .data(pie(data));
 	text.enter()
 		.append("text")
 		.attr("dy", ".35em")
@@ -112,7 +109,7 @@ function visualize(data) {
 
 	/* ------- SLICE TO TEXT POLYLINES -------*/
 	var polyline = svg.select(".lines").selectAll("polyline")
-		.data(pie(data), key);
+        .data(pie(data));
 	polyline.enter()
 		.append("polyline");
 	polyline.transition().duration(1000)

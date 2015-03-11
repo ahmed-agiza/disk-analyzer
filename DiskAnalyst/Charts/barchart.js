@@ -2,7 +2,7 @@
 /*var testData = [
   {name: "AAAAAAAAAAAAAAAAAAAAAAAA", value: 500},
   {name: "BAA", value: 10000},
-  {name: "CAA", value: 200},
+  {name: "BAA", value: 200},
   {name: "DAA", value: 2500},
   {name: "EAA", value: 1500},
   {name: "FAA", value: 5000},
@@ -43,6 +43,7 @@ var y = d3.scale.linear()
 // Axis generators
 var xAxis = d3.svg.axis()
     .scale(x)
+    .tickFormat(function(d) {return d.substr(0, d.length-6).length > 13 ? d.substr(0, d.length-6).substr(0, 12)+".." : d.substr(0, d.length-6);})
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
@@ -160,7 +161,7 @@ function findMax(data){
     var max = 0;
     for(var i=0; i<data.length; i++){
         if (data[i].value > max) max = data[i].value;
-        barData[i].name = barData[i].name.length > 13 ? (barData[i].name.substr(0, 12)+"...") : barData[i].name;
+        barData[i].name = barData[i].name + Math.floor(100000 + Math.random() * 900000);
     }
     return max;
 }
@@ -178,10 +179,3 @@ function applySettings(en){
     if (typeof en == "undefined") readable = true;
     else readable = en;
 }
-
-// Data fetching from file
-/*d3.tsv("data.tsv", function(error, data) {
-    data.forEach(function(d) {
-      d.frequency = +d.frequency;
-  });
-});*/
