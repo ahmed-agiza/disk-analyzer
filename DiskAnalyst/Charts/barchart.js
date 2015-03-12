@@ -30,7 +30,7 @@ var units;
 var readable;
 
 // The margins of the bar chart
-var margin = {top: 20, right: 20, bottom: 110, left: 110},
+var margin = {top: 50, right: 20, bottom: 110, left: 110},
     width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
