@@ -507,8 +507,11 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/analysis-icon.png \
 		../DiskAnalyst/Icons/Developer-icon.png \
 		../DiskAnalyst/Icons/Apps-Terminal-Pc-104-icon.png \
+		../DiskAnalyst/Icons/statistics-icon.png \
 		../DiskAnalyst/Icons/Folder-Open-icon.png \
+		../DiskAnalyst/Icons/Arrow-download-icon.png \
 		../DiskAnalyst/Icons/about.png \
+		../DiskAnalyst/Icons/chart-icon.png \
 		../DiskAnalyst/Icons/file-explore-icon.png \
 		../DiskAnalyst/Icons/Folder-Add-icon.png \
 		../DiskAnalyst/Icons/Apps-konsole-icon.png \
@@ -521,6 +524,7 @@ qrc_files.cpp: ../DiskAnalyst/files.qrc \
 		../DiskAnalyst/Icons/Button-Upload-icon.png \
 		../DiskAnalyst/Charts/d3.v3.min.js \
 		../DiskAnalyst/Charts/sequences.css \
+		../DiskAnalyst/Charts/sunburst.expanded.html \
 		../DiskAnalyst/Charts/css.css \
 		../DiskAnalyst/Charts/progress.css \
 		../DiskAnalyst/Charts/data.tsv \
@@ -1777,6 +1781,9 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QSplitter \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qsplitter.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QToolButton \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qtoolbutton.h \
+		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../DiskAnalyst/mainwindow.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1795,7 +1802,6 @@ mainwindow.o: ../DiskAnalyst/mainwindow.cpp /opt/Qt5.3.2/5.3/gcc_64/include/QtWi
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QSettings \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/qsettings.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/QAbstractButton \
-		/opt/Qt5.3.2/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		/opt/Qt5.3.2/5.3/gcc_64/include/QtCore/QDir \
 		../DiskAnalyst/filestatdialog.h \
 		../DiskAnalyst/dupesdialog.h \

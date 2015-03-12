@@ -28,6 +28,7 @@
 #define FLAG_SHOW_OWNER 512
 #define FLAG_SHOW_HUMAN_FORMAT 1024
 #define FLAG_ONLY_FILES_AND_DIRS 2048
+#define FLAG_LIST_FILES 4096
 
 
 #define MAX_NAME_SIZE 2048
@@ -69,7 +70,7 @@ int main(int argc, char **argv){
     if(argv[i][0] != '-')
       argv_count++;
 
-  while ((opt = getopt(argc, argv, "irbsdaAtloHhf")) != -1) {
+  while ((opt = getopt(argc, argv, "irbsdaAtloHhfL")) != -1) {
       switch (opt) {
         case 'i':
           flags |= FLAG_SHOW_INODE;
@@ -104,10 +105,14 @@ int main(int argc, char **argv){
         case 'H':
           flags |= FLAG_SHOW_HUMAN_FORMAT;
           break;
+        case 'L':
+          flags |= FLAG_LIST_FILES;
+          break;
         case 'h':
           printf("Disk Analyzer 0.1\n");
           printf("Usage: %s [-options] <path>\n", argv[0]);
           printf("Options: \n");
+          printf("-L\tList files while analyzing\n");
           printf("-H\tShow sizes in human readable format\n");
           printf("-f\tCalculate regular files and directoris only\n");
           printf("-h\tDisplay this help\n");
@@ -167,7 +172,8 @@ int main(int argc, char **argv){
         sprintf(full_path, "Stat error while opening %s%s", dir, dir_inode->d_name);
         perror(full_path);
       }else{
-        //print_stat(&stat_buf, flags);
+      	if(flags & FLAG_LIST_FILES)
+        	print_stat(&stat_buf, flags);
         total_size += stat_buf.total_size;
       }
         

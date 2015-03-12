@@ -17,10 +17,12 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBar>
@@ -47,8 +49,12 @@ public:
     QTreeView *twgDirViewer;
     QTabWidget *tbsMain;
     QWidget *tabVisualizer;
-    QHBoxLayout *horizontalLayout_2;
+    QVBoxLayout *verticalLayout_2;
     QWebView *wvwCharts;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *lblZoom;
+    QSlider *sldZoom;
+    QLabel *lblZoomValue;
     QWidget *tabStatistics;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout;
@@ -56,6 +62,10 @@ public:
     QPushButton *btnExtensions;
     QPushButton *btnSizeGroups;
     QWebView *wvwStatistics;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *lblStatZoom;
+    QSlider *sldStatZoom;
+    QLabel *lblStatZoomValue;
     QHBoxLayout *horizontalLayout_3;
     QPushButton *btnBarChart;
     QPushButton *btnDoughChart;
@@ -148,20 +158,52 @@ public:
         tbsMain->setObjectName(QStringLiteral("tbsMain"));
         tabVisualizer = new QWidget();
         tabVisualizer->setObjectName(QStringLiteral("tabVisualizer"));
-        horizontalLayout_2 = new QHBoxLayout(tabVisualizer);
-        horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        verticalLayout_2 = new QVBoxLayout(tabVisualizer);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         wvwCharts = new QWebView(tabVisualizer);
         wvwCharts->setObjectName(QStringLiteral("wvwCharts"));
-        sizePolicy1.setHeightForWidth(wvwCharts->sizePolicy().hasHeightForWidth());
-        wvwCharts->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy2(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(wvwCharts->sizePolicy().hasHeightForWidth());
+        wvwCharts->setSizePolicy(sizePolicy2);
         wvwCharts->setMinimumSize(QSize(1000, 0));
         wvwCharts->setUrl(QUrl(QStringLiteral("about:blank")));
         wvwCharts->setZoomFactor(1);
-        wvwCharts->setRenderHints(QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
+        wvwCharts->setRenderHints(QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::Qt4CompatiblePainting|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
 
-        horizontalLayout_2->addWidget(wvwCharts);
+        verticalLayout_2->addWidget(wvwCharts);
+
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        horizontalLayout_2->setContentsMargins(-1, 0, -1, -1);
+        lblZoom = new QLabel(tabVisualizer);
+        lblZoom->setObjectName(QStringLiteral("lblZoom"));
+
+        horizontalLayout_2->addWidget(lblZoom);
+
+        sldZoom = new QSlider(tabVisualizer);
+        sldZoom->setObjectName(QStringLiteral("sldZoom"));
+        sldZoom->setMinimum(50);
+        sldZoom->setMaximum(400);
+        sldZoom->setSingleStep(5);
+        sldZoom->setPageStep(0);
+        sldZoom->setValue(100);
+        sldZoom->setSliderPosition(100);
+        sldZoom->setOrientation(Qt::Horizontal);
+
+        horizontalLayout_2->addWidget(sldZoom);
+
+        lblZoomValue = new QLabel(tabVisualizer);
+        lblZoomValue->setObjectName(QStringLiteral("lblZoomValue"));
+
+        horizontalLayout_2->addWidget(lblZoomValue);
+
+
+        verticalLayout_2->addLayout(horizontalLayout_2);
 
         tbsMain->addTab(tabVisualizer, QString());
         tabStatistics = new QWidget();
@@ -193,12 +235,41 @@ public:
 
         wvwStatistics = new QWebView(tabStatistics);
         wvwStatistics->setObjectName(QStringLiteral("wvwStatistics"));
-        sizePolicy1.setHeightForWidth(wvwStatistics->sizePolicy().hasHeightForWidth());
-        wvwStatistics->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(wvwStatistics->sizePolicy().hasHeightForWidth());
+        wvwStatistics->setSizePolicy(sizePolicy2);
         wvwStatistics->setUrl(QUrl(QStringLiteral("about:blank")));
-        wvwStatistics->setZoomFactor(0.82);
+        wvwStatistics->setZoomFactor(1);
+        wvwStatistics->setRenderHints(QPainter::Qt4CompatiblePainting|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing);
 
         verticalLayout->addWidget(wvwStatistics);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        horizontalLayout_4->setContentsMargins(-1, 0, -1, -1);
+        lblStatZoom = new QLabel(tabStatistics);
+        lblStatZoom->setObjectName(QStringLiteral("lblStatZoom"));
+
+        horizontalLayout_4->addWidget(lblStatZoom);
+
+        sldStatZoom = new QSlider(tabStatistics);
+        sldStatZoom->setObjectName(QStringLiteral("sldStatZoom"));
+        sldStatZoom->setMinimum(50);
+        sldStatZoom->setMaximum(400);
+        sldStatZoom->setSingleStep(5);
+        sldStatZoom->setPageStep(0);
+        sldStatZoom->setValue(100);
+        sldStatZoom->setOrientation(Qt::Horizontal);
+
+        horizontalLayout_4->addWidget(sldStatZoom);
+
+        lblStatZoomValue = new QLabel(tabStatistics);
+        lblStatZoomValue->setObjectName(QStringLiteral("lblStatZoomValue"));
+
+        horizontalLayout_4->addWidget(lblStatZoomValue);
+
+
+        verticalLayout->addLayout(horizontalLayout_4);
 
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setSpacing(0);
@@ -237,6 +308,8 @@ public:
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        mainToolBar->setMovable(false);
+        mainToolBar->setFloatable(false);
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -319,10 +392,14 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionAbout->setToolTip(QApplication::translate("MainWindow", "About", 0));
 #endif // QT_NO_TOOLTIP
+        lblZoom->setText(QApplication::translate("MainWindow", "Zoom Factor:", 0));
+        lblZoomValue->setText(QApplication::translate("MainWindow", "100%", 0));
         tbsMain->setTabText(tbsMain->indexOf(tabVisualizer), QApplication::translate("MainWindow", "Visualizer", 0));
         btnLargestFiles->setText(QApplication::translate("MainWindow", "Largest Files Statistics", 0));
         btnExtensions->setText(QApplication::translate("MainWindow", "Extenstions Statistics", 0));
         btnSizeGroups->setText(QApplication::translate("MainWindow", "Size Group Statistics", 0));
+        lblStatZoom->setText(QApplication::translate("MainWindow", "Zoom Factor:", 0));
+        lblStatZoomValue->setText(QApplication::translate("MainWindow", "100%", 0));
         btnBarChart->setText(QApplication::translate("MainWindow", "Bar chart", 0));
         btnDoughChart->setText(QApplication::translate("MainWindow", "Doughnut chart", 0));
         tbsMain->setTabText(tbsMain->indexOf(tabStatistics), QApplication::translate("MainWindow", "Statistics", 0));
